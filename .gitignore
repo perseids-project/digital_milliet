@@ -16,6 +16,7 @@ env
 flask
 bower_components
 tmp
+venv
 # Installer logs
 pip-log.txt
 # Unit test / coverage reports

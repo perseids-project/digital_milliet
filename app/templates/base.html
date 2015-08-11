@@ -1,0 +1,18 @@
+<html>
+<link rel="stylesheet" media="screen" href="static/css/app.css">
+<link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/bootstrap/bootstrap.min.css')}}">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="static/js/bootstrap/bootstrap.js"></script>
+<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+	<head>
+		<title>The Digital Milliet Project</title>
+	</head>
+		
+	<body class = "body">
+		<div id="navbar">{% include 'header.html' %}</div>
+		
+		<div id="content" class="container-fluid">{% block content %}{% endblock %}</div>
+    
+    <div id="footer">{% include 'footer.html' %}</div>
+	</body>
+</html>

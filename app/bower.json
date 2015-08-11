@@ -1,0 +1,26 @@
+{
+  "name": "digmil-app",
+  "version": "0.0.0",
+  "authors": [
+    "Anna Krohn <akkrohn@gmail.com>"
+  ],
+  "main": "__init__.py",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "capitains-sparrow": "~1.0.9",
+    "capitains-sparrow.typeahead": "~0.0.2",
+    "capitains-sparrow.xslt": "~0.0.2",
+    "capitains-sparrow.service": "~0.0.2"
+  }
+}

@@ -1,1 +1,9 @@
-<div>This will have the list of commentaries</div> 
+{% extends "base.html" %}
+{% block content %}
+	<div>Digital Milliet Entries and Commentary</div>
+	<ul>
+		{% for num in millnum_list %}
+			<li><a href="commentary/{{ num }}">{{ num }} </a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}

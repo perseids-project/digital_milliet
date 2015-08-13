@@ -6,11 +6,19 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 100px;
+  margin-bottom: 200px;
+}
+
+#wrap {
+  min-height: 100%;
+  overflow: auto;
+  padding-bottom: 150px;
 }
 .footer {
   position: absolute;
   bottom: 0;
+  margin-top: -60px;
+  padding-top: 20px;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 60px;

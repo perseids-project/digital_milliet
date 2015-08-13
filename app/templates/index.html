@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 	{{ super() }}
+	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
 				<h1>The Digital Milliet Project</h1>
@@ -12,12 +13,12 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-3 col-md-offset-3">
-				<button type="button" class="btn btn-primary btn-large">Browse</button>
+			<div class="col-xs-3 col-xs-offset-2">
+				<a role="button" class="btn btn-primary btn-large btn-block" href="/commentary">Browse</a>
 			</div>
-			<div class="col-md-3 col-md-offset-3">
-				<button type="button" class="btn btn-primary btn-large">Search</button>
+			<div class="col-xs-3 col-xs-offset-2">
+				<button type="button" class="btn btn-primary btn-large btn-block">Search</button>
 			</div>
 		</div>
-	
+	</div>
 {% endblock %}

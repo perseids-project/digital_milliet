@@ -1,82 +1,73 @@
 {% extends "base.html" %}
+{% from "commentary/get_text.html" import get_text with context %}
 {% block content %}
-  {{ super() }}
-  <div class="row wrapper">
-    <div class="small-12 medium-8 columns full texts">
-      <div class="row half">
-        <div class="small-12 medium-6 columns full">
-          
-        <!-- original text -->
-        <div ng-bind-html-unsafe="original"
-          class="original stain box" scrollto>
+  <div class='row'>
+    <div class='col-xs-8'>
+      <div class='row'>
+        <div class='col-xs-6'>
+          <!-- original text -->
+          <div class='well'>
+            <!-- Need to define some css for the text boxes, max height, scrolling, etc -->
+            <div id='origin_text' class='text-box'>
+              <!-- going to need a way for all of the text fields to grab text if uri, or display char field if not -->
+              {% if obj.has_key('orig_uri') %}
+                {{ get_text(obj['orig_uri']) }}
+              {% else %}
+                <p>{{ obj['orig_text'] }}</p>
+              {% endif %}
+            </div>
+          </div>
         </div>
+        <div class='col-xs-6'>
+          <!-- translations -->
+          <!-- really these ought to be generated based on the attached translations but this will work for now -->
+          <div class='well'>  
+            <ul id='lang_tabs' class='nav nav-tabs nav-justified' role="tablist">
+              <li role='presentation' class='active'><a href='#english' aria-controls='english' role='tab' data-toggle='tab'>English</a></li>
+              <li role='presentation'><a href='#french' aria-controls='french' role='tab' data-toggle='tab'>French</a></li>
+            </ul>
+
+            <div class='tab-content'>
+              <div role='tabpanel' class='tab-pane active' id='english'>
+                {% if obj.has_key('eng_uri') %}
+                  {{ get_text(obj['eng_uri']) }}
+                {% else %}
+                  <p>{{ obj['eng_text'] }}</p>
+                {% endif %}
+              </div>
+              <div role='tabpanel' class='tab-pane' id='french'>
+                {% if obj.has_key('fra_uri') %}
+                  {{ get_text(obj['fra_uri']) }}
+                {% else %}
+                  <p>{{ obj['fra_text'] }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="small-12 medium-6 columns full">
-          <div class="ctrl">
-            <a href="" 
-              ng-click="lang_switch('eng')" 
-              ng-class="{select: lang == 'eng'}" 
-              class="button tiny secondary">English</a>
-              
-            <a href="" 
-              ng-click="lang_switch('fre')" 
-              ng-class="{select: lang == 'fre'}" 
-              class="button tiny secondary">French</a>
-          </div>
-        <div class="full">
-          <!-- english -->
-          <div ng-bind-html-unsafe="translation.english" 
-            ng-show="lang_check('eng')" 
-            class="translation english stain box">
-          </div>
-          <!-- french -->
-          <div ng-bind-html-unsafe="translation.french"
-            ng-show="lang_check('fre')" 
-            class="translation french stain box">
-          </div>
+      </div>
+      <div class='row'>
+        <!-- commentary and bibliography -->
+        <div class='well'>
+          <ul id='comm_tabs' class='nav nav-tabs nav-justified' role="tablist">
+            <li role='presentation' class='active'><a href='#commentary' aria-controls='commentary' role='tab' data-toggle='tab'>Commentary</a></li>
+            <li role='presentation'><a href='#bibliography' aria-controls='bibliography' role='tab' data-toggle='tab'>Bibliography</a></li>
+          </ul>
+
+          <div class='tab-content'>
+            <div role='tabpanel' class='tab-pane active' id='commentary'><p>{{ obj['comm'] }}</p></div>
+            <div role='tabpanel' class='tab-pane' id='bibliography'><p>{{ obj['bibl'] }}</p></div>
+          </div> 
         </div>
       </div>
     </div>
-    
-    <div class="row half">
-      <div class="small-12 columns commentary full">
-        <div class="ctrl">
-          <a href="" 
-          ng-click="comment_switch()"
-          ng-class="{select: comment == 'bibl' }"
-          class="button tiny secondary">Bibliography</a>
-        </div>
-        <div class="full">
-          
-          <!-- commentary body -->
-          <div ng-bind-html-unsafe="commentary.body" 
-          ng-show="comment_check('body')" 
-          class="body light box">
-          </div>
-        
-          <!-- commentary bibliography -->        
-          <div ng-bind-html-unsafe="commentary.bibl" 
-          ng-show="comment_check('bibl')"
-          class="bibliography light box">
-          </div>
-          
-        </div>
+    <div class='col-xs-4'>
+      <!-- images -->
+      <div class='well'> 
+        <p>Insert pretty picture here</p>
       </div>
-    </div>
-  </div>
-  
-  <div class="small-12 medium-4 columns full imgs">
-    <div class="box">
-      <div class="slide" ng-repeat="(key, val) in data.img">
-      <a name="img-{{ key }}" href="{{ val.url }}" target="_blank"><img src="{{ val.url }}"></a>
-      <div class="group">
-        <div class="caption">{{ val.caption }}</div>
-        <div class="caption">{{ val.place }}</div>
-        <div class="caption">{{ val.time }}</div>
-        <div class="caption">{{ val.rights }}</div>
-      </div>
-      </div>
+      
     </div>
   </div>
-</div>
+
 {% endblock %}

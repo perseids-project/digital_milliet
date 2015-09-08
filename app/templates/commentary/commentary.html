@@ -2,16 +2,17 @@
 {% from "commentary/get_text.html" import get_text with context %}
 {% block content %}
   <div class='row'>
+    <div id="auth_head"></div>
     <div class='col-xs-8'>
       <div class='row'>
         <div class='col-xs-6'>
           <!-- original text -->
           <div class='well'>
             <!-- Need to define some css for the text boxes, max height, scrolling, etc -->
-            <div id='origin_text' class='text-box'>
+            <div id='origin_text'>
               <!-- going to need a way for all of the text fields to grab text if uri, or display char field if not -->
               {% if obj.has_key('orig_uri') %}
-                {{ get_text(obj['orig_uri']) }}
+                <p>{{ get_text(obj['orig_uri'], 'origin_text') }}</p>
               {% else %}
                 <p>{{ obj['orig_text'] }}</p>
               {% endif %}
@@ -30,14 +31,14 @@
             <div class='tab-content'>
               <div role='tabpanel' class='tab-pane active' id='english'>
                 {% if obj.has_key('eng_uri') %}
-                  {{ get_text(obj['eng_uri']) }}
+                  <p>{{ get_text(obj['eng_uri'], 'english') }}</p>
                 {% else %}
                   <p>{{ obj['eng_text'] }}</p>
                 {% endif %}
               </div>
               <div role='tabpanel' class='tab-pane' id='french'>
                 {% if obj.has_key('fra_uri') %}
-                  {{ get_text(obj['fra_uri']) }}
+                  <p>{{ get_text(obj['fra_uri'], 'french') }}</p>
                 {% else %}
                   <p>{{ obj['fra_text'] }}</p>
                 {% endif %}

@@ -33,6 +33,9 @@ def commentary():
 def millnum(millnum):
 	obj = mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
 	parsed_obj = parse_it(obj)
+	if parsed_obj.has_key('orig_uri'):
+		session['cts_uri'] = parsed_obj['orig_uri']
+
 	return render_template('/commentary/commentary.html', obj=parsed_obj)
 
 
@@ -56,5 +59,4 @@ def parse_it(obj):
 		result['orig_uri'] = obj['commentary'][0]['hasTarget']
 
 
-	import pdb; pdb.set_trace()
 	return result

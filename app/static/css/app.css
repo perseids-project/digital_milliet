@@ -24,3 +24,8 @@ body {
   height: 60px;
   background-color: #f5f5f5;
 }
+
+.well {
+  height: 500px;
+  overflow: scroll;
+}

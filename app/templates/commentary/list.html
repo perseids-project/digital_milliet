@@ -1,9 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-	<div>Digital Milliet Entries and Commentary</div>
-	<ul>
-		{% for num in millnum_list %}
-			<li><a href="commentary/{{ num }}">{{ num }} </a></li>
-		{% endfor %}
-	</ul>
+
+<ul id='browse-tabs' class='nav nav-tabs nav-justified' role="tablist">
+	<li role='presentation' class='active'><a href='#millnum' aria-controls='millnum' role='tab' data-toggle='tab'>Milliet Number</a></li>
+	<li role='presentation'><a href='#author' aria-controls='author' role='tab' data-toggle='tab'>Author and Work</a></li>
+</ul>
+
+<div class='tab-content'>
+  <div role='tabpanel' class='tab-pane active' id='millnum'>
+    <div>Digital Milliet Entries and Commentary</div>
+		<ul>
+			{% for num in millnum_list %}
+				<li>{{ num }} <a href="commentary/{{ num }}">View</a> <a href="edit/{{ num }}">Edit</a></li>
+			{% endfor %}
+		</ul>
+  </div>
+  <div role='tabpanel' class='tab-pane' id='author'>
+    
+  </div>
+</div>
+
 {% endblock %}

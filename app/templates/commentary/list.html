@@ -14,10 +14,16 @@
 				<li>{{ num }} <a href="commentary/{{ num }}">View</a> <a href="edit/{{ num }}">Edit</a></li>
 			{% endfor %}
 		</ul>
+
   </div>
   <div role='tabpanel' class='tab-pane' id='author'>
-    
+    <ul>
+			{% for num in millnum_list %}
+				<li>{{ num }} <a href="commentary/{{ num }}">View</a> <a href="edit/{{ num }}">Edit</a></li>
+			{% endfor %}
+		</ul>
   </div>
 </div>
+
 
 {% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html"%}
+{% block content %}
+ {{ super() }}
+	<div>
+      <form id='input_form' action="/save_edit" method="POST">
+        <input type='hidden' name='mongo_id' value={{obj['mid']}}>
+        <div class="row">
+          <fieldset id="align-enter-title"  class="large-9 columns">
+            <legend>{{ 'Edit Commentary:' }}</legend>
+            <label for="milnum">{{ 'Milliet Number:'+millnum }}</label>
+          </fieldset>
+        </div>
+
+        <!-- inital text -->
+        <div class="row">
+          <legend>{{ 'Text:' }}</legend>
+          {% if obj.has_key('orig_uri') %}
+            <input name="orig_uri" type='text' value={{obj['orig_uri']}} size=60> </input>
+          {% else %}
+            <textarea name='orig_text' rows="10" cols="80">{{ obj['orig_text'] }}</textarea>
+          {% endif %}
+          
+        </div>
+
+        <!-- Commentary -->
+        <div class="row">
+          <legend>{{ 'Commentary:' }}</legend>          
+          <textarea class='markdown' id="c1text" name="c1text" rows="10" cols="80" data-lnum="c1">{{ obj['comm'] }}</textarea>
+        </div>
+
+        <!-- Bibliography information -->
+        <div class="row">
+          <legend>{{ 'Bibliography:' }}</legend>
+          <textarea id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
+        </div>
+
+        <!-- Translation 1 -->
+        <div class="row">
+          <legend>{{ 'English Translation:' }}</legend>
+          {% if obj.has_key('eng_uri') %}
+            <input name="eng_uri" type='text' value={{obj['eng_uri']}} size=60> </input> 
+          {% else %}
+            <textarea name="eng_text" rows="10" cols="80">{{ obj['eng_text'] }}</textarea>
+          {% endif %}
+          
+            
+        </div>
+
+        <!-- Translation 2 -->
+        <div class="row">
+          <legend>{{ 'French Translation:' }}</legend>
+          {% if obj.has_key('fra_uri') %}
+           <input name="fra_uri" type='text' value={{obj['fra_uri']}} size=60> </input>
+          {% else %}
+            <textarea name="fra_text" rows="10" cols="80">{{ obj['fra_text'] }}</textarea>
+          {% endif %}   
+        </div>
+        <input type="submit" value="Save Changes" style="float: right; width:200px;"/>
+      </form> 
+      
+    </div>
+{% endblock %}

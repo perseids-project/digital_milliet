@@ -4,6 +4,7 @@ from app import app
 from flask import render_template, request, jsonify, flash, redirect, url_for, session
 from os.path import expanduser
 from app import mongo
+from bson.objectid import ObjectId
 from app import bower
 import re
 
@@ -36,8 +37,7 @@ def commentary():
 
 @app.route('/commentary/<millnum>')
 def millnum(millnum):
-	obj = mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
-	parsed_obj = parse_it(obj)
+	parsed_obj = get_it(millnum)
 	if parsed_obj.has_key('orig_uri'):
 		session['cts_uri'] = parsed_obj['orig_uri']
 
@@ -45,12 +45,59 @@ def millnum(millnum):
 
 @app.route('/edit/<millnum>')
 def edit(millnum):
+	parsed_obj = get_it(millnum)
+	return render_template('/commentary/edit.html', millnum=millnum, obj=parsed_obj)
+
+
+@app.route('/save_edit', methods = ['POST'])
+def save_edit():
+	form = request.form
+	#could do wholesale replace of document but then might risk losing the tags or images
+	record = mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
+	record['commentary'][0]['hasBody']['chars'] = form['c1text']
+	record['bibliography'][0]['hasBody']['chars'] = form['b1text']
+	#translations need to find correct language and account for uri or char body
+	if ((type(record['translation'][0]['hasBody']) is dict) and record['translation'][0]['hasBody']['language'] == 'eng') or re.search('eng', record['translation'][0]['hasBody']):
+		transl_eng = record['translation'][0]
+		transl_fra = record['translation'][1]
+	else:
+		transl_eng = record['translation'][1]
+		transl_fra = record['translation'][0]
+	
+	if 'eng_text' in form:
+		transl_eng['hasBody']['chars'] = form['eng_text']
+	else:
+		transl_eng['hasBody'] = form['eng_uri']
+	
+	if 'fra_text' in form:
+		transl_fra['hasBody']['chars'] = form['fra_text']
+	else:
+		transl_fra['hasBody'] = form['fra_uri']
+	
+	if 'orig_uri' in form:
+		record['commentary'][0]['hasTarget'] = form['orig_uri']
+	else:
+		record['commentary'][0]['hasTarget']['chars'] = form['orig_text']
+	
+	if mongo.db.annotation.save(record):
+		flash('Edit sucessfully saved')
+	else:
+		flash('Error!')
+
+	return redirect('/commentary')
+
+
+
+
+def get_it(millnum):
 	obj = mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
 	parsed_obj = parse_it(obj)
-	return render_template('/commentary/edit.html', millnum=millnum, obj=parsed_obj)
+	return parsed_obj
+
 
 def parse_it(obj):	
 	result = {}
+	result['mid'] = obj['_id']
 	result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
 	result['comm'] = obj['commentary'][0]['hasBody']['chars']
 	for transl in obj['translation']:
@@ -67,8 +114,6 @@ def parse_it(obj):
 		result['orig_text'] = obj['commentary'][0]['hasTarget']['chars']
 	else:
 		result['orig_uri'] = obj['commentary'][0]['hasTarget']
-
-
 	return result
 
 def get_from_cite_coll(target_list):

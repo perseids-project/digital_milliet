@@ -7,11 +7,20 @@
 <script src="{{ bower_url_for('capitains-sparrow', 'dist/cts.min.js') }}"></script>
 <script src="{{ bower_url_for('capitains-sparrow.xslt', 'dist/jquery.cts.xslt.min.js') }}"></script>
 <script src="{{ bower_url_for('capitains-sparrow.service', 'dist/jquery.cts.service.min.js') }}"></script>
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
 <meta name="viewport" content = "width=device-width, initial-scale=1.0">
 	<head>
 		<title>The Digital Milliet Project</title>
 	</head>
-		
+	{% with messages = get_flashed_messages() %}
+  	{% if messages %}
+	    <ul class=flashes>
+	    {% for message in messages %}
+	      <li>{{ message }}</li>
+	    {% endfor %}
+	    </ul>
+	  {% endif %}
+	{% endwith %}	
 	<body class = "body">
 		<div id="navbar">{% include 'header.html' %}</div>
 		<div id='wrap'>

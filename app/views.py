@@ -49,7 +49,7 @@ def edit(millnum):
 	return render_template('/commentary/edit.html', millnum=millnum, obj=parsed_obj)
 
 
-@app.route('/save_edit', methods = ['POST'])
+@app.route('/edit/save_edit', methods = ['POST'])
 def save_edit():
 	form = request.form
 	#could do wholesale replace of document but then might risk losing the tags or images
@@ -84,7 +84,7 @@ def save_edit():
 	else:
 		flash('Error!')
 
-	return redirect('/commentary')
+	return redirect('commentary')
 
 
 

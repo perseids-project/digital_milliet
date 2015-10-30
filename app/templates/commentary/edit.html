@@ -2,7 +2,7 @@
 {% block content %}
  {{ super() }}
 	<div>
-      <form id='input_form' action="/save_edit" method="POST">
+      <form id='input_form' action="save_edit" method="POST">
         <input type='hidden' name='mongo_id' value={{obj['mid']}}>
         <div class="row">
           <fieldset id="align-enter-title"  class="large-9 columns">

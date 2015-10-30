@@ -7,6 +7,8 @@ from app import mongo
 from bson.objectid import ObjectId
 from app import bower
 import re
+from flaskext.markdown import Markdown
+Markdown(app)
 
 HOME = expanduser("~")
 app.secret_key = 'adding this in so flash messages will work'

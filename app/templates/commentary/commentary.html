@@ -56,8 +56,10 @@
           </ul>
 
           <div class='tab-content'>
-            <div role='tabpanel' class='tab-pane active' id='commentary'><p>{{ obj['comm'] }}</p></div>
-            <div role='tabpanel' class='tab-pane' id='bibliography'><p>{{ obj['bibl'] }}</p></div>
+            
+              <div role='tabpanel' class='tab-pane active' id='commentary'><p>{% filter markdown %}{{ obj['comm'] }}{% endfilter %}</p></div>
+              <div role='tabpanel' class='tab-pane' id='bibliography'><p>{{ obj['bibl'] }}</p></div>
+            
           </div> 
         </div>
       </div>

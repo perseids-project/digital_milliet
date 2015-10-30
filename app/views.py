@@ -16,6 +16,10 @@ app.secret_key = 'adding this in so flash messages will work'
 def index():
 	return render_template('index.html')
 
+@app.route('/about')
+def about():
+	return render_template('about.html')
+
 @app.route('/commentary')
 def commentary():
 	comm_list = mongo.db.annotation.find({}, {"commentary" : 1}).sort([("commentary.hasBody.@id" , 1)])

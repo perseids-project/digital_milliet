@@ -16,10 +16,7 @@ function get_cts(textURI, textType){
 		success : function(data) {
             if(cts_obj.checkXML() === true) {
 
-              var name = cts_obj.getXml("groupname", "xml")[0].textContent;
-              var title = cts_obj.getXml("label", "xml")[0].textContent;
               var psg = cts_obj.getXml("psg", "xml")[0].textContent;
-              $('#auth_head').html("<h2>"+name+", "+title+", "+psg+"</h2>");
               $("#"+textType+" p").html(cts_obj.getXml("body", "string"));
 
             } else {

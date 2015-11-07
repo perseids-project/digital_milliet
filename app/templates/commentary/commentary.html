@@ -2,7 +2,9 @@
 {% from "commentary/get_text.html" import get_text with context %}
 {% block content %}
   <div class='row'>
-    <div id="auth_head"></div>
+    <div class='col-md-6'>
+      <div id="auth_head"> <h2>{{ info['auth'] }}, {{ info['work'] }} {{ info['passage'] }} </h2></div>
+    </div>
     <div class='col-xs-8'>
       <div class='row'>
         <div class='col-xs-6'>

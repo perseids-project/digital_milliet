@@ -6,6 +6,7 @@ from os.path import expanduser
 from app import mongo
 from bson.objectid import ObjectId
 from app import bower
+from search_and_browse import *
 import re
 from flaskext.markdown import Markdown
 Markdown(app)
@@ -24,34 +25,22 @@ def about():
 
 @app.route('/commentary')
 def commentary():
-	comm_list = mongo.db.annotation.find({}, {"commentary" : 1}).sort([("commentary.hasBody.@id" , 1)])
-	millnum_list = []
-	target_list = []
-	for row in comm_list:
-		cite_urn = str(row['commentary'][0]['hasBody']['@id'])
-		target = str(row['commentary'][0]['hasTarget'])
-		millnum = cite_urn.split('.')[2]
-		if millnum:
-			millnum_list.append(millnum)
-			tup = (millnum, target)
-			target_list.append(tup)
-		else:
-			pass
-		
-	auth_work_list = ""
-	return render_template('commentary/list.html', millnum_list=millnum_list, auth_work_list=auth_work_list)
+	comm_list = mongo.db.annotation.find({"commentary" : {'$exists' : 1}}).sort([("commentary.hasBody.@id" , 1)])
+	auth_list = mongo.db.annotation.find({"cts_id" : {'$exists' : 1}}).sort([("name" , 1)])
+	millnum_list = process_comm(comm_list)
+	return render_template('commentary/list.html', millnum_list=millnum_list, auth_list=auth_list)
 
 @app.route('/commentary/<millnum>')
 def millnum(millnum):
-	parsed_obj = get_it(millnum)
+	parsed_obj, auth_info = get_it(millnum)
 	if parsed_obj.has_key('orig_uri'):
 		session['cts_uri'] = parsed_obj['orig_uri']
 
-	return render_template('/commentary/commentary.html', obj=parsed_obj)
+	return render_template('/commentary/commentary.html', obj=parsed_obj, info=auth_info)
 
 @app.route('/edit/<millnum>')
 def edit(millnum):
-	parsed_obj = get_it(millnum)
+	parsed_obj, auth_info = get_it(millnum)
 	return render_template('/commentary/edit.html', millnum=millnum, obj=parsed_obj)
 
 
@@ -98,7 +87,16 @@ def save_edit():
 def get_it(millnum):
 	obj = mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
 	parsed_obj = parse_it(obj)
-	return parsed_obj
+	info = mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$in': [millnum]}}})
+	auth_info = {}
+	auth_info['auth'] = info['name']
+	for w in info['works']:
+		for tup in w['millnums']:
+			if millnum in tup:
+				auth_info['work'] = w['title']
+				auth_info['passage'] = tup[1]
+
+	return parsed_obj, auth_info
 
 
 def parse_it(obj):	

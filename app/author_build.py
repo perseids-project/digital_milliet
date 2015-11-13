@@ -54,6 +54,8 @@ def author_db_build(data_dict):
 		mongo.db.annotation.update({'_id' : author['_id']}, author)
 	except "TypeError":
 		pass
+	except "KeyError":
+		pass
 
 def make_author(resp):
 	author = {}

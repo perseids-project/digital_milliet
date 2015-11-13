@@ -1,13 +1,19 @@
 {% extends "base.html" %}
+{% import "auth_list.html" as a_list %}
+
 {% block content %}
 
 <ul id='browse-tabs' class='nav nav-tabs nav-justified' role="tablist">
-	<li role='presentation' class='active'><a href='#millnum' aria-controls='millnum' role='tab' data-toggle='tab'>Milliet Number</a></li>
-	<li role='presentation'><a href='#author' aria-controls='author' role='tab' data-toggle='tab'>Author and Work</a></li>
+	<li role='presentation' class='active'><a href='#author' aria-controls='author' role='tab' data-toggle='tab'>Author and Work</a></li>
+	<li role='presentation'><a href='#millnum' aria-controls='millnum' role='tab' data-toggle='tab'>Milliet Number</a></li>
 </ul>
 
 <div class='tab-content'>
-  <div role='tabpanel' class='tab-pane active' id='millnum'>
+	<div role='tabpanel' class='tab-pane active' id='author'>
+    {{ a_list.auth_list(auth_list) }}
+  </div>
+
+  <div role='tabpanel' class='tab-pane' id='millnum'>
     <div>Digital Milliet Entries and Commentary</div>
 		<ul>
 			{% for num in millnum_list %}
@@ -16,23 +22,7 @@
 		</ul>
 
   </div>
-  <div role='tabpanel' class='tab-pane' id='author'>
-    <ul>
-			{% for auth in auth_list %}
-				<li>{{ auth['name'] }}</li>	
-					<ul>
-					{% for work in auth['works'] %}					
-						<li>{{ work['title'] }}</li>
-							<ul>
-								{% for millnum in work['millnums']%}
-								<li> <a href="commentary/{{ millnum[0] }}">{{ millnum[1] }}</a> </li>
-								{% endfor %}
-							</ul>
-					{% endfor %}
-					</ul>				
-			{% endfor %}
-		</ul>
-  </div>
+  
 </div>
 
 

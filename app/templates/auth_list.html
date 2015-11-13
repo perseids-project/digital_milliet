@@ -1,0 +1,19 @@
+{% macro auth_list(auth_list) -%}
+
+	<ul>
+		{% for auth in auth_list %}
+			<li>{{ auth['name'] }}</li>	
+				<ul>
+				{% for work in auth['works'] %}					
+					<li>{{ work['title'] }}</li>
+						<ul>
+							{% for millnum in work['millnums']%}
+							<li> <a href="commentary/{{ millnum[0] }}">{{ millnum[1] }}</a> </li>
+							{% endfor %}
+						</ul>
+				{% endfor %}
+				</ul>				
+		{% endfor %}
+	</ul>
+
+{%- endmacro %}

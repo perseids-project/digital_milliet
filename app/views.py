@@ -23,6 +23,19 @@ def index():
 def about():
 	return render_template('about.html')
 
+@app.route('/search', methods = ['POST'])
+def search():
+	form = request.form
+	if form['dropdown'] == "Author":
+		res = mongo.db.annotation.find({"name" : form['value']})
+	else:
+		res = mongo.db.annotation.find({"works.title" : form['value']})
+
+	if res.count() == 0:
+		res = None
+		
+	return render_template('search.html', res = res)
+
 @app.route('/commentary')
 def commentary():
 	comm_list = mongo.db.annotation.find({"commentary" : {'$exists' : 1}}).sort([("commentary.hasBody.@id" , 1)])

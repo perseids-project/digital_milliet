@@ -73,3 +73,14 @@ def make_work(work_id, millnum, pasg):
 			l = [[millnum, pasg]]
 			work['millnums'] = l
 			return work
+
+def process_comm(comm_list):
+	millnum_list = []
+	for row in comm_list:
+		cite_urn = str(row['commentary'][0]['hasBody']['@id'])
+		millnum = cite_urn.split('.')[2]
+		if millnum:
+			millnum_list.append(millnum)	
+		else:
+			pass
+	return millnum_list

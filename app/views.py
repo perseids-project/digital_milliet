@@ -17,7 +17,6 @@ app.secret_key = 'adding this in so flash messages will work'
 @app.route('/')
 @app.route('/index')
 def index():
-	#add_to_existing_db()
 	return render_template('index.html')
 
 @app.route('/about')
@@ -39,6 +38,7 @@ def search():
 
 @app.route('/commentary')
 def commentary():
+	#add_to_existing_db()
 	comm_list = mongo.db.annotation.find({"commentary" : {'$exists' : 1}}).sort([("commentary.hasBody.@id" , 1)])
 	auth_list = mongo.db.annotation.find({"cts_id" : {'$exists' : 1}}).sort([("name" , 1)])
 	millnum_list = process_comm(comm_list)

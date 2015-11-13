@@ -6,7 +6,7 @@ from os.path import expanduser
 from app import mongo
 from bson.objectid import ObjectId
 from app import bower
-from search_and_browse import *
+from author_build import *
 import re
 from flaskext.markdown import Markdown
 Markdown(app)
@@ -17,6 +17,7 @@ app.secret_key = 'adding this in so flash messages will work'
 @app.route('/')
 @app.route('/index')
 def index():
+	#add_to_existing_db()
 	return render_template('index.html')
 
 @app.route('/about')
@@ -33,7 +34,7 @@ def search():
 
 	if res.count() == 0:
 		res = None
-		
+
 	return render_template('search.html', res = res)
 
 @app.route('/commentary')

@@ -23,6 +23,9 @@ def author_db_build(data_dict):
 	try:
 		target = data_dict['commentary'][0]['hasTarget']
 		cite_urn = data_dict['commentary'][0]['hasBody']['@id']
+		if (type(target is dict)):
+			pass
+			 
 		millnum = cite_urn.split('.')[2]
 		t_parts = target.split(':')
 		urn_parts = t_parts[3].split('.')
@@ -52,9 +55,9 @@ def author_db_build(data_dict):
 					work['millnums'].append(l)
 		
 		mongo.db.annotation.update({'_id' : author['_id']}, author)
-	except "TypeError":
+	except TypeError:
 		pass
-	except "KeyError":
+	except KeyError:
 		pass
 
 def make_author(resp):

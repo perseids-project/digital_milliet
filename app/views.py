@@ -103,12 +103,17 @@ def get_it(millnum):
 	parsed_obj = parse_it(obj)
 	info = mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$in': [millnum]}}})
 	auth_info = {}
-	auth_info['auth'] = info['name']
-	for w in info['works']:
-		for tup in w['millnums']:
-			if millnum in tup:
-				auth_info['work'] = w['title']
-				auth_info['passage'] = tup[1]
+	if info is None:
+		auth_info['auth'] = ""
+		auth_info['work'] = ""
+		auth_info['passage'] = ""
+	else:
+		auth_info['auth'] = info['name']
+		for w in info['works']:
+			for tup in w['millnums']:
+				if millnum in tup:
+					auth_info['work'] = w['title']
+					auth_info['passage'] = tup[1]
 
 	return parsed_obj, auth_info
 

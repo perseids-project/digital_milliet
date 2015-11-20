@@ -10,7 +10,7 @@ $('#lang_tabs a[href="#bibliography"]').tab('show')
 
 
 function get_cts(textURI, textType){
-	var endpoint = new CTS.endpoint.XQ("http://sosol.perseids.org/exist/rest/db/xq/CTS.xq?");
+	var endpoint = new CTS.endpoint.XQ("http://services2.perseids.org/exist/restxq/cts?");
 	var cts_obj = new CTS.text.Passage(textURI, endpoint, "annotsrc")
 	cts_obj.retrieve({
 		success : function(data) {

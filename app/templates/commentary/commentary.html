@@ -69,7 +69,15 @@
     <div class='col-xs-4'>
       <!-- images -->
       <div class='well'> 
-        <p>Insert pretty picture here</p>
+        {% if obj.has_key('images') %}
+          {% for img in obj['images'] %}
+            <div class='row'>
+              <div class='col-xs-12'>
+                <img src="{{ url_for('static', filename='img') }}"/>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
       
     </div>

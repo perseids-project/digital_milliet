@@ -7,3 +7,4 @@ requests-cache==0.4.9
 flask-cors==2.0.0
 Flask-PyMongo==0.3.1
 Flask-Markdown
+MyCapytain==.0.0.9

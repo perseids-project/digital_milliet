@@ -7,9 +7,12 @@ from app import mongo
 from bson.objectid import ObjectId
 from app import bower
 from author_build import *
+from app import markdown
+#from MyCapytain.endpoints import cts5
+#from MyCapytain.resources.texts.api import Text
+#from MyCapytain.common import reference
 import re
-from flaskext.markdown import Markdown
-Markdown(app)
+
 
 HOME = expanduser("~")
 app.secret_key = 'adding this in so flash messages will work'
@@ -101,7 +104,7 @@ def save_edit():
 def get_it(millnum):
 	obj = mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
 	parsed_obj = parse_it(obj)
-	info = mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$in': [millnum]}}})
+	info = mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$elemMatch' :{'$in': [millnum]}}}})
 	auth_info = {}
 	if info is None:
 		auth_info['auth'] = ""
@@ -136,8 +139,28 @@ def parse_it(obj):
 	if (type(obj['commentary'][0]['hasTarget']) is dict):
 		result['orig_text'] = obj['commentary'][0]['hasTarget']['chars']
 	else:
+		#import pdb; pdb.set_trace()
 		result['orig_uri'] = obj['commentary'][0]['hasTarget']
+		#uri_arr = obj['commentary'][0]['hasTarget'].split(':')
+		#result['orig_text']= cts_retrieve(uri_arr)
+
 	return result
+
+#This and the commented out lines above in parse_it and the commented out imports are for the new CTS service
+#using MyCapytains to access it. For now, since there are not as many texts that are CTS/TEI compliant
+#meaning we lose access to texts with the switch, the javascript call in commentary.js will have to do.
+def cts_retrieve(uri_arr):
+	orig_uri = ":".join(uri_arr[:4])
+	cts = cts5.CTS('http://services2.perseids.org/exist/restxq/cts', inventory="nemo")
+	text = Text(orig_uri, cts)
+	ref = reference.Reference(reference = uri_arr[4])
+	try:
+		passg = text.getPassage(ref)
+	except IndexError:
+		passg = ""
+
+	return passg
+
 
 def get_from_cite_coll(target_list):
 	a_addr = "http://catalog.perseus.org/cite-collections/api/authors/search?"

@@ -11,7 +11,7 @@ $('#lang_tabs a[href="#bibliography"]').tab('show')
 
 function get_cts(textURI, textType){
 	var endpoint = new CTS.endpoint.XQ("http://services2.perseids.org/exist/restxq/cts?");
-	var cts_obj = new CTS.text.Passage(textURI, endpoint, "nemo")
+	var cts_obj = new CTS.text.Passage(textURI, endpoint, "digmill")
 	cts_obj.retrieve({
 		success : function(data) {
             if(cts_obj.checkXML() === true) {

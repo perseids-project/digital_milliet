@@ -151,7 +151,7 @@ def parse_it(obj):
 #meaning we lose access to texts with the switch, the javascript call in commentary.js will have to do.
 def cts_retrieve(uri_arr):
 	orig_uri = ":".join(uri_arr[:4])
-	cts = cts5.CTS('http://services2.perseids.org/exist/restxq/cts', inventory="nemo")
+	cts = cts5.CTS('http://services2.perseids.org/exist/restxq/cts', inventory="digmill")
 	text = Text(orig_uri, cts)
 	ref = reference.Reference(reference = uri_arr[4])
 	try:

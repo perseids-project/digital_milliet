@@ -1,5 +1,5 @@
 {% macro get_text(uri, type) %}
-	<script src="static/js/commentary.js"></script>
+	<script src="{{url_for('static', filename='js/commentary.js')}}"></script>
 	<script type="text/javascript"> 
 		$(function(){
 			var textURI = "{{uri}}";

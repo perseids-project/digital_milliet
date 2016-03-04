@@ -41,13 +41,18 @@
         </div>
 
         <!-- Translation 1 -->
+
         <div class="row">
           <div class="col-md-6">
-            <legend>{{ 'English Translation:' }}</legend>
-            {% if obj.has_key('eng_uri') %}
-              <input name="eng_uri" type='text' value={{obj['eng_uri']}} size=60> </input> 
-            {% else %}
-              <textarea name="eng_text" rows="10" cols="80">{{ obj['eng_text'] }}</textarea>
+            <legend>{{ 'Translation 1:' }}</legend>
+            {% if obj.has_key('t1_uri') %}
+              <input name="t1_uri" type='text' value={{obj['t1_uri']}} size=60> </input> 
+            {% else %}              
+              <select name="lang1" id="lang1">
+                <option value="eng" {% if obj['t1_lang'] == 'eng' %} selected='selected' {% endif %}>{{ ('English') }}</option>
+                <option value="fra" {% if obj['t1_lang'] == 'fra' %} selected='selected' {% endif %}>{{ ('French') }}</option>
+              </select>
+              <textarea name="t1_text" rows="10" cols="80">{{ obj['t1_text'] }}</textarea>
             {% endif %}
           </div>  
         </div>
@@ -55,11 +60,15 @@
         <!-- Translation 2 -->
         <div class="row">
           <div class="col-md-6">
-            <legend>{{ 'French Translation:' }}</legend>
-            {% if obj.has_key('fra_uri') %}
-             <input name="fra_uri" type='text' value={{obj['fra_uri']}} size=60> </input>
+            <legend>{{ 'Translation 2:' }}</legend>
+            {% if obj.has_key('t2_uri') %}
+             <input name="t2_uri" type='text' value={{obj['t2_uri']}} size=60> </input>
             {% else %}
-              <textarea name="fra_text" rows="10" cols="80">{{ obj['fra_text'] }}</textarea>
+              <select name="lang2" id="lang2">
+                <option value="eng" {% if obj['t2_lang'] == 'eng' %} selected='selected' {% endif %}>{{ ('English') }}</option>
+                <option value="fra" {% if obj['t2_lang'] == 'fra' %} selected='selected' {% endif %}>{{ ('French') }}</option>
+              </select>
+              <textarea name="t2_text" rows="10" cols="80">{{ obj['t2_text'] }}</textarea>
             {% endif %}   
           </div>
         </div>

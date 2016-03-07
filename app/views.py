@@ -68,23 +68,18 @@ def save_edit():
 	record = mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
 	record['commentary'][0]['hasBody']['chars'] = form['c1text']
 	record['bibliography'][0]['hasBody']['chars'] = form['b1text']
-	#translations need to find correct language and account for uri or char body
-	if ((type(record['translation'][0]['hasBody']) is dict) and record['translation'][0]['hasBody']['language'] == 'eng') or re.search('eng', record['translation'][0]['hasBody']):
-		transl_eng = record['translation'][0]
-		transl_fra = record['translation'][1]
+
+	if 't1_text' in form:
+		record['translation'][0]['hasBody']['chars'] = form['t1_text']
+		record['translation'][0]['hasBody']['language'] = form['lang1']
 	else:
-		transl_eng = record['translation'][1]
-		transl_fra = record['translation'][0]
+		record['translation'][0]['hasBody'] = form['t1_uri']
 	
-	if 'eng_text' in form:
-		transl_eng['hasBody']['chars'] = form['eng_text']
+	if 't2_text' in form:
+		record['translation'][1]['hasBody']['chars'] = form['t2_text']
+		record['translation'][1]['hasBody']['language'] = form['lang2']
 	else:
-		transl_eng['hasBody'] = form['eng_uri']
-	
-	if 'fra_text' in form:
-		transl_fra['hasBody']['chars'] = form['fra_text']
-	else:
-		transl_fra['hasBody'] = form['fra_uri']
+		record['translation'][1]['hasBody'] = form['t2_uri']
 	
 	if 'orig_uri' in form:
 		record['commentary'][0]['hasTarget'] = form['orig_uri']
@@ -127,14 +122,17 @@ def parse_it(obj):
 	result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
 	result['comm'] = obj['commentary'][0]['hasBody']['chars']
 	for transl in obj['translation']:
+		t_num = transl['hasBody']['@id'].split('.')[-1]
 		if (type(transl['hasBody']) is dict):
 			text = transl['hasBody']['chars']
 			lang = transl['hasBody']['language']
-			result[lang+'_text'] = text
+			result[t_num+'_text'] = text
+			result[t_num+'_lang'] = lang
 		else:
 			text = transl['hasBody']
 			lang = re.search('\D+', text.split('-')[1]).group(0)
-			result[lang+'_uri'] = text
+			result[t_num+'_uri'] = text
+			result[t_num+'_lang'] = lang
 
 	if (type(obj['commentary'][0]['hasTarget']) is dict):
 		result['orig_text'] = obj['commentary'][0]['hasTarget']['chars']

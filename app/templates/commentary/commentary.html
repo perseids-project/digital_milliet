@@ -23,26 +23,26 @@
         </div>
         <div class='col-xs-6'>
           <!-- translations -->
-          <!-- really these ought to be generated based on the attached translations but this will work for now -->
+          <!-- really these ought to be generated based on the attached translations but this will work for now, only need to change how the tab is named, reference a list or something -->
           <div class='well'>  
             <ul id='lang_tabs' class='nav nav-tabs nav-justified' role="tablist">
-              <li role='presentation' class='active'><a href='#english' aria-controls='english' role='tab' data-toggle='tab'>English</a></li>
-              <li role='presentation'><a href='#french' aria-controls='french' role='tab' data-toggle='tab'>French</a></li>
+              <li role='presentation' class='active'><a href='#eng' aria-controls='eng' role='tab' data-toggle='tab'>English</a></li>
+              <li role='presentation'><a href='#fra' aria-controls='fra' role='tab' data-toggle='tab'>French</a></li>
             </ul>
 
             <div class='tab-content'>
-              <div role='tabpanel' class='tab-pane active' id='english'>
-                {% if obj.has_key('eng_uri') %}
-                  <p>{{ get_text(obj['eng_uri'], 'english') }}</p>
+              <div role='tabpanel' class='tab-pane active' id={{ obj['t1_lang']}}>
+                {% if obj.has_key('t1_uri') %}
+                  <p>{{ get_text(obj['t1_uri'], 'english') }}</p>
                 {% else %}
-                  <p>{{ obj['eng_text'] }}</p>
+                  <p>{{ obj['t1_text'] }}</p>
                 {% endif %}
               </div>
-              <div role='tabpanel' class='tab-pane' id='french'>
-                {% if obj.has_key('fra_uri') %}
-                  <p>{{ get_text(obj['fra_uri'], 'french') }}</p>
+              <div role='tabpanel' class='tab-pane' id={{ obj['t2_lang']}}>
+                {% if obj.has_key('t2_uri') %}
+                  <p>{{ get_text(obj['t2_uri'], 'french') }}</p>
                 {% else %}
-                  <p>{{ obj['fra_text'] }}</p>
+                  <p>{{ obj['t2_text'] }}</p>
                 {% endif %}
               </div>
             </div>

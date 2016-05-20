@@ -70,14 +70,17 @@ def save_edit():
 	record['bibliography'][0]['hasBody']['chars'] = form['b1text']
 
 	if 't1_text' in form:
-		record['translation'][0]['hasBody']['chars'] = form['t1_text']
-		record['translation'][0]['hasBody']['language'] = form['lang1']
+                if form['t1_text'] != '':
+		    record['translation'][0]['hasBody']['chars'] = form['t1_text']
+		    record['translation'][0]['hasBody']['language'] = form['lang1']
+                
 	else:
 		record['translation'][0]['hasBody'] = form['t1_uri']
 	
 	if 't2_text' in form:
-		record['translation'][1]['hasBody']['chars'] = form['t2_text']
-		record['translation'][1]['hasBody']['language'] = form['lang2']
+                if form['t2_text'] != '':
+		    record['translation'][1]['hasBody']['chars'] = form['t2_text']
+		    record['translation'][1]['hasBody']['language'] = form['lang2']
 	else:
 		record['translation'][1]['hasBody'] = form['t2_uri']
 	
@@ -122,13 +125,14 @@ def parse_it(obj):
 	result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
 	result['comm'] = obj['commentary'][0]['hasBody']['chars']
 	for transl in obj['translation']:
-		t_num = transl['hasBody']['@id'].split('.')[-1]
 		if (type(transl['hasBody']) is dict):
+		        t_num = transl['hasBody']['@id'].split('.')[-1]
 			text = transl['hasBody']['chars']
 			lang = transl['hasBody']['language']
 			result[t_num+'_text'] = text
 			result[t_num+'_lang'] = lang
 		else:
+                        t_num = "1" 
 			text = transl['hasBody']
 			lang = re.search('\D+', text.split('-')[1]).group(0)
 			result[t_num+'_uri'] = text
@@ -149,7 +153,7 @@ def parse_it(obj):
 #meaning we lose access to texts with the switch, the javascript call in commentary.js will have to do.
 def cts_retrieve(uri_arr):
 	orig_uri = ":".join(uri_arr[:4])
-	cts = cts5.CTS('http://services2.perseids.org/exist/restxq/cts', inventory="digmill")
+	cts = cts5.CTS('http://cts.perseids.org/api/cts/', inventory="digmill")
 	text = Text(orig_uri, cts)
 	ref = reference.Reference(reference = uri_arr[4])
 	try:

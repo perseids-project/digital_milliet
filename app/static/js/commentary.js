@@ -10,13 +10,13 @@ $('#lang_tabs a[href="#bibliography"]').tab('show')
 
 
 function get_cts(textURI, textType){
-	var endpoint = new CTS.endpoint.XQ("http://services2.perseids.org/exist/restxq/cts?");
+	var endpoint = new CTS.endpoint.XQ("http://cts.perseids.org/api/cts/?");
 	var cts_obj = new CTS.text.Passage(textURI, endpoint, "digmill")
 	cts_obj.retrieve({
 		success : function(data) {
             if(cts_obj.checkXML() === true) {
 
-              var psg = cts_obj.getXml("psg", "xml")[0].textContent;
+              var psg = cts_obj.getXml("passage", "xml")[0].textContent;
               $("#"+textType+" p").html(cts_obj.getXml("body", "string"));
 
             } else {

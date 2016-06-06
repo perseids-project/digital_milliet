@@ -84,6 +84,7 @@ def make_work(work_id, millnum, pasg):
 def process_comm(comm_list):
 	millnum_list = []
 	for row in comm_list:
+            try:
 		cite_urn = str(row['commentary'][0]['hasBody']['@id'])
 		millnum = int(cite_urn.split('.')[2])
 		if millnum:
@@ -91,4 +92,7 @@ def process_comm(comm_list):
 		else:
 			pass
 		millnum_list.sort()
+            except:
+                print("Unable to process" + str(cite_urn)) 
+                pass 
 	return millnum_list

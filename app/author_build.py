@@ -3,6 +3,7 @@
 from app import app
 from flask import request, jsonify, url_for, session
 import os, requests
+import re
 from app import mongo
 from bson.objectid import ObjectId
 
@@ -83,16 +84,17 @@ def make_work(work_id, millnum, pasg):
 
 def process_comm(comm_list):
 	millnum_list = []
+        convert = lambda text: int(text) if text.isdigit() else text
+        alphanum_key = lambda key: [ convert(re.split('([A-Za-z]+)', key)[0]) ] 
 	for row in comm_list:
             try:
 		cite_urn = str(row['commentary'][0]['hasBody']['@id'])
-		millnum = int(cite_urn.split('.')[2])
+		millnum = cite_urn.split('.')[2]
 		if millnum:
 			millnum_list.append(millnum)	
 		else:
 			pass
-		millnum_list.sort()
             except:
                 print("Unable to process" + str(cite_urn)) 
                 pass 
-	return millnum_list
+	return sorted(millnum_list,key=alphanum_key)

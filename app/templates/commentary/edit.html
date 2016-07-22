@@ -16,7 +16,7 @@
         <div class="row">
           <div class="col-md-6">
             <legend>{{ 'Text:' }}</legend>
-            {% if obj.has_key('orig_uri') %}
+            {% if 'orig_uri' in obj %}
               <input name="orig_uri" type='text' value={{obj['orig_uri']}} size=60> </input>
             {% else %}
               <textarea name='orig_text' rows="10" cols="80">{{ obj['orig_text'] }}</textarea>
@@ -45,7 +45,7 @@
         <div class="row">
           <div class="col-md-6">
             <legend>{{ 'Translation 1:' }}</legend>
-            {% if obj.has_key('t1_uri') %}
+            {% if 't1_uri' in obj %}
               <input name="t1_uri" type='text' value={{obj['t1_uri']}} size=60> </input> 
             {% else %}              
               <select name="lang1" id="lang1">
@@ -61,7 +61,7 @@
         <div class="row">
           <div class="col-md-6">
             <legend>{{ 'Translation 2:' }}</legend>
-            {% if obj.has_key('t2_uri') %}
+            {% if 't2_uri' in obj %}
              <input name="t2_uri" type='text' value={{obj['t2_uri']}} size=60> </input>
             {% else %}
               <select name="lang2" id="lang2">

@@ -13,7 +13,7 @@
             <!-- Need to define some css for the text boxes, max height, scrolling, etc -->
             <div id='origin_text'>
               <!-- going to need a way for all of the text fields to grab text if uri, or display char field if not -->
-              {% if obj.has_key('orig_uri') %}
+              {% if 'orig_uri' in obj %}
                 <p>{{ get_text(obj['orig_uri'], 'origin_text') }}</p>
               {% else %}
                 <p>{{ obj['orig_text'] }}</p>
@@ -32,14 +32,14 @@
 
             <div class='tab-content'>
               <div role='tabpanel' class='tab-pane active' id={{ obj['t1_lang']}}>
-                {% if obj.has_key('t1_uri') %}
+                {% if 't1_uri' in obj %}
                   <p>{{ get_text(obj['t1_uri'], 'english') }}</p>
                 {% else %}
                   <p>{{ obj['t1_text'] }}</p>
                 {% endif %}
               </div>
               <div role='tabpanel' class='tab-pane' id={{ obj['t2_lang']}}>
-                {% if obj.has_key('t2_uri') %}
+                {% if 't2_uri' in obj %}
                   <p>{{ get_text(obj['t2_uri'], 'french') }}</p>
                 {% else %}
                   <p>{{ obj['t2_text'] }}</p>
@@ -69,7 +69,7 @@
     <div class='col-xs-4'>
       <!-- images -->
       <div class='well'> 
-        {% if obj.has_key('images') %}
+        {% if 'images' in obj %}
           {% for img in obj['images'] %}
             <div class='row'>
               <div class='col-xs-12'>

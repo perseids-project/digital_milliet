@@ -9,6 +9,7 @@ from bson.objectid import ObjectId
 from bson.json_util import dumps
 from app import bower
 from app.author_build import *
+from app.data_parse import *
 from app import markdown
 #from MyCapytain.endpoints import cts5
 #from MyCapytain.resources.texts.api import Text
@@ -101,12 +102,11 @@ def save_edit():
 @app.route('/save_data', methods=['GET', 'POST'])
 def save_data(): 
   import pdb; pdb.set_trace()
-  data_dict = request.args.to_dict() 
-#make_json method will be in the data_parse.py file, right now it is just the JS taken from persieds-client-apps
+  vals = request.args.to_dict() 
   json_data = make_json(vals)    
-  data = json.dumps(data_dict, indent=2, sort_keys=True)
-  raw_id = data_dict['commentary'][0]['hasBody']['@id'].encode()
-  m_obj = add_to_db(data_dict)
+  data = json.dumps(json_data, indent=2, sort_keys=True)
+  raw_id = json_data['commentary'][0]['hasBody']['@id'].encode()
+  m_obj = add_to_db(json_data)
   mil_id = raw_id.split(':').pop()
   path = "/digmil/"+mil_id+".txt"
   session['path'] = path

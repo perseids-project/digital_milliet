@@ -101,21 +101,8 @@ def save_edit():
 #for catching requests from the perseids-client-apps form and saving the data
 @app.route('/save_data', methods=['GET', 'POST'])
 def save_data(): 
-  import pdb; pdb.set_trace()
-  vals = request.args.to_dict() 
-  json_data = make_json(vals)    
-  data = json.dumps(json_data, indent=2, sort_keys=True)
-  raw_id = json_data['commentary'][0]['hasBody']['@id'].encode()
-  m_obj = add_to_db(json_data)
-  mil_id = raw_id.split(':').pop()
-  path = "/digmil/"+mil_id+".txt"
-  session['path'] = path
-  session['obj'] = str(m_obj)
-  with open(HOME+path, "wb") as mil_file:
-    mil_file.write(data)
-
-  m_obj = mongo.db.annotation.find({'_id': bson.ObjectId(obj)})
-  data = dumps(m_obj[0], indent=2, sort_keys=True)
+  path, data = save_from_form(request.args.to_dict(), HOME)
+  
   return render_template('save_data/success.html', path=path, data=data)
 
 
@@ -153,7 +140,7 @@ def parse_it(obj):
       result[t_num+'_lang'] = lang
     else:
       t_num = "1" 
-      text = trSansl['hasBody']
+      text = transl['hasBody']
       lang = re.search('\D+', text.split('-')[1]).group(0)
       result[t_num+'_uri'] = text
       result[t_num+'_lang'] = lang

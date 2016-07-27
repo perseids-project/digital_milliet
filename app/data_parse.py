@@ -10,7 +10,6 @@ import json
 from app.author_build import *
 
 def save_from_form(vals, HOME):
-  import pdb; pdb.set_trace()
   json_data = make_json(vals)
   data = json.dumps(json_data, indent=2, sort_keys=True)
   raw_id = json_data['commentary'][0]['hasBody']['@id']
@@ -20,7 +19,7 @@ def save_from_form(vals, HOME):
   session['path'] = path
   session['obj'] = str(m_obj)  
   with open(HOME+path, "wb") as mil_file:
-    mil_file.write(data)
+    mil_file.write(data.encode('utf-8'))
 
   return path, data
 

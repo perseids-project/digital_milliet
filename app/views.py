@@ -103,7 +103,7 @@ def save_edit():
 def save_data(): 
   path, data = save_from_form(request.args.to_dict(), HOME)
   
-  return render_template('save_data/success.html', path=path, data=data)
+  return json.dumps({'path':path, 'data':data}, 200, {'ContentType':'application/json'})  
 
 
 def get_it(millnum):

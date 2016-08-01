@@ -6,8 +6,10 @@ import os, requests, datetime
 import re
 from app import mongo
 from bson.objectid import ObjectId
+from bson.json_util import dumps
 import json
 from app.author_build import *
+
 
 def save_from_form(vals, HOME):
   json_data = make_json(vals)
@@ -25,6 +27,37 @@ def save_from_form(vals, HOME):
 
 
 
+def edit_save(form):
+  record = mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
+  record['commentary'][0]['hasBody']['chars'] = form['c1text']
+  record['bibliography'][0]['hasBody']['chars'] = form['b1text']
+
+  if 't1_text' in form:
+    if form['t1_text'] != '':
+      record['translation'][0]['hasBody']['chars'] = form['t1_text']
+      record['translation'][0]['hasBody']['language'] = form['lang1']                
+  else:
+    record['translation'][0]['hasBody'] = form['t1_uri']
+  
+  if 't2_text' in form:
+    if form['t2_text'] != '':
+      record['translation'][1]['hasBody']['chars'] = form['t2_text']
+      record['translation'][1]['hasBody']['language'] = form['lang2']
+  else:
+    record['translation'][1]['hasBody'] = form['t2_uri']
+  
+  if 'orig_uri' in form:
+    record['commentary'][0]['hasTarget'] = form['orig_uri']
+  else:
+    record['commentary'][0]['hasTarget']['chars'] = form['orig_text']
+  
+  if mongo.db.annotation.save(record):
+    flash('Edit sucessfully saved')
+  else:
+    flash('Error!')
+
+
+
 def add_to_db(data_dict):
   #save data in mongo
   m_obj = mongo.db.annotation.insert(data_dict)  
@@ -32,6 +65,7 @@ def add_to_db(data_dict):
   author_db_build(data_dict)
   
   return m_obj
+
 
 
 def make_json(vals):
@@ -135,4 +169,86 @@ def build_transl(num, milnum, text, uri, own_uri, select, other):
 
   return body
 
-{'commentary': [{'motivatedBy': 'oa:commenting', 'hasTarget': 'urn:cts:latinLit:phi1056.phi001.perseus-lat1:1.1.1-1.1.1', '@context': 'http://www.w3.org/ns/oa-context-20130208.json', '@type': 'oa:Annotation', 'hasBody': {'format': 'text', '@id': 'http://perseids.org/collections/urn:cite:perseus:digmil.23456789.c1', 'chars': 'wqdewfresgtrdhytjukilo', 'language': 'eng'}, 'annotatedAt': '2016-07-26 16:11:42.485480', '@id': 'digmilann.5965983798380217224'}], '_id': ObjectId('5797c403fcfb727347e866c6'), 'images': [], 'translation': [{'motivatedBy': 'oa:linking', 'hasTarget': 'urn:cts:latinLit:phi1056.phi001.perseus-lat1:1.1.1-1.1.1', '@context': 'http://www.w3.org/ns/oa-context-20130208.json', '@type': 'oa:Annotation', 'hasBody': 'urn:cts:latinLit:phi1056.phi001.perseus-eng1:1.1.1-1.1.1', 'annotatedAt': '2016-07-26 16:11:42.485480', '@id': 'digmilann.1360570924997549291'}, {'motivatedBy': 'oa:linking', 'hasTarget': 'urn:cts:latinLit:phi1056.phi001.perseus-lat1:1.1.1-1.1.1', '@context': 'http://www.w3.org/ns/oa-context-20130208.json', '@type': 'oa:Annotation', 'hasBody': {'format': 'text', '@id': 'http://perseids.org/collections/urn:cite:perseus:digmil.23456789.t2', 'chars': 'qwdefegthryjtukiyujyhgfds"', 'language': 'fra'}, 'annotatedAt': '2016-07-26 16:11:42.485480', '@id': 'digmilann.-4441570331895779802'}], 'tags': [], 'bibliography': [{'motivatedBy': 'oa:linking', 'hasTarget': 'http://perseids.org/collections/urn:cite:perseus:digmil.23456789.c1', '@context': 'http://www.w3.org/ns/oa-context-20130208.json', '@type': 'oa:Annotation', 'hasBody': {'format': 'text', '@id': 'http://perseids.org/collections/urn:cite:perseus:digmil.23456789.b1', 'chars': 'weafrethdytjuykilo', 'language': 'eng'}, 'annotatedAt': '2016-07-26 16:11:42.485480', '@id': 'digmilann.-7543811096773959574'}]}
+
+
+def get_it(millnum):
+  obj = mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
+  parsed_obj = parse_it(obj)
+  info = mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$elemMatch' :{'$in': [millnum]}}}})
+  auth_info = {}
+  if info is None:
+    auth_info['auth'] = ""
+    auth_info['work'] = ""
+    auth_info['passage'] = ""
+  else:
+    auth_info['auth'] = info['name']
+    for w in info['works']:
+      for tup in w['millnums']:
+        if millnum in tup:
+          auth_info['work'] = w['title']
+          auth_info['passage'] = tup[1]
+
+  return parsed_obj, auth_info
+
+
+
+def parse_it(obj):  
+  result = {}
+  result['mid'] = obj['_id']
+  result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
+  result['comm'] = obj['commentary'][0]['hasBody']['chars']
+  for transl in obj['translation']:
+    if (type(transl['hasBody']) is dict):
+      t_num = transl['hasBody']['@id'].split('.')[-1]
+      text = transl['hasBody']['chars']
+      lang = transl['hasBody']['language']
+      result[t_num+'_text'] = text
+      result[t_num+'_lang'] = lang
+    else:
+      t_num = "1" 
+      text = transl['hasBody']
+      lang = re.search('\D+', text.split('-')[1]).group(0)
+      result[t_num+'_uri'] = text
+      result[t_num+'_lang'] = lang
+
+  if (type(obj['commentary'][0]['hasTarget']) is dict):
+    result['orig_text'] = obj['commentary'][0]['hasTarget']['chars']
+  else:
+    #import pdb; pdb.set_trace()
+    result['orig_uri'] = obj['commentary'][0]['hasTarget']
+    #uri_arr = obj['commentary'][0]['hasTarget'].split(':')
+    #result['orig_text']= cts_retrieve(uri_arr)
+
+  return result
+
+
+
+#This and the commented out lines above in parse_it and the commented out imports are for the new CTS service
+#using MyCapytains to access it. For now, since there are not as many texts that are CTS/TEI compliant
+#meaning we lose access to texts with the switch, the javascript call in commentary.js will have to do.
+def cts_retrieve(uri_arr):
+  orig_uri = ":".join(uri_arr[:4])
+  cts = cts5.CTS('http://cts.perseids.org/api/cts/', inventory="digmill")
+  text = Text(orig_uri, cts)
+  ref = reference.Reference(reference = uri_arr[4])
+  try:
+    passg = text.getPassage(ref)
+  except IndexError:
+    passg = ""
+
+  return passg
+
+
+
+def get_from_cite_coll(target_list):
+  a_addr = "http://catalog.perseus.org/cite-collections/api/authors/search?"
+  w_addr = "http://catalog.perseus.org/cite-collections/api/works/search?"
+  #this isn't finished!! need to pull info out of the target list and batch send the urns to the cite collections
+  #then need to match it all back up again?S
+  if auth in auth_work_list:
+    if work in auth_work_list[auth]:
+      pass
+    else:
+      auth_work_list[auth].append(work).sort()
+  else:
+    auth_work_list[auth] = [work]

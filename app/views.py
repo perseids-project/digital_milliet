@@ -84,8 +84,8 @@ def save_edit():
 #for catching requests from the perseids-client-apps form and saving the data
 @app.route('/save_data', methods=['GET', 'POST'])
 def save_data(): 
-  path, data = save_from_form(request.args.to_dict(), HOME)
+  millnum = save_from_form(request.args.to_dict(), HOME)
   
-  return json.dumps({'path':path, 'data':data}, 200, {'ContentType':'application/json'})  
+  return json.dumps({'millnum':millnum}, 200, {'ContentType':'application/json'})  
 
 

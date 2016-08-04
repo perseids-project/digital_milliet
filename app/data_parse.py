@@ -15,15 +15,17 @@ def save_from_form(vals, HOME):
   json_data = make_json(vals)
   data = json.dumps(json_data, indent=2, sort_keys=True)
   raw_id = json_data['commentary'][0]['hasBody']['@id']
-  m_obj = add_to_db(json_data)
   mil_id = raw_id.split(':').pop()
+  record = mongo.db.annotation.find_one_or_404({'commentary'[0]['hasBody']['@id']: raw_id})
+  m_obj = add_to_db(json_data, mil_id)
+  
   path = "/digmil/"+mil_id+".txt"
   session['path'] = path
   session['obj'] = str(m_obj)  
   with open(HOME+path, "wb") as mil_file:
     mil_file.write(data.encode('utf-8'))
 
-  return path, data
+  return mil_id
 
 
 

@@ -195,7 +195,6 @@ def get_it(millnum):
 
 def parse_it(obj):  
   result = {}
-  result['mid'] = obj['_id']
   result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
   result['comm'] = obj['commentary'][0]['hasBody']['chars']
   for transl in obj['translation']:

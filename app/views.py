@@ -1,7 +1,7 @@
 # coding=utf8
 
 from app import app
-from flask import render_template, request, jsonify, flash, redirect, url_for, session
+from flask import render_template, request, jsonify, flash, redirect, url_for, session, Response, make_response
 from os.path import expanduser
 from app import mongo
 import bson
@@ -60,7 +60,7 @@ def millnum(millnum):
   if 'orig_uri' in parsed_obj:
     session['cts_uri'] = parsed_obj['orig_uri']
 
-  return render_template('/commentary/commentary.html', obj=parsed_obj, info=auth_info)
+  return render_template('/commentary/commentary.html', obj=parsed_obj, info=auth_info, millnum=millnum)
 
 
 
@@ -89,3 +89,17 @@ def save_data():
   return json.dumps({'millnum':millnum}, 200, {'ContentType':'application/json'})  
 
 
+def removethingihate(x):
+  for k in x:
+    if x[k] is dict or x[k] is list:
+      removethingihate(x[k])
+    if not (x[k] is int or x[k] is float and x[k] is not str):
+      x[k] = str(x[k])
+
+@app.route('/api/commentary/<millnum>', methods=['GET'])
+def api_data_get(millnum):
+  res = mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
+  #have to remove the _id from mongo because it is bson and bson breaks the json
+  del res['_id']
+
+  return jsonify(res)

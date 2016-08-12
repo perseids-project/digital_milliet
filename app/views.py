@@ -89,13 +89,6 @@ def save_data():
   return json.dumps({'millnum':millnum}, 200, {'ContentType':'application/json'})  
 
 
-def removethingihate(x):
-  for k in x:
-    if x[k] is dict or x[k] is list:
-      removethingihate(x[k])
-    if not (x[k] is int or x[k] is float and x[k] is not str):
-      x[k] = str(x[k])
-
 @app.route('/api/commentary/<millnum>', methods=['GET'])
 def api_data_get(millnum):
   res = mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})

@@ -206,7 +206,7 @@ def parse_it(obj):
       result[t_num+'_text'] = text
       result[t_num+'_lang'] = lang
     else:
-      t_num = "1" 
+      t_num = "t1" 
       text = transl['hasBody']
       lang = re.search('\D+', text.split('-')[1]).group(0)
       result[t_num+'_uri'] = text

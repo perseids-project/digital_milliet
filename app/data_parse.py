@@ -195,7 +195,6 @@ def get_it(millnum):
 
 def parse_it(obj):  
   result = {}
-  result['mid'] = obj['_id']
   result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
   result['comm'] = obj['commentary'][0]['hasBody']['chars']
   for transl in obj['translation']:
@@ -206,7 +205,7 @@ def parse_it(obj):
       result[t_num+'_text'] = text
       result[t_num+'_lang'] = lang
     else:
-      t_num = "1" 
+      t_num = "t1" 
       text = transl['hasBody']
       lang = re.search('\D+', text.split('-')[1]).group(0)
       result[t_num+'_uri'] = text

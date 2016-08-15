@@ -2,7 +2,6 @@
 {% from "commentary/get_text.html" import get_text with context %}
 {% block content %}
 
-  <script> var obj = {{ obj|tojson|safe }}; </script>
   <div class='row'>
     <div class='col-md-6'>
       <div id="auth_head"> <h2>{{ info['auth'] }}, {{ info['work'] }} {{ info['passage'] }} </h2></div>

@@ -33,10 +33,13 @@ function get_cts(textURI, textType){
 }
 
 function set_active() {
+	var available_langs = [];
 	$('#lang_tabs a').each(function() {
 	  if ($('#' + this.getAttribute('aria-controls')+ ' p')[0].innerHTML.length > 0) {
-	    $(this).addClass("active").tab('show');
-	    return false;
-	  }
+      available_langs.push(this.getAttribute('aria-controls'));
+		}
 	});
+	if (available_langs.length > 0) {
+    $('#lang_tabs a[aria-controls='+available_langs[0]+']').addClass("active").tab('show');
+	}
 };

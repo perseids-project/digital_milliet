@@ -12,6 +12,7 @@ from app.author_build import *
 from app.data_parse import *
 import re
 import json
+import sys
 
 HOME = expanduser("~")
 app.secret_key = 'adding this in so flash messages will work'
@@ -82,9 +83,10 @@ def save_edit():
 
 
 #for catching requests from the perseids-client-apps form and saving the data
-@app.route('/save_data', methods=['GET', 'POST'])
+@app.route('/save_data', methods=['POST'])
 def save_data(): 
-  millnum = save_from_form(request.args.to_dict(), HOME)
+  print("Data = " +str(request.form),file=sys.stderr)
+  millnum = save_from_form(request.form.to_dict(), HOME)
   
   return json.dumps({'millnum':millnum}, 200, {'ContentType':'application/json'})  
 

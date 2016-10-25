@@ -93,6 +93,5 @@ def process_comm(comm_list):
       else:
         pass
     except:
-      print("Unable to process" + str(cite_urn)) 
       pass 
   return sorted(millnum_list,key=alphanum_key)

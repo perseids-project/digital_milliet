@@ -60,6 +60,7 @@ def millnum(millnum):
   if 'orig_uri' in parsed_obj:
     session['cts_uri'] = parsed_obj['orig_uri']
 
+
   return render_template('/commentary/commentary.html', obj=parsed_obj, info=auth_info, millnum=millnum)
 
 
@@ -82,11 +83,14 @@ def save_edit():
 
 
 #for catching requests from the perseids-client-apps form and saving the data
-@app.route('/save_data', methods=['GET', 'POST'])
+@app.route('/save_data', methods=['POST'])
 def save_data(): 
-  millnum = save_from_form(request.args.to_dict(), HOME)
-  
-  return json.dumps({'millnum':millnum}, 200, {'ContentType':'application/json'})  
+  millnum = save_from_form(request.form.to_dict(), HOME)
+  if millnum is not None:
+    return json.dumps({'millnum':millnum}), 200, {'ContentType':'application/json'}  
+  else:
+    return json.dumps({"error":"unable to save data"}), 409, {'ContentType':'application/json'}  
+
 
 
 @app.route('/api/commentary/<millnum>', methods=['GET'])

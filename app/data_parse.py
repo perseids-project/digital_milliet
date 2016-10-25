@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from app import app
-from flask import request, jsonify, url_for, session
+from flask import request, jsonify, url_for, session, flash
 import os, requests, datetime
 import re
 from app import mongo
@@ -17,16 +17,10 @@ def save_from_form(vals, HOME):
   raw_id = json_data['commentary'][0]['hasBody']['@id']
   mil_id = raw_id.split(':').pop()
   m_obj = add_to_db(json_data)
-  
-  path = "/digmil/"+mil_id+".txt"
-  session['path'] = path
-  session['obj'] = str(m_obj)  
-  with open(HOME+path, "wb") as mil_file:
-    mil_file.write(data.encode('utf-8'))
-
-  return mil_id.split('.')[1]
-
-
+  if m_obj is not None:
+    return mil_id.split('.')[1]
+  else:
+    return None
 
 def edit_save(form):
   record = mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
@@ -61,10 +55,13 @@ def edit_save(form):
 
 def add_to_db(data_dict):
   #save data in mongo
-  m_obj = mongo.db.annotation.insert(data_dict)  
-  #now compile author info
-  author_db_build(data_dict)
-  
+  cid = data_dict["commentary"][0]["hasBody"]["@id"]
+  exists = mongo.db.annotation.find_one({"commentary.hasBody.@id" : cid})
+  m_obj = None
+  if not exists:
+    m_obj = mongo.db.annotation.insert(data_dict)  
+    #now compile author info
+    author_db_build(data_dict)
   return m_obj
 
 
@@ -72,18 +69,17 @@ def add_to_db(data_dict):
 def make_json(vals):
   date = datetime.datetime.today()
   milnum = vals['milnum'].zfill(3)
-  if not vals['l1uri']:
-    if not vals['own_uri_l1']:
-      main_text = dict(
-        [("@id", "http://perseids.org/collections/urn:cite:perseus:digmil." + milum+ ".l1"),
-        ("format", "text"),
-        ("chars", vals['l1text']),
-        ("language", vals['select_l1'])
-        ])
-    else:
-      main_text = vals['own_uri_l1']
-  else:
+  if vals['l1uri']:
     main_text = vals['l1uri']
+  elif vals['own_uri_l1']:
+    main_text = vals['own_uri_l1']
+  else:
+    main_text = dict(
+      [("@id", "http://perseids.org/collections/urn:cite:perseus:digmil." + milnum+ ".l1"),
+      ("format", "text"),
+      ("chars", vals['l1text']),
+      ("language", vals['select_l1'])
+      ])
   
   annotation = dict([
     ("commentary", [dict([
@@ -195,6 +191,7 @@ def get_it(millnum):
 
 def parse_it(obj):  
   result = {}
+  result['mid'] = obj['_id']
   result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
   result['comm'] = obj['commentary'][0]['hasBody']['chars']
   for transl in obj['translation']:

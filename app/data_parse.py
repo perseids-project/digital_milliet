@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from app import app
-from flask import request, jsonify, url_for, session
+from flask import request, jsonify, url_for, session, flash
 import os, requests, datetime
 import re
 from app import mongo
@@ -9,7 +9,6 @@ from bson.objectid import ObjectId
 from bson.json_util import dumps
 import json
 from app.author_build import *
-import sys
 
 
 def save_from_form(vals, HOME):
@@ -18,10 +17,10 @@ def save_from_form(vals, HOME):
   raw_id = json_data['commentary'][0]['hasBody']['@id']
   mil_id = raw_id.split(':').pop()
   m_obj = add_to_db(json_data)
-  
-  return mil_id.split('.')[1]
-
-
+  if m_obj is not None:
+    return mil_id.split('.')[1]
+  else:
+    return None
 
 def edit_save(form):
   record = mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
@@ -56,18 +55,19 @@ def edit_save(form):
 
 def add_to_db(data_dict):
   #save data in mongo
-  m_obj = mongo.db.annotation.insert(data_dict)  
-  #now compile author info
-  print("Type = " + str(type(data_dict['commentary'][0]['hasTarget'])),file=sys.stderr)
-  author_db_build(data_dict)
-  
+  cid = data_dict["commentary"][0]["hasBody"]["@id"]
+  exists = mongo.db.annotation.find_one({"commentary.hasBody.@id" : cid})
+  m_obj = None
+  if not exists:
+    m_obj = mongo.db.annotation.insert(data_dict)  
+    #now compile author info
+    author_db_build(data_dict)
   return m_obj
 
 
 
 def make_json(vals):
   date = datetime.datetime.today()
-  print("Vals:" + str(vals), file=sys.stderr)
   milnum = vals['milnum'].zfill(3)
   if vals['l1uri']:
     main_text = vals['l1uri']
@@ -191,6 +191,7 @@ def get_it(millnum):
 
 def parse_it(obj):  
   result = {}
+  result['mid'] = obj['_id']
   result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
   result['comm'] = obj['commentary'][0]['hasBody']['chars']
   for transl in obj['translation']:

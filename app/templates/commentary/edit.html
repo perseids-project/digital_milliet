@@ -19,7 +19,7 @@
             {% if 'orig_uri' in obj %}
               <input name="orig_uri" type='text' value={{obj['orig_uri']}} size=60> </input>
             {% else %}
-              <textarea name='orig_text' rows="10" cols="80">{{ obj['orig_text'] }}</textarea>
+              <textarea id="orig_text" name='orig_text' rows="10" cols="80">{{ obj['orig_text'] }}</textarea>
             {% endif %}
           </div>
         </div>
@@ -28,6 +28,9 @@
         <div class="row">
           <div class="col-md-6">
             <legend>{{ 'Commentary:' }}</legend>          
+              <div class='markdownify-menu' data-target='c1text'>
+                <a class='btn--insert' data-type='link' href='javascript:void(0)'>link</a>
+              </div>
             <textarea class='markdown' id="c1text" name="c1text" rows="10" cols="80" data-lnum="c1">{{ obj['comm'] }}</textarea>
           </div>
         </div>
@@ -36,7 +39,10 @@
         <div class="row">
           <div class="col-md-6">
             <legend>{{ 'Bibliography:' }}</legend>
-            <textarea id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
+              <div class='markdownify-menu' data-target='b1text'>
+                <a class='btn--insert' data-type='link' href='javascript:void(0)'>link</a>
+              </div>
+            <textarea class="markdown" id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
           </div>
         </div>
 

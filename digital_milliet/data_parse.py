@@ -1,14 +1,14 @@
 #!/usr/bin/python
 
-from app import app
 from flask import request, jsonify, url_for, session, flash
 import os, requests, datetime
 import re
-from app import mongo
+from flask.ext.pymongo import PyMongo
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 import json
-from app.author_build import *
+from .author_build import *
+from .digital_milliet import mongo
 
 
 def save_from_form(vals, HOME):

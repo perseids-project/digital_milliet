@@ -1,10 +1,9 @@
 #!/usr/bin/python
 
-from app import app
 from flask import request, jsonify, url_for, session
 import os, requests
 import re
-from app import mongo
+from .digital_milliet import mongo
 from bson.objectid import ObjectId
 
 

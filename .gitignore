@@ -1,8 +1,7 @@
 
 *.py[co]
 
-# Packages
-*.egg
+# Packages *.egg
 *.egg-info
 dist
 build
@@ -36,3 +35,4 @@ Ahab
 #Configurations
 .conf
 *.tar
+.idea

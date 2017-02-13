@@ -1,0 +1,12 @@
+<div class="nemo-oauth-login-container">
+    {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
+        <div class="user">Hello, {{ session.oauth_user_name or session.oauth_user_uri }}</div>
+        <div class="logout">
+            <a href="/oauth/logout?next={{ request.url }}">Logout</a>
+        </div>
+    {% else %}
+        <div class="login">
+            <a href="/oauth/login?next={{ request.url }}">Login</a>
+        </div>
+    {% endif %}
+</div>

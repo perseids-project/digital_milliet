@@ -11,6 +11,7 @@ from bson.objectid import ObjectId
 from bson.json_util import dumps
 import re
 import json
+from .oauth import OAuthHelper
 
 app = Flask(__name__)
 config = {
@@ -26,6 +27,7 @@ bower = Bower(app)
 mongo = PyMongo(app)
 markdown = Markdown(app)
 cors = CORS(app)
+OAuthHelper(app)
 
 
 

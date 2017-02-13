@@ -19,11 +19,22 @@
       <ul class="nav nav-tabs navbar-right">
         <li><a href="{{url_for('commentary')}}">Browse</a></li>
         <li><a href="{{url_for('about')}}">About</a></li>
+        {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
+          <li class="logout">
+            <a href="/oauth/logout?next={{ request.url }}">Logout</a>
+          </li>
+        {% else %}
+          <li><a href="{{url_for('r_oauth_login')}}?next={{ request.url }}">Login</a></li>
+        {% endif %}
          <!-- Should set this elsewhere... -->
         <li><a href="http://digmill.perseus.org/annotation">Add Record</a></li>
         <!-- <li><a href="http://digmill.perseus.org/annotation">Add Record</a></li> -->
       </ul>
     </div><!-- /.navbar-collapse -->
+    {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
+      <div class="navbar-right">Hello, {{ session.oauth_user_name or session.oauth_user_uri }}</div>
+    {% endif %}
+
   </div><!-- /.container-fluid -->
   <div class="row vertical-center-row">
     <div class="text-center col-md-4 col-md-offset-4">

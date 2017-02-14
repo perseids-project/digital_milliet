@@ -1,10 +1,7 @@
-from flask import render_template, request, jsonify, flash, redirect, url_for, session, Response, make_response
-from flask_bower import Bower
-import re
 import json
-from bson.objectid import ObjectId
-from bson.json_util import dumps
-from digital_milliet.oauth import OAuthHelper
+
+from digital_milliet.lib.oauth import OAuthHelper
+from flask import render_template, request, jsonify, redirect, session
 
 
 class Views(object):

@@ -1,20 +1,14 @@
 # coding=utf8
-from flask import Flask, render_template, request, jsonify, flash, redirect, url_for, session, Response, make_response
 from flask.ext.cors import CORS
 from flask.ext.pymongo import PyMongo
 from flask_bower import Bower
 from flaskext.markdown import Markdown
-from os.path import expanduser
-from os.path import expanduser
-import bson
-from bson.objectid import ObjectId
-from bson.json_util import dumps
-import re
-import json
-from digital_milliet.oauth import OAuthHelper
-from digital_milliet.data_parse import Parser
-from digital_milliet.author_builder import AuthorBuilder
-from digital_milliet.views import Views
+
+from digital_milliet.lib.author_builder import AuthorBuilder
+from digital_milliet.lib.oauth import OAuthHelper
+from digital_milliet.lib.parser import Parser
+from digital_milliet.lib.views import Views
+
 
 class DigitalMilliet(object):
     """ The Digital Milliet Web Application """
@@ -31,9 +25,9 @@ class DigitalMilliet(object):
     def init_app(self,config_file=None):
 
         config = {
-            "development" : "digital_milliet.config.DevelopmentConfig",
-            "testing" : "digital_milliet.config.TestingConfig",
-            "default" : "digital_milliet.config.BaseConfig"
+            "development" : "digital_milliet.lib.config.DevelopmentConfig",
+            "testing" : "digital_milliet.lib.config.TestingConfig",
+            "default" : "digital_milliet.lib.config.BaseConfig"
         }
         self.app.config.from_object(config["default"])
         self.app.config.from_pyfile(config_file,silent=False)

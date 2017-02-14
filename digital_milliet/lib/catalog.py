@@ -2,6 +2,10 @@
 import os, requests
 
 class Catalog(object):
+    """
+    Provides an interface to a Catalog API Endpoint
+    which can lookup author and work records by CTS URN
+    """
 
     def __init__(self,app=None):
         self.app = app

@@ -1,5 +1,3 @@
-from .digital_milliet import app
-
 class BaseConfig(object):
     MONGO_DBNAME = 'dev'
 

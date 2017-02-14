@@ -68,7 +68,7 @@ class OAuthHelper(object):
         session.pop('oauth_user_uri', None)
         session.pop('oauth_user_name', None)
         next = request.args.get('next','')
-        if next is not None:
+        if next is not None and next != '':
             return redirect(session['next'])
         else:
             return render_template('index.html')

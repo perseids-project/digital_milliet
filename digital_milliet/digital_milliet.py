@@ -11,23 +11,39 @@ from bson.objectid import ObjectId
 from bson.json_util import dumps
 import re
 import json
-from .oauth import OAuthHelper
+from digital_milliet.oauth import OAuthHelper
+from digital_milliet.data_parse import Parser
+from digital_milliet.author_build import AuthorBuilder
+from digital_milliet.views import Views
 
-app = Flask(__name__)
-config = {
-    "development" : "digital_milliet.config.DevelopmentConfig",
-    "testing" : "digital_milliet.config.TestingConfig",
-    "default" : "digital_milliet.config.BaseConfig"
-}
+class DigitalMilliet(object):
+    """ The Digital Milliet Web Application """
 
-app.config.from_object(config["default"])
-app.config.from_pyfile('config.cfg',silent=True)
 
-bower = Bower(app)
-mongo = PyMongo(app)
-markdown = Markdown(app)
-cors = CORS(app)
-OAuthHelper(app)
+    def __init__(self,app=None,config_file="config.cfg"):
+        self.app = None
 
+
+        if app is not None:
+            self.app = app
+            self.init_app(config_file)
+
+    def init_app(self,config_file=None):
+
+        config = {
+            "development" : "digital_milliet.config.DevelopmentConfig",
+            "testing" : "digital_milliet.config.TestingConfig",
+            "default" : "digital_milliet.config.BaseConfig"
+        }
+        self.app.config.from_object(config["default"])
+        self.app.config.from_pyfile(config_file,silent=False)
+        self.bower = Bower(self.app)
+        self.markdown = Markdown(self.app)
+        self.cors = CORS(self.app)
+        self.mongo = PyMongo(self.app)
+        self.oauth = OAuthHelper(self.app)
+        self.parser = Parser(self.mongo)
+        self.builder = AuthorBuilder(self.app, self.mongo)
+        self.views = Views(self.app, self.parser, self.mongo, self.builder)
 
 

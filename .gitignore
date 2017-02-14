@@ -36,3 +36,4 @@ Ahab
 .conf
 *.tar
 .idea
+.eggs

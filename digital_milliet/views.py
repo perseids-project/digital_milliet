@@ -8,6 +8,7 @@ from .digital_milliet import bower
 from .digital_milliet import mongo
 from .author_build import *
 from .data_parse import *
+from .oauth import OAuthHelper
 import re
 import json
 
@@ -63,6 +64,7 @@ def millnum(millnum):
 
 
 @app.route('/edit/<millnum>')
+@OAuthHelper.oauth_required
 def edit(millnum):
     parsed_obj, auth_info = get_it(millnum)
 

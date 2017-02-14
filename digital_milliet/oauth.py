@@ -1,5 +1,6 @@
 from flask_oauthlib.client import OAuth
 from flask import redirect, url_for, session, request, jsonify, render_template
+from functools import wraps
 
 class OAuthHelper(object):
 

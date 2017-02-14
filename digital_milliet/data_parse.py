@@ -7,7 +7,6 @@ from flask.ext.pymongo import PyMongo
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 import json
-from .author_build import *
 
 
 class Parser(object):
@@ -223,6 +222,27 @@ class Parser(object):
                 #result['orig_text']= cts_retrieve(uri_arr)
 
         return result
+
+    def process_comm(self,comm_list):
+        """
+        Extract a sorted list of milliet numbers from a set of commentary annotations
+        :param comm_list: set of commentary annotations
+        :return: sorted list of milliet numbers
+        """
+        millnum_list = []
+        convert = lambda text: int(text) if text.isdigit() else text
+        alphanum_key = lambda key: [ convert(re.split('([A-Za-z]+)', key)[0]) ]
+        for row in comm_list:
+            try:
+                cite_urn = str(row['commentary'][0]['hasBody']['@id'])
+                millnum = cite_urn.split('.')[2]
+                if millnum:
+                    millnum_list.append(millnum)
+                else:
+                    pass
+            except:
+                pass
+        return sorted(millnum_list,key=alphanum_key)
 
 
 

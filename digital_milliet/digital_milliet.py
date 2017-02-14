@@ -13,7 +13,7 @@ import re
 import json
 from digital_milliet.oauth import OAuthHelper
 from digital_milliet.data_parse import Parser
-from digital_milliet.author_build import AuthorBuilder
+from digital_milliet.author_builder import AuthorBuilder
 from digital_milliet.views import Views
 
 class DigitalMilliet(object):

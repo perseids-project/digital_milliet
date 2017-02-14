@@ -6,23 +6,30 @@ import re
 from bson.objectid import ObjectId
 
 class AuthorBuilder(object):
+    """
+      Provides methods for building new Author records in the database
 
-    def __init__(self,app=None,db=None):
-        self.app = app
+       :param db Mongo Db Handle
+       :type db PyMongo
+       :param catalog Catalog API Manager
+       :type catalog Catalog
+    """
+
+    def __init__(self, db=None, catalog=None):
         self.mongo = db
-
-    def add_to_existing_db(self):
-        #save data in mongo
-        full_list = self.mongo.db.annotation.find()
-
-        for data_dict in full_list:
-          #now compile author info
-          self.author_db_build(data_dict)
-
-
-
+        self.catalog = catalog
 
     def author_db_build(self,data_dict):
+        """
+        Adds or Updates Author Records in the Annotation Database
+        Author Records contain authority name  and work information
+        and are populated as annotations referencing an author and work
+        are added to the annotator store so that they can be used for browsing
+
+        :param data_dict: the full annotation
+        :type data_dict dict of the annotation
+        :return: None
+        """
         try:
             target = data_dict['commentary'][0]['hasTarget']
             cite_urn = data_dict['commentary'][0]['hasBody']['@id']
@@ -37,8 +44,7 @@ class AuthorBuilder(object):
 
             author = self.mongo.db.annotation.find_one({"cts_id" : auth_id})
             if author is None:
-                url = "http://catalog.perseus.org/cite-collections/api/authors/search?canonical_id="+auth_id+'&format=json'
-                response_dict = requests.get(url).json()
+                response_dict = self.catalog.lookup_author(auth_id)
                 for resp in response_dict:
                     if resp['urn_status'] is not 'invalid':
                         author = self.make_author(resp)
@@ -62,6 +68,12 @@ class AuthorBuilder(object):
             pass
 
     def make_author(self,resp):
+        """
+        Make an author from a catalog record and insert it in the database
+        :param millnum:
+        :param pasg:
+        :return:
+        """
         author = {}
         author['name'] = resp['authority_name']
         author['cts_id'] = resp['canonical_id']
@@ -70,9 +82,15 @@ class AuthorBuilder(object):
         new_auth = self.mongo.db.annotation.find_one({'_id' : a_id})
         return new_auth
 
-    def make_work(work_id, millnum, pasg):
-        w_url = "http://catalog.perseus.org/cite-collections/api/works/search?work=" + work_id + "&format=json"
-        w_resp = requests.get(w_url).json()
+
+    def make_work(self,work_id, millnum, pasg):
+        """
+        Make a work from a catalog record
+        :param millnum:
+        :param pasg:
+        :return:
+        """
+        w_resp = self.catalog.lookup_work(work_id)
         for w in w_resp:
             if w['urn_status'] is not 'invalid':
                 work = {}
@@ -83,6 +101,11 @@ class AuthorBuilder(object):
         return work
 
     def process_comm(self,comm_list):
+        """
+        Extract a sorted list of milliet numbers from a set of commentary annotations
+        :param comm_list: set of commentary annotations
+        :return: sorted list of milliet numbers
+        """
         millnum_list = []
         convert = lambda text: int(text) if text.isdigit() else text
         alphanum_key = lambda key: [ convert(re.split('([A-Za-z]+)', key)[0]) ]

@@ -4,7 +4,6 @@ import re
 import json
 from bson.objectid import ObjectId
 from bson.json_util import dumps
-from .author_build import *
 from digital_milliet.oauth import OAuthHelper
 
 
@@ -48,7 +47,7 @@ class Views(object):
         #add_to_existing_db()
         comm_list = self.mongo.db.annotation.find({"commentary": {'$exists' : 1}}).sort([("commentary.hasBody.@id" , 1)])
         auth_list = self.mongo.db.annotation.find({"cts_id": {'$exists' : 1}}).sort([("name" , 1)])
-        millnum_list = self.builder.process_comm(comm_list)
+        millnum_list = self.parser.process_comm(comm_list)
         return render_template('commentary/list.html', millnum_list=millnum_list, auth_list=auth_list)
 
     def millnum(self, millnum):

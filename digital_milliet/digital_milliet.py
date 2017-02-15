@@ -41,4 +41,7 @@ class DigitalMilliet(object):
         self.parser = Parser(db=self.mongo, builder=self.builder, config=self.app.config)
         self.views = Views(self.app, self.parser, self.mongo, self.builder)
 
+    def get_db(self):
+        return self.mongo
+
 

@@ -37,3 +37,4 @@ Ahab
 *.tar
 .idea
 .eggs
+.cache

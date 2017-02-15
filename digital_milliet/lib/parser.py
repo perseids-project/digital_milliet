@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-from flask import request, jsonify, url_for, session, flash
 import os, requests, datetime
 import re
 from flask.ext.pymongo import PyMongo
@@ -10,13 +9,31 @@ import json
 
 
 class Parser(object):
+    """
+    Parse Data for retrieva/storage to/from the database
 
-    def __init__(self,db=None,builder=None):
+       :param db Mongo Db Handle
+       :type db PyMongo
+
+       :param builder  helper for building new Author records
+        :type builder AuthorBuilder
+
+        :param config configuration dictionary
+        :type config dict
+    """
+
+    def __init__(self,db=None,builder=None,config=None):
         self.mongo = db
         self.builder = builder
+        self.config = config
 
 
     def save_from_form(self,vals):
+        """
+        Save a new set of annotations from the input form
+        :param vals:
+        :return: the nilliet number for the saved annotations or None if the record couldn't be saved
+        """
         json_data = self.make_json(vals)
         data = json.dumps(json_data, indent=2, sort_keys=True)
         raw_id = json_data['commentary'][0]['hasBody']['@id']
@@ -28,6 +45,11 @@ class Parser(object):
             return None
 
     def edit_save(self,form):
+        """
+        Save an edited set of annotations to the db
+        :param form:
+        :return:  True if successful False if not
+        """
         record = self.mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
         record['commentary'][0]['hasBody']['chars'] = form['c1text']
         record['bibliography'][0]['hasBody']['chars'] = form['b1text']
@@ -51,15 +73,15 @@ class Parser(object):
         else:
               record['commentary'][0]['hasTarget']['chars'] = form['orig_text']
 
-        if self.mongo.db.annotation.save(record):
-              flash('Edit sucessfully saved')
-        else:
-              flash('Error!')
-
+        return self.mongo.db.annotation.save(record)
 
 
     def add_to_db(self,data_dict):
-        #save data in mongo
+        """
+         Add a new set of annotations ot the database
+        :param data_dict:
+        :return: the inserted db record or None if the record already existed
+        """
         cid = data_dict["commentary"][0]["hasBody"]["@id"]
         exists = self.mongo.db.annotation.find_one({"commentary.hasBody.@id" : cid})
         m_obj = None
@@ -71,7 +93,12 @@ class Parser(object):
 
 
 
-    def make_json(self,vals):
+    def make_json(self, vals):
+        """
+        Make a JSON structure for the annotation from a set of key/value pairs
+        :param vals:
+        :return: the annotation as a JSON structure
+        """
         date = datetime.datetime.today()
         milnum = vals['milnum'].zfill(3)
         if vals['l1uri']:
@@ -80,7 +107,7 @@ class Parser(object):
             main_text = vals['own_uri_l1']
         else:
             main_text = dict(
-                [("@id", "http://perseids.org/collections/urn:cite:perseus:digmil." + milnum+ ".l1"),
+                [("@id", self.make_uri(milnum,'l1')),
                  ("format", "text"),
                  ("chars", vals['l1text']),
                  ("language", vals['select_l1'])
@@ -89,11 +116,11 @@ class Parser(object):
         annotation = dict([
             ("commentary", [dict([
               ("@context", "http://www.w3.org/ns/oa-context-20130208.json"),
-              ("@id", "digmilann." + str(self.uid(vals['c1text'], date))),
+              ("@id", self.uid(vals['c1text'], date)),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
               ("hasBody", dict([
-                ("@id", "http://perseids.org/collections/urn:cite:perseus:digmil."+vals['milnum']+".c1"),
+                ("@id", self.make_uri(milnum,'c1')),
                 ("format", "text"),
                 ("chars", vals['c1text']),
                 ("language", "eng")
@@ -103,21 +130,21 @@ class Parser(object):
             ])]),
             ("bibliography", [dict([
               ("@context", "http://www.w3.org/ns/oa-context-20130208.json"),
-              ("@id", "digmilann." + str(self.uid(vals['b1text'], date))),
+              ("@id", self.uid(vals['b1text'], date)),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
               ("hasBody", dict([
-                ("@id", "http://perseids.org/collections/urn:cite:perseus:digmil."+vals['milnum']+".b1"),
+                ("@id", self.make_uri(milnum,'b1')),
                 ("format", "text"),
                 ("chars", vals['b1text']),
                 ("language", "eng")
               ])),
-              ("hasTarget", "http://perseids.org/collections/urn:cite:perseus:digmil."+vals['milnum']+".c1"),
+              ("hasTarget", self.make_uri(milnum,'c1')),
               ("motivatedBy", "oa:linking")
             ])]),
             ("translation", [dict([
               ("@context", "http://www.w3.org/ns/oa-context-20130208.json"),
-              ("@id", "digmilann." + str(self.uid(vals['t1text'], date))),
+              ("@id", self.uid(vals['t1text'], date)),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
               ("hasBody", self.build_transl(self,"t1", vals['milnum'], vals['t1text'], vals['t1uri'], vals['own_uri_t1'], vals['select_t1'], vals['other_t1'])),
@@ -126,7 +153,7 @@ class Parser(object):
               ]),
               dict([
               ("@context", "http://www.w3.org/ns/oa-context-20130208.json"),
-              ("@id", "digmilann." + str(self.uid(vals['t2text'], date))),
+              ("@id", self.uid(vals['t2text'], date)),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
               ("hasBody", self.build_transl(self,"t2", vals['milnum'], vals['t2text'], vals['t2uri'], vals['own_uri_t2'], vals['select_t2'], vals['other_t2'])),
@@ -143,15 +170,31 @@ class Parser(object):
 
 
     def uid(self,str, date):
-        #creating unique ids based on a hash of the
+        """
+        Create a unique id based upon a hash of the string value and date
+        :param str:
+        :param date:
+        :return: uid
+        """
         part1 = hash(str[0:4])
         mil = date.microsecond
         uid = part1 + mil
-        return uid
+        return 'digmilann.' + str(uid)
 
 
 
     def build_transl(self,num, milnum, text, uri, own_uri, select, other):
+        """
+        Build the body of a translation annotation
+        :param num:
+        :param milnum:
+        :param text:
+        :param uri:
+        :param own_uri:
+        :param select:
+        :param other:
+        :return: the body of the translation annotation
+        """
         if not uri and not own_uri:
             if select is 'other' or other:
               lang = other
@@ -159,7 +202,7 @@ class Parser(object):
               lang = select
 
             body = dict([
-              ("@id", "http://perseids.org/collections/urn:cite:perseus:digmil."+milnum+"."+num),
+              ("@id", self.make_uri(milnum,num)),
               ("format", "text"),
               ("chars", text),
               ("language", lang)
@@ -174,7 +217,13 @@ class Parser(object):
 
 
     def get_it(self,millnum):
-        obj = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
+        """
+        Get the first set of annotations that target the supplied Milliet Number
+        :param millnum:  Milliet Number
+        :return: the annotation set as a dict
+        """
+        print(str("Retrieve " + self.make_uri(millnum,'c1')))
+        obj = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : self.make_uri(millnum,'c1')})
         parsed_obj = self.parse_it(obj)
         info = self.mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$elemMatch' :{'$in': [millnum]}}}})
         auth_info = {}
@@ -195,6 +244,11 @@ class Parser(object):
 
 
     def parse_it(self,obj):
+        """
+        Parse a db record into a dict
+        :param obj: the db record
+        :return:  parsed as a dict
+        """
         result = {}
         result['mid'] = obj['_id']
         result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
@@ -243,6 +297,13 @@ class Parser(object):
             except:
                 pass
         return sorted(millnum_list,key=alphanum_key)
+
+    def make_uri(self, milnum, subcoll):
+        """
+        Make a URI for an annotation
+        :return:  uri
+        """
+        return self.config['CITE_URI_PREFIX'] +  self.config['CITE_COLLECTION'] + '.' + milnum + '.' + subcoll
 
 
 

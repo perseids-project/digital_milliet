@@ -31,13 +31,14 @@ class DigitalMilliet(object):
         }
         self.app.config.from_object(config["default"])
         self.app.config.from_pyfile(config_file,silent=False)
+        self.app.secret_key = self.app.config['SECRET_KEY']
         self.bower = Bower(self.app)
         self.markdown = Markdown(self.app)
         self.cors = CORS(self.app)
         self.mongo = PyMongo(self.app)
         self.oauth = OAuthHelper(self.app)
-        self.parser = Parser(self.mongo)
         self.builder = AuthorBuilder(self.app, self.mongo)
+        self.parser = Parser(db=self.mongo, builder=self.builder, config=self.app.config)
         self.views = Views(self.app, self.parser, self.mongo, self.builder)
 
 

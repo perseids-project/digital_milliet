@@ -69,7 +69,7 @@ class OAuthHelper(object):
         session.pop('oauth_user_name', None)
         next = request.args.get('next','')
         if next is not None and next != '':
-            return redirect(session['next'])
+            return redirect(next)
         else:
             return render_template('index.html')
 
@@ -104,6 +104,13 @@ class OAuthHelper(object):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if 'oauth_user_uri' not in session or session['oauth_user_uri'] is None:
-                return redirect(url_for('.r_oauth_login', next=request.url))
+                if request.method == 'POST':
+                    # we should really handle redirects on POSTS too but they should only happen if the session
+                    # timed out in between requesting a page and submitting it so to keep it simple just redirect
+                    # POSTs to the index page
+                    next = url_for('.index',_external=True)
+                else:
+                    next = request.url
+                return redirect(url_for('.r_oauth_login', next=next, _external=True))
             return f(*args,**kwargs)
         return decorated_function

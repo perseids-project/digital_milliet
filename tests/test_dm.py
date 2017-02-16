@@ -17,6 +17,7 @@ class DigitalMillietTestCase(TestCase):
         self.fixture = os.path.join(os.path.dirname(__file__), 'dbfixture.yml')
         self.mongo = self.dm.get_db()
         self.setupDb()
+        self.setupSession()
 
     def setupDb(self):
         with self.app.app_context():
@@ -25,11 +26,20 @@ class DigitalMillietTestCase(TestCase):
                 data = yaml.load(stream)
                 self.mongo.db.annotation.insert_many(data)
 
-    def tearDownDb(self):
+    def setupSession(self):
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = None
+
+    def teardownSession(self):
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = None
+
+    def teardownDb(self):
         with self.app.app_context():
             self.mongo.db.annotation.drop()
 
     def tearDown(self):
-        self.tearDownDb()
+        self.teardownDb()
+        self.teardownSession()
 
 

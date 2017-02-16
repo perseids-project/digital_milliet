@@ -1,7 +1,7 @@
 import json
 
 from digital_milliet.lib.oauth import OAuthHelper
-from flask import render_template, request, jsonify, redirect, session, flash
+from flask import render_template, request, jsonify, redirect, session, flash, url_for
 
 
 class Views(object):
@@ -61,17 +61,19 @@ class Views(object):
 
         return render_template('/commentary/edit.html', millnum=millnum, obj=parsed_obj)
 
-    def save_edit(self,):
+    @OAuthHelper.oauth_required
+    def save_edit(self):
         form = request.form
         saved = self.parser.edit_save(form)
         if saved:
-            flash('Edit sucessfully saved')
+            flash('Edit successfully saved')
         else:
             flash('Error!')
 
         return redirect('commentary')
 
     #for catching requests from the perseids-client-apps form and saving the data
+    @OAuthHelper.oauth_required
     def save_data(self):
         millnum = self.parser.save_from_form(request.form.to_dict())
         if millnum is not None:

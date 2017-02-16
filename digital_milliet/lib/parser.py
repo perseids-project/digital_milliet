@@ -222,7 +222,6 @@ class Parser(object):
         :param millnum:  Milliet Number
         :return: the annotation set as a dict
         """
-        print(str("Retrieve " + self.make_uri(millnum,'c1')))
         obj = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : self.make_uri(millnum,'c1')})
         parsed_obj = self.parse_it(obj)
         info = self.mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$elemMatch' :{'$in': [millnum]}}}})

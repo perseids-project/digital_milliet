@@ -6,7 +6,7 @@ python:
 
 before_script: 
   - npm install -g bower
-  - cd digital_milliet && bower install -f
+  - cd digital_milliet && bower install -f && cd ..
 services:
   - mongodb
 

@@ -8,7 +8,6 @@ setup(
     install_requires=[
         'flask==0.12',
         "Flask-OAuthlib>=0.9.3",
-        "MyCapytain==.0.0.9",
         "Flask-Babel==0.9",
         "Flask-Bower==1.0.1",
         "requests>=2.5.0",
@@ -16,7 +15,8 @@ setup(
         "requests-cache==0.4.9",
         "flask-cors==2.0.0",
         "Flask-PyMongo==0.3.1",
-        "Flask-Markdown"
+        "Flask-Markdown",
+        "MyCapytain==2.0.0b8"
     ],
     setup_requires=[
     ],

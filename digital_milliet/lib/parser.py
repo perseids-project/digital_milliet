@@ -1,11 +1,13 @@
 #!/usr/bin/python
 
 import os, requests, datetime
+from uuid import uuid4
 import re
 from flask.ext.pymongo import PyMongo
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 import json
+from MyCapytain.common.reference import URN
 
 
 class Parser(object):
@@ -34,15 +36,14 @@ class Parser(object):
         :param vals:
         :return: the nilliet number for the saved annotations or None if the record couldn't be saved
         """
-        json_data = self.make_json(vals)
-        data = json.dumps(json_data, indent=2, sort_keys=True)
-        raw_id = json_data['commentary'][0]['hasBody']['@id']
+        data = self.make_annotation(vals)
+        raw_id = data['commentary'][0]['hasBody']['@id']
         mil_id = raw_id.split(':').pop()
-        m_obj = self.add_to_db(json_data)
+        rv = None
+        m_obj = self.add_to_db(data)
         if m_obj is not None:
-            return mil_id.split('.')[1]
-        else:
-            return None
+            rv = mil_id.split('.')[1]
+        return rv
 
     def edit_save(self,form):
         """
@@ -69,11 +70,14 @@ class Parser(object):
               record['translation'][1]['hasBody'] = form['t2_uri']
 
         if 'orig_uri' in form:
-              record['commentary'][0]['hasTarget'] = form['orig_uri']
+            record['commentary'][0]['hasTarget'] = form['orig_uri']
         else:
-              record['commentary'][0]['hasTarget']['chars'] = form['orig_text']
+            record['commentary'][0]['hasTarget']['chars'] = form['orig_text']
 
-        return self.mongo.db.annotation.save(record)
+        rv =  None
+        if self.validate_annotation(record):
+            rv = self.mongo.db.annotation.save(record)
+        return rv
 
 
     def add_to_db(self,data_dict):
@@ -85,7 +89,7 @@ class Parser(object):
         cid = data_dict["commentary"][0]["hasBody"]["@id"]
         exists = self.mongo.db.annotation.find_one({"commentary.hasBody.@id" : cid})
         m_obj = None
-        if not exists:
+        if not exists and self.validate_annotation(data_dict):
             m_obj = self.mongo.db.annotation.insert(data_dict)
             #now compile author info
             self.builder.author_db_build(data_dict)
@@ -93,9 +97,9 @@ class Parser(object):
 
 
 
-    def make_json(self, vals):
+    def make_annotation(self, vals):
         """
-        Make a JSON structure for the annotation from a set of key/value pairs
+        Make a structure for the annotation from a set of key/value pairs
         :param vals:
         :return: the annotation as a JSON structure
         """
@@ -116,7 +120,7 @@ class Parser(object):
         annotation = dict([
             ("commentary", [dict([
               ("@context", "http://www.w3.org/ns/oa-context-20130208.json"),
-              ("@id", self.uid(vals['c1text'], date)),
+              ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
               ("hasBody", dict([
@@ -130,7 +134,7 @@ class Parser(object):
             ])]),
             ("bibliography", [dict([
               ("@context", "http://www.w3.org/ns/oa-context-20130208.json"),
-              ("@id", self.uid(vals['b1text'], date)),
+              ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
               ("hasBody", dict([
@@ -144,19 +148,19 @@ class Parser(object):
             ])]),
             ("translation", [dict([
               ("@context", "http://www.w3.org/ns/oa-context-20130208.json"),
-              ("@id", self.uid(vals['t1text'], date)),
+              ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
-              ("hasBody", self.build_transl(self,"t1", vals['milnum'], vals['t1text'], vals['t1uri'], vals['own_uri_t1'], vals['select_t1'], vals['other_t1'])),
+              ("hasBody", self.build_transl("t1", vals['milnum'], vals['t1text'], vals['t1uri'], vals['own_uri_t1'], vals['select_t1'], vals['other_t1'])),
               ("hasTarget", main_text),
               ("motivatedBy", "oa:linking")
               ]),
               dict([
               ("@context", "http://www.w3.org/ns/oa-context-20130208.json"),
-              ("@id", self.uid(vals['t2text'], date)),
+              ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
-              ("hasBody", self.build_transl(self,"t2", vals['milnum'], vals['t2text'], vals['t2uri'], vals['own_uri_t2'], vals['select_t2'], vals['other_t2'])),
+              ("hasBody", self.build_transl("t2", vals['milnum'], vals['t2text'], vals['t2uri'], vals['own_uri_t2'], vals['select_t2'], vals['other_t2'])),
               ("hasTarget", main_text),
               ("motivatedBy", "oa:linking")
               ])
@@ -169,17 +173,13 @@ class Parser(object):
 
 
 
-    def uid(self,str, date):
+    def uid(self):
         """
-        Create a unique id based upon a hash of the string value and date
-        :param str:
-        :param date:
+        Create a unique id for an annotation
         :return: uid
         """
-        part1 = hash(str[0:4])
-        mil = date.microsecond
-        uid = part1 + mil
-        return 'digmilann.' + str(uid)
+        uuid = 'digmilann.' + str(uuid4())
+        return uuid
 
 
 
@@ -275,6 +275,32 @@ class Parser(object):
                 #result['orig_text']= cts_retrieve(uri_arr)
 
         return result
+
+    def validate_annotation(self,annotation):
+        """
+        Validate the structure of an annotation.
+
+        This is not foolproof but it attempts to catch some errors that could come in from mistakes
+        in data entry. It would be good to make sure these all couldn't occur to begin with.
+        :return: True if valid False if not
+        """
+        try:
+            if isinstance(annotation['commentary'][0]['hasTarget'],str):
+                urn = URN(annotation['commentary'][0]['hasTarget'])
+        except ValueError as err:
+            raise ValueError("Invalid commentary target - not parseable as URN")
+        try:
+            if isinstance(annotation['translation'][0]['hasBody'],str):
+                urn = URN(annotation['translation'][0]['hasBody'])
+        except ValueError as err:
+            raise ValueError("Invalid translation 1 uri - not parseable as URN")
+        try:
+            if isinstance(annotation['translation'][1]['hasBody'],str):
+                urn = URN(annotation['translation'][1]['hasBody'])
+        except ValueError as err:
+            raise ValueError("Invalid translation 2 uri - not parseable as URN")
+        return True
+
 
     def process_comm(self,comm_list):
         """

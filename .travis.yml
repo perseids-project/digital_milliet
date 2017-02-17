@@ -4,6 +4,9 @@ python:
   - "3.4.5"
   - "3.5"
 
+before_script: 
+  - npm install -g bower
+  - cd digital_milliet && bower install -f
 services:
   - mongodb
 

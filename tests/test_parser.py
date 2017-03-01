@@ -19,13 +19,11 @@ class TestDb(DigitalMillietTestCase):
             t1uri = "urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:3.10.1-3.10.5",
             t1text = "",
             own_uri_t1 = "",
-            select_t1 = "eng",
-            other_t1 = "",
+            lang_t1 = "eng",
             t2uri = "",
             t2text = "some translation text",
             own_uri_t2 = "",
-            select_t2 = "fra",
-            other_t2 = ""
+            lang_t2 = "fra"
         )
         with self.app.app_context():
           added = self.dm.parser.save_from_form(submit_data)
@@ -41,13 +39,11 @@ class TestDb(DigitalMillietTestCase):
             t1uri = "urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:3.10.1-3.10.5",
             t1text = "",
             own_uri_t1 = "",
-            select_t1 = "eng",
-            other_t1 = "",
+            lang_t1 = "eng",
             t2uri = "",
             t2text = "some translation text",
             own_uri_t2 = "",
-            select_t2 = "fra",
-            other_t2 = ""
+            lang_t2 = "fra",
         )
         with self.app.app_context():
           added = self.dm.parser.save_from_form(submit_data)

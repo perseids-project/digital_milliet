@@ -151,7 +151,7 @@ class Parser(object):
               ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
-              ("hasBody", self.build_transl("t1", vals['milnum'], vals['t1text'], vals['t1uri'], vals['own_uri_t1'], vals['select_t1'], vals['other_t1'])),
+              ("hasBody", self.build_transl("t1", vals['milnum'], vals['t1text'], vals['t1uri'], vals['own_uri_t1'], vals['lang_t1'])),
               ("hasTarget", main_text),
               ("motivatedBy", "oa:linking")
               ]),
@@ -160,7 +160,7 @@ class Parser(object):
               ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
-              ("hasBody", self.build_transl("t2", vals['milnum'], vals['t2text'], vals['t2uri'], vals['own_uri_t2'], vals['select_t2'], vals['other_t2'])),
+              ("hasBody", self.build_transl("t2", vals['milnum'], vals['t2text'], vals['t2uri'], vals['own_uri_t2'], vals['lang_t2'])),
               ("hasTarget", main_text),
               ("motivatedBy", "oa:linking")
               ])
@@ -183,7 +183,7 @@ class Parser(object):
 
 
 
-    def build_transl(self,num, milnum, text, uri, own_uri, select, other):
+    def build_transl(self,num, milnum, text, uri, own_uri, lang):
         """
         Build the body of a translation annotation
         :param num:
@@ -191,16 +191,10 @@ class Parser(object):
         :param text:
         :param uri:
         :param own_uri:
-        :param select:
-        :param other:
+        :param lang:
         :return: the body of the translation annotation
         """
         if not uri and not own_uri:
-            if select is 'other' or other:
-              lang = other
-            else:
-              lang = select
-
             body = dict([
               ("@id", self.make_uri(milnum,num)),
               ("format", "text"),

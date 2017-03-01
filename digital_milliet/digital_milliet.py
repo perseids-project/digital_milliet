@@ -1,4 +1,5 @@
 # coding=utf8
+from flask.ext.babel import Babel
 from flask.ext.cors import CORS
 from flask.ext.pymongo import PyMongo
 from flask_bower import Bower
@@ -40,6 +41,7 @@ class DigitalMilliet(object):
         self.oauth = OAuthHelper(self.app)
         self.builder = AuthorBuilder(self.mongo,Catalog(self.app))
         self.parser = Parser(db=self.mongo, builder=self.builder, config=self.app.config)
+        self.babel = Babel(self.app)
         self.views = Views(self.app, self.parser, self.mongo, self.builder)
 
     def get_db(self):

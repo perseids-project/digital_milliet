@@ -1,0 +1,208 @@
+<html>
+  <head>
+      <title>The Digital Milliet Project</title>
+      <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.0/css/foundation.min.css" />
+      <link rel="stylesheet" media="screen" type="text/css" href="{{ url_for('static', filename='css/commentary.enter.css')}}"/>
+      <link rel="stylesheet" type="text/css" href="{{ bower_url_for('capitains-sparrow.typeahead', 'src/css/jquery.cts.typeahead.css') }}" />
+      <link href='https://fonts.googleapis.com/css?family=Cinzel:400,700' rel='stylesheet' type='text/css'>
+      <link rel='stylesheet' href="{{ bower_url_for('codemirror','lib/codemirror.css') }}"></link>
+      <link rel="stylesheet" href="{{ bower_url_for('jquery.markdownify','lib/jquery.markdownify.css') }}"></link>
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+      <script language="javascript" type="text/javascript" src="{{ url_for('static', filename="js/commentary.enter.js")}}"></script>
+      <script src="{{ bower_url_for('handlebars', 'handlebars.min.js') }}"></script>
+      <script src="{{ bower_url_for('typeahead.js', 'dist/typeahead.bundle.min.js') }}"></script>
+      <script src="{{ bower_url_for('capitains-sparrow', 'dist/cts.min.js') }}"></script>
+      <script src="{{ bower_url_for('capitains-sparrow.xslt', 'dist/jquery.cts.xslt.min.js') }}"></script>
+      <script src="{{ bower_url_for('capitains-sparrow.service', 'dist/jquery.cts.service.min.js') }}"></script>
+      <!--script src="{{ bower_url_for('capitains-sparrow.typeahead', 'dist/jquery.cts.typeahead.min.js') }}"></script-->
+      <script src="bower/capitains-sparrow.typeahead/dist/jquery.cts.typeahead.js"></script>
+      <script src="{{ bower_url_for('codemirror','lib/codemirror.js') }}"></script>
+      <script src="{{ bower_url_for('codemirror','addon/edit/continuelist.js') }}"></script>
+      <script src="{{ bower_url_for('codemirror','mode/xml/xml.js') }}"></script>
+      <script src="{{ bower_url_for('codemirror','mode/markdown/markdown.js') }}"></script>
+      <script src="{{ bower_url_for('marked','lib/marked.js') }}" type='text/javascript'></script>
+      <script src="{{ bower_url_for('jquery.markdownify', 'lib/jquery.markdownify.js') }}"></script>
+      <meta name="viewport" content = "width=device-width, initial-scale=1.0">
+      {% import "commentary/lang_choice.html" as lang %}
+	</head>
+    <body class="body">
+    <div class="alpheios-ignore">
+        <div id="alph-page-header">
+            <img style="max-height:130px; margin-top:-7px;" src="{{ url_for('static', filename='img/digmilbanner.png')}}"/> </a>
+        </div>
+    </div>
+
+	{% with messages = get_flashed_messages() %}
+  	{% if messages %}
+	    <ul class=flashes>
+	    {% for message in messages %}
+	      <li>{{ message }}</li>
+	    {% endfor %}
+	    </ul>
+	  {% endif %}
+	{% endwith %}
+	<div>
+      <form id='input_form' action="create" method="POST">
+        <input type="hidden" name="l1"/>
+        <input type="hidden" name="c1"/>
+        <input type="hidden" name="b1"/>
+        <input type="hidden" name="t1"/>
+        <input type="hidden" name="t2"/>
+        <div id="config" data-verify-millnum-url="api/commentary/" data-cts-api="{{ cts_api }}" data-cts-version="{{ cts_version }}"/>
+
+        <div class="row">
+          <fieldset id="align-enter-title"  class="large-9 columns">
+            <label for="milnum">{{ _('Milliet Number:') }}
+            <input placeholder="{{ _('Enter the Milliet number for this passage and associated commentary') }}" type="text" id="milnum" name="milnum" pattern="[\w \d-_\.]+" maxlength="100" size="100"></input>
+            </label>
+          </fieldset>
+        </div>
+
+        <!-- Select inital text -->
+        <div class="row">
+          <div id="text1">
+              <fieldset class="large-6 columns">
+                  <legend>{{ _('Search for a primary source text:') }}</legend>
+                  <div class="textdriver" id="l1textdriver" data-lnum="l1"></div>
+                  <div>
+                      <input placeholder="{{ _('URI Identifer for this text. If a URL, text will be loaded from there. Plain text only supported.') }}"
+                             type="url" id="l1uri" name="l1uri" size="100" class="texturi" data-lnum="l1" data-lang=""></input>
+                      <div class="worklist"><a target="_blank" href="{{cts_browse}}">{{ _('All available works') }}</a></div>
+                  </div>
+                  <div class="ownuri">
+                      <label for="own_uri_l1">{{ _('Or enter your own text URI:') }}</label>
+                      <div class="row collapse">
+                          <div class="small-10 columns">
+                              <input type="text" placeholder="" id="own_uri_l1" name="own_uri_l1" />
+                          </div>
+                          <div class="small-2 columns">
+                              <a href="#" data-lnum="l1" class="own_uri_trigger button postfix">{{ _('Select') }}</a>
+                          </div>
+                      </div>
+                      <small class="error" id="own_uri_l1_error" style="display:none;">{{ _('Invalid entry') }}</small>
+                  </div>
+                  <div id="lang_choicel1">{{ lang.lang_choice('l1') }}</div>
+              </fieldset>
+              <fieldset class="large-6 columns">
+                  <legend>{{ _('Primary Source Passage:') }}</legend>
+                  <div id="l1-dir-buttons">
+                      <label>{{ _('Text Direction:') }}</label>
+                      <input type="radio" id="l1-dir-ltr" name="l1-direction" value="ltr" checked="checked"/>
+                      <label for="l1-dir-ltr">{{ _('Left to Right') }}</label>
+                      <input type="radio" id="l1-dir-rtl" name="l1-direction" value="rtl"/>
+                      <label for="l1-dir-rtl">{{ _('Right to Left') }}</label>
+                  </div>
+                  <div>
+                  <div>
+                      <textarea id="l1text" name="l1text" rows="10" cols="80" data-lnum="l1"></textarea>
+                      <small class="error" id="l1texterror" style="display:none;">{{ _('Invalid entry') }}</small>
+                  </div>
+              </fieldset>
+          </div>
+        </div>
+        </div>
+        </div>
+
+        <!-- Commentary -->
+        <div class="row">
+          <legend>{{ _('Enter Commentary:') }}</legend>
+          <div class="textdriver" id="comtextdriver" data-lnum="c1"></div>
+        
+          <div class='markdownify-menu' data-target='c1text'>
+            <a class='btn--insert' data-type='link' href='javascript:void(0)'>link</a>
+          </div>
+          <textarea class='markdown' id="c1text" name="c1text" rows="10" cols="80" data-lnum="c1"></textarea>
+          <small class="error" id="c1texterror" style="display:none;">{{ _('Invalid entry') }}</small>
+          <div id="lang_choice{{id}}">{{ lang.lang_choice(id) }}</div>
+        </div>
+
+        <!-- Bibliography information -->
+        <div class="row">
+          <legend>{{ _('Enter Bibliography:') }}</legend>
+          <textarea id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1"></textarea>
+          <input type="hidden" name="select_b1" value="eng"/>
+          <input type="radio" id="b1-dir-ltr" name="b1-direction" value="ltr" checked="checked" style="display:none"/>
+          <input id="cts-service-1-xml" class="" type="checkbox" name="b1isxml" style="display:none"/>
+        </div>
+
+        <!-- Translation 1 -->
+        <div class="row">
+          <input type="hidden" name="lang_t1" value="eng"/>
+          <input type="hidden" name="t1-direction" value="ltr"/>
+          <div id="text1">
+              <fieldset class="large-6 columns">
+                  <legend>{{ _('Search for an English translation:') }}</legend>
+                  <div class="textdriver" id="t1textdriver" data-lnum="t1"></div>
+                  <div>
+                      <input placeholder="{{ _('URI Identifer for this text. If a URL, text will be loaded from there. Plain text only supported.') }}"
+                             type="url" id="t1uri" name="t1uri" size="100" class="texturi" data-lnum="t1" data-lang="eng"></input>
+                      <div class="worklist"><a target="_blank" href="{{cts_browse}}">{{ _('All available works') }}</a></div>
+                  </div>
+                  <div class="ownuri">
+                      <label for="own_uri_t1">{{ _('Or enter your own text URI:') }}</label>
+                      <div class="row collapse">
+                          <div class="small-10 columns">
+                              <input type="text" placeholder="" id="own_uri_t1" name="own_uri_t1" />
+                          </div>
+                          <div class="small-2 columns">
+                              <a href="#" data-lnum="t1" class="own_uri_trigger button postfix">{{ _('Select') }}</a>
+                          </div>
+                      </div>
+                      <small class="error" id="own_uri_t1_error" style="display:none;">{{ _('Invalid entry') }}</small>
+                  </div>
+              </fieldset>
+              <fieldset class="large-6 columns">
+                  <legend>{{ _('Enter English Translation:') }}</legend>
+                  <div>
+                    <textarea id="t1text" name="t1text" rows="10" cols="80" data-lnum="t1"></textarea>
+                      <small class="error" id="t1texterror" style="display:none;">{{ _('Invalid entry') }}</small>
+                  </div>
+              </fieldset>
+          </div>
+        </div>
+
+        <!-- Translation 2 -->
+        <div class="row">
+           <input type="hidden" name="lang_t2" value="fra"/>
+           <input type="hidden" name="t2-direction" value="ltr"/>
+
+          <div id="text2">
+              <fieldset class="large-6 columns">
+                  <legend>{{ _('Search for a French translation:') }}</legend>
+                  <div class="textdriver" id="t2textdriver" data-lnum="t2"></div>
+                  <div>
+                      <input placeholder="{{ _('URI Identifer for this text. If a URL, text will be loaded from there. Plain text only supported.') }}"
+                             type="url" id="t2uri" name="t2uri" size="100" class="texturi" data-lnum="t2" data-lang="eng"></input>
+                      <div class="worklist"><a target="_blank" href="{{cts_browse}}">{{ _('All available works') }}</a></div>
+                  </div>
+                  <div class="ownuri">
+                      <label for="own_uri_t2">{{ _('Or enter your own text URI:') }}</label>
+                      <div class="row collapse">
+                          <div class="small-10 columns">
+                              <input type="text" placeholder="" id="own_uri_t2" name="own_uri_t2" />
+                          </div>
+                          <div class="small-2 columns">
+                              <a href="#" data-lnum="t2" class="own_uri_trigger button postfix">{{ _('Select') }}</a>
+                          </div>
+                      </div>
+                      <small class="error" id="own_uri_t2_error" style="display:none;">{{ _('Invalid entry') }}</small>
+                  </div>
+              </fieldset>
+              <fieldset class="large-6 columns">
+                  <legend>{{ _('Enter French Translation:') }}</legend>
+                  <div>
+                      <textarea id="t2text" name="t2text" rows="10" cols="80" data-lnum="t2"></textarea>
+                      <small class="error" id="t2texterror" style="display:none;">{{ _('Invalid entry') }}</small>
+                  </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        <button id="submit_button" type="submit" style="float: right; width:200px;">{{ _('Save Annotation') }}</button>
+      </form> 
+      
+    </div>
+	</body>
+</html>

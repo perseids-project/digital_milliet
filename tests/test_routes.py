@@ -37,6 +37,16 @@ class TestRoutes(DigitalMillietTestCase):
         rv = self.client.get('/api/commentary/261').data.decode()
         self.assertIn('{\n  "bibliography',rv,'API Response Invalid')
 
+    def test_new_no_session(self):
+        rv = self.client.get('/new')
+        self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2Fnew',rv.location, "Doesn't redirect to login")
+
+    def test_new_with_session(self):
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+        rv = self.client.get('/new').data.decode()
+        self.assertIn('Enter Commentary',rv,"Not the new record page")
+
     def test_edit_no_session(self):
         rv = self.client.get('/edit/261')
         self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2Fedit%2F261',rv.location, "Doesn't redirect to login")
@@ -47,6 +57,25 @@ class TestRoutes(DigitalMillietTestCase):
         rv = self.client.get('/edit/261').data.decode()
         self.assertIn('<legend>Edit Commentary:</legend>',rv,"Not the commentary page")
         self.assertIn('<label for="milnum">Milliet Number:261</label>',rv,"Wrong record being edited")
+
+    def test_create_no_session(self):
+        rv = self.client.post('/create', data = dict(l1text='New text'))
+        self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2F',rv.location, "Doesn't redirect to index")
+
+    def create_with_session(self):
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+        submit_data = dict(
+            milnum = "123",
+            l1_uri = "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1-1",
+            c1text ="commentary",
+            b1text = "bibliography",
+            t1_uri = "urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:1-1",
+            t2_text = "french translation",
+            t2_lang = "fra"
+        )
+        rv = self.client.post('/new', data=submit_data, follow_redirects=True)
+        self.assertIn('Annotation successfully created',rv.data.decode(),"Missing success message")
 
     def test_save_edit_no_session(self):
         rv = self.client.post('/edit/save_edit', data = dict(c1text='Replacing the text'))

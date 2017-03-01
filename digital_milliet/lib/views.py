@@ -19,8 +19,9 @@ class Views(object):
         app.add_url_rule('/commentary/<millnum>', view_func=self.millnum)
         app.add_url_rule('/edit/<millnum>', view_func=self.edit)
         app.add_url_rule('/edit/save_edit', view_func=self.save_edit, methods=['POST'])
-        app.add_url_rule('/save_data', view_func=self.save_data, methods=['POST'])
+        app.add_url_rule('/create', view_func=self.create, methods=['POST'])
         app.add_url_rule('/api/commentary/<millnum>', view_func=self.api_data_get, methods=['GET'])
+        app.add_url_rule('/new', view_func=self.new,methods=['GET', 'POST'], strict_slashes=False)
 
     def index(self):
         return render_template('index.html')
@@ -74,16 +75,27 @@ class Views(object):
 
     #for catching requests from the perseids-client-apps form and saving the data
     @OAuthHelper.oauth_required
-    def save_data(self):
+    def create(self):
         millnum = self.parser.save_from_form(request.form.to_dict())
         if millnum is not None:
-            return json.dumps({'millnum':millnum}), 200, {'ContentType':'application/json'}
+            flash('Annotation successfully created!')
+            return redirect('commentary/' + str(millnum))
         else:
-            return json.dumps({"error":"unable to save data"}), 409, {'ContentType':'application/json'}
+            flash('Error saving!')
+            return redirect('new')
 
     def api_data_get(self, millnum):
         res = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id": "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
         #have to remove the _id from mongo because it is bson and bson breaks the json
         del res['_id']
         return jsonify(res)
+
+    @OAuthHelper.oauth_required
+    def new(self):
+        return render_template(
+            'commentary/enter.html',
+            cts_api=self.app.config['CTS_API_URL'],
+            cts_browse = self.app.config['CTS_BROWSE_URL'],
+            cts_version = self.app.config['CTS_API_VERSION']
+        )
 

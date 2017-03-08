@@ -2,7 +2,7 @@
 
 import os, requests, datetime
 from uuid import uuid4
-import re
+import re, sys
 from flask.ext.pymongo import PyMongo
 from bson.objectid import ObjectId
 from bson.json_util import dumps
@@ -57,15 +57,27 @@ class Parser(object):
 
         if 't1_text' in form:
             if form['t1_text'] != '':
-                record['translation'][0]['hasBody']['chars'] = form['t1_text']
-                record['translation'][0]['hasBody']['language'] = form['lang1']
+                if not record['translation'][0]['hasBody'] is dict:
+                    cite_urn = record['commentary'][0]['hasBody']['@id']
+                    millnum = cite_urn.split('.')[2]
+                    # if we have switched from a uri to text then make sure we have the structure in place
+                    record['translation'][0]['hasBody'] = self.build_transl("t1", millnum, form['t1_text'], None, None, form['lang1'])
+                else:
+                    record['translation'][0]['hasBody']['chars'] = form['t1_text']
+                    record['translation'][0]['hasBody']['language'] = form['lang1']
         else:
             record['translation'][0]['hasBody'] = form['t1_uri']
 
         if 't2_text' in form:
             if form['t2_text'] != '':
-                record['translation'][1]['hasBody']['chars'] = form['t2_text']
-                record['translation'][1]['hasBody']['language'] = form['lang2']
+                if not record['translation'][0]['hasBody'] is dict:
+                    cite_urn = record['commentary'][0]['hasBody']['@id']
+                    millnum = cite_urn.split('.')[2]
+                    # if we have switched from a uri to text then make sure we have the structure in place
+                    record['translation'][1]['hasBody'] = self.build_transl("t2", millnum, form['t2_text'], None, None, form['lang2'])
+                else:
+                    record['translation'][1]['hasBody']['chars'] = form['t2_text']
+                    record['translation'][1]['hasBody']['language'] = form['lang2']
         else:
               record['translation'][1]['hasBody'] = form['t2_uri']
 
@@ -246,7 +258,9 @@ class Parser(object):
         result['mid'] = obj['_id']
         result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
         result['comm'] = obj['commentary'][0]['hasBody']['chars']
+        tnum = 0
         for transl in obj['translation']:
+            tnum = tnum + 1
             if (type(transl['hasBody']) is dict):
                 t_num = transl['hasBody']['@id'].split('.')[-1]
                 text = transl['hasBody']['chars']
@@ -254,12 +268,18 @@ class Parser(object):
                 result[t_num+'_text'] = text
                 result[t_num+'_lang'] = lang
             else:
-                t_num = "t1"
+                t_num = "t" + str(tnum)
                 text = transl['hasBody']
-                lang = re.search('\D+', text.split('-')[1]).group(0)
-                result[t_num+'_uri'] = text
-                result[t_num+'_lang'] = lang
-
+                try:
+                    urn = URN(text)
+                    lang = re.search('\D+', text.split('-')[1]).group(0)
+                    result[t_num+'_uri'] = text
+                    result[t_num+'_lang'] = lang
+                except:
+                    # invalid URN we need to recover
+                    result[t_num+'_text'] = text
+                    result[t_num+'_lang'] = "eng"
+                    pass
             if (type(obj['commentary'][0]['hasTarget']) is dict):
                 result['orig_text'] = obj['commentary'][0]['hasTarget']['chars']
             else:

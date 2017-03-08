@@ -97,6 +97,30 @@ class TestRoutes(DigitalMillietTestCase):
         rv = self.client.post('/edit/save_edit', data=submit_data, follow_redirects=True)
         self.assertIn('Edit successfully saved',rv.data.decode(),"Missing success message")
 
+    def test_save_edit_fix_corrupted(self):
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+        rv1 = self.client.get('/edit/999').data.decode()
+        m = re.search("name='mongo_id' value=(.*)>",rv1).group(1)
+        t1_text = re.search("t1_text",rv1)
+        self.assertIsNotNone(t1_text)
+        submit_data = dict(
+            mongo_id = m,
+            orig_uri ="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
+            c1text ="",
+            b1text = "",
+            t1_text = "some new translation text",
+            lang1 = "eng",
+            t2_text = "nouveau!",
+            lang2 = "fra"
+        )
+        rv = self.client.post('/edit/save_edit', data=submit_data, follow_redirects=True)
+        self.assertIn('Edit successfully saved',rv.data.decode(),"Missing success message")
+        with self.app.app_context():
+          rec,auth = self.dm.parser.get_it("999")
+        self.assertEqual(rec['t1_text'],"some new translation text")
+
+
 
 
 

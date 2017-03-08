@@ -31,7 +31,7 @@ class TestDb(DigitalMillietTestCase):
 
     def test_save_from_form_succeeds_new(self):
         submit_data = dict(
-            milnum = '999',
+            milnum = '111',
             l1uri ="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
             own_uri_l1 = "",
             c1text ="",
@@ -48,7 +48,7 @@ class TestDb(DigitalMillietTestCase):
         with self.app.app_context():
           added = self.dm.parser.save_from_form(submit_data)
         self.assertIsNotNone(added,"Should not have added a new record")
-        self.assertEqual("999",added,"Unexpected response from save")
+        self.assertEqual("111",added,"Unexpected response from save")
 
     def test_edit_save_does_not_overrwrite_uri(self):
         with self.client.session_transaction() as sess:

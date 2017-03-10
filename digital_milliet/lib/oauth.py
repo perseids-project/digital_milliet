@@ -19,6 +19,7 @@ class OAuthHelper(object):
         )
         self.authobj.tokengetter(self.oauth_token)
         self.authcallback = app.config['OAUTH_CALLBACK_URL']
+        self.enforce_community_id = app.config['ENFORCE_COMMUNITY_ID']
         app.add_url_rule('/oauth/login',view_func = self.r_oauth_login)
         app.add_url_rule('/oauth/authorized',view_func = self.r_oauth_authorized)
         app.add_url_rule('/oauth/logout',view_func = self.r_oauth_logout)
@@ -53,6 +54,11 @@ class OAuthHelper(object):
         session['oauth_token'] = (resp['access_token'], '')
         user = self.authobj.get('user')
         ## TODO this is too specific to Perseids' api model. We should externalize.
+        if not self.user_in_community(user.data['user']['communities']):
+            return 'Access denied: reason=%s error=%s' % (
+                "Not in Community",
+                "Not in Community"
+            )
         session['oauth_user_uri'] = user.data['user']['uri']
         session['oauth_user_name'] = user.data['user']['full_name']
         if 'next' in session and session['next'] is not None and session['next'] != '':
@@ -73,8 +79,6 @@ class OAuthHelper(object):
         else:
             return render_template('index.html')
 
-
-
     def oauth_token(self,token=None):
         """
         tokengetter function
@@ -83,7 +87,6 @@ class OAuthHelper(object):
         """
         return session.get('oauth_token')
 
-    @property
     def current_user(self):
         """
         Gets the current user from the session
@@ -95,6 +98,19 @@ class OAuthHelper(object):
         else:
             return None
 
+    def user_in_community(self,user_communities=[]):
+        """
+        Checks to see if the user is the authorized community for editing
+        This is a hack specific to the Perseids OAuth provider used as a way
+        to limit editing of DM records to members of a specific community in Perseids
+        Eventually editing could be delegated entirely to Perseids
+        :return: True if the user name is listed in the configured community members,
+                 False if the user name is not listed
+        """
+        if self.enforce_community_id:
+            return user_communities.__contains__(self.enforce_community_id)
+        else:
+            return True
 
     def oauth_required(f):
         """

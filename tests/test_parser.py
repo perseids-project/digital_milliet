@@ -25,7 +25,7 @@ class TestDb(DigitalMillietTestCase):
             own_uri_t2 = "",
             lang_t2 = "fra"
         )
-        with self.app.app_context():
+        with self.app.test_request_context():
           added = self.dm.parser.save_from_form(submit_data)
         self.assertIsNone(added,"Should not have added a new record")
 
@@ -45,7 +45,7 @@ class TestDb(DigitalMillietTestCase):
             own_uri_t2 = "",
             lang_t2 = "fra",
         )
-        with self.app.app_context():
+        with self.app.test_request_context():
           added = self.dm.parser.save_from_form(submit_data)
         self.assertIsNotNone(added,"Should not have added a new record")
         self.assertEqual("111",added,"Unexpected response from save")

@@ -3,6 +3,7 @@
 import os, requests, datetime
 from uuid import uuid4
 import re, sys
+from flask import session
 from flask.ext.pymongo import PyMongo
 from bson.objectid import ObjectId
 from bson.json_util import dumps
@@ -24,10 +25,11 @@ class Parser(object):
         :type config dict
     """
 
-    def __init__(self,db=None,builder=None,config=None):
+    def __init__(self,db=None,builder=None,config=None,auth=None):
         self.mongo = db
         self.builder = builder
         self.config = config
+        self.auth = auth
 
 
     def save_from_form(self,vals):
@@ -51,9 +53,12 @@ class Parser(object):
         :param form:
         :return:  True if successful False if not
         """
+
+        modtime = datetime.datetime.utcnow().isoformat()
         record = self.mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
         record['commentary'][0]['hasBody']['chars'] = form['c1text']
         record['bibliography'][0]['hasBody']['chars'] = form['b1text']
+
 
         if 't1_text' in form:
             if form['t1_text'] != '':
@@ -70,7 +75,7 @@ class Parser(object):
 
         if 't2_text' in form:
             if form['t2_text'] != '':
-                if not record['translation'][0]['hasBody'] is dict:
+                if not record['translation'][1]['hasBody'] is dict:
                     cite_urn = record['commentary'][0]['hasBody']['@id']
                     millnum = cite_urn.split('.')[2]
                     # if we have switched from a uri to text then make sure we have the structure in place
@@ -80,6 +85,15 @@ class Parser(object):
                     record['translation'][1]['hasBody']['language'] = form['lang2']
         else:
               record['translation'][1]['hasBody'] = form['t2_uri']
+
+        record['commentary'][0]['modified'] = modtime
+        record['bibliography'][0]['modified'] = modtime
+        record['translation'][0]['modified'] = modtime
+        record['translation'][1]['modified'] = modtime
+        self.update_contributors(record['commentary'][0])
+        self.update_contributors(record['bibliography'][0])
+        self.update_contributors(record['translation'][0])
+        self.update_contributors(record['translation'][1])
 
         if 'orig_uri' in form:
             record['commentary'][0]['hasTarget'] = form['orig_uri']
@@ -117,6 +131,7 @@ class Parser(object):
         """
         date = datetime.datetime.today()
         milnum = vals['milnum'].zfill(3)
+        person = self.make_person()
         if vals['l1uri']:
             main_text = vals['l1uri']
         elif vals['own_uri_l1']:
@@ -135,6 +150,7 @@ class Parser(object):
               ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
+              ("creator",person),
               ("hasBody", dict([
                 ("@id", self.make_uri(milnum,'c1')),
                 ("format", "text"),
@@ -149,6 +165,7 @@ class Parser(object):
               ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
+              ("creator",person),
               ("hasBody", dict([
                 ("@id", self.make_uri(milnum,'b1')),
                 ("format", "text"),
@@ -163,6 +180,7 @@ class Parser(object):
               ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
+              ("creator",person),
               ("hasBody", self.build_transl("t1", vals['milnum'], vals['t1text'], vals['t1uri'], vals['own_uri_t1'], vals['lang_t1'])),
               ("hasTarget", main_text),
               ("motivatedBy", "oa:linking")
@@ -172,6 +190,7 @@ class Parser(object):
               ("@id", self.uid()),
               ("@type", "oa:Annotation"),
               ("annotatedAt", str(date)),
+              ("creator",person),
               ("hasBody", self.build_transl("t2", vals['milnum'], vals['t2text'], vals['t2uri'], vals['own_uri_t2'], vals['lang_t2'])),
               ("hasTarget", main_text),
               ("motivatedBy", "oa:linking")
@@ -180,7 +199,6 @@ class Parser(object):
             ("tags", []),
             ("images", [])
         ])
-
         return annotation
 
 
@@ -258,6 +276,14 @@ class Parser(object):
         result['mid'] = obj['_id']
         result['bibl'] = obj['bibliography'][0]['hasBody']['chars']
         result['comm'] = obj['commentary'][0]['hasBody']['chars']
+        if 'creator' in obj['commentary'][0]:
+            result['creator'] = obj['commentary'][0]['creator']
+        else:
+            result['creator'] = None
+        if 'contributor' in obj['commentary'][0]:
+            result['contributor'] = obj['commentary'][0]['contributor']
+        else:
+            result['contributor'] = None
         tnum = 0
         for transl in obj['translation']:
             tnum = tnum + 1
@@ -344,7 +370,38 @@ class Parser(object):
         """
         return self.config['CITE_URI_PREFIX'] +  self.config['CITE_COLLECTION'] + '.' + milnum + '.' + subcoll
 
+    def make_person(self):
+        """
+        Make a person for an annotation (i.e for contributor or creator)
+        :return: a dict with the person attributes
+        """
+        person = self.auth.current_user()
+        if person:
+            return dict([
+                ("id", person['uri']),
+                ("type", "Person"),
+                ("name", person['name'])
+            ])
+        else:
+            return None
 
+    def update_contributors(self,annotation_dict=dict):
+        """
+        Update the contributors for an annotation
+        :param annotation_dict: the annotation to update
+        :return: None - annotation updated in place
+        """
+        contributors = annotation_dict.setdefault('contributor',[])
+        person = self.make_person()
+        if person:
+            found = False
+            for c in contributors:
+                if c['id'] == person['id'] :
+                    found = True
+                    break
+            if not found:
+                if 'creator' in annotation_dict and annotation_dict['creator']['id'] != person['id']:
+                    contributors.append(person)
 
     #This and the commented out lines above in parse_it and the commented out imports are for the new CTS service
     #using MyCapytains to access it. For now, since there are not as many texts that are CTS/TEI compliant

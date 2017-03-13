@@ -65,6 +65,7 @@ class TestRoutes(DigitalMillietTestCase):
     def create_with_session(self):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+            sess['oauth_user_name'] = 'Test User'
         submit_data = dict(
             milnum = "123",
             l1_uri = "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1-1",
@@ -76,6 +77,10 @@ class TestRoutes(DigitalMillietTestCase):
         )
         rv = self.client.post('/new', data=submit_data, follow_redirects=True)
         self.assertIn('Annotation successfully created',rv.data.decode(),"Missing success message")
+        with self.app.app_context():
+            rec,auth = self.dm.parser.get_it("123")
+        self.assertEqual(rec['creator']['id'],"http://sosol.perseids.org/sosol/User/MyTestUser")
+        self.assertEqual(rec['creator']['name'],"Test User")
 
     def test_save_edit_no_session(self):
         rv = self.client.post('/edit/save_edit', data = dict(c1text='Replacing the text'))

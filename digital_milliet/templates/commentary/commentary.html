@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% from "commentary/get_text.html" import get_text with context %}
+{% from "commentary/get_people.html" import get_people with context %}
 {% block content %}
 
   <div class='row'>
@@ -38,6 +39,7 @@
                 {% else %}
                   <p>{{ obj['t1_text'] }}</p>
                 {% endif %}
+                {{ get_people(obj) }}
               </div>
               <div role='tabpanel' class='tab-pane' id={{ obj['t2_lang']}}>
                 {% if 't2_uri' in obj %}
@@ -45,6 +47,7 @@
                 {% else %}
                   <p>{{ obj['t2_text'] }}</p>
                 {% endif %}
+                {{ get_people(obj) }}
               </div>
             </div>
           </div>
@@ -57,19 +60,26 @@
       </div>
       <div class='row'>
         <!-- commentary and bibliography -->
-        <div class='well'>
-          <ul id='comm_tabs' class='nav nav-tabs nav-justified' role="tablist">
-            <li role='presentation' class='active'><a href='#commentary' aria-controls='commentary' role='tab' data-toggle='tab'>Commentary</a></li>
-            <li role='presentation'><a href='#bibliography' aria-controls='bibliography' role='tab' data-toggle='tab'>Bibliography</a></li>
-          </ul>
+        <div class='col-xs-12'>
+            <div class='well'>
+              <ul id='comm_tabs' class='nav nav-tabs nav-justified' role="tablist">
+                <li role='presentation' class='active'><a href='#commentary' aria-controls='commentary' role='tab' data-toggle='tab'>Commentary</a></li>
+                <li role='presentation'><a href='#bibliography' aria-controls='bibliography' role='tab' data-toggle='tab'>Bibliography</a></li>
+              </ul>
 
-          <div class='tab-content'>
-            
-              <div role='tabpanel' class='tab-pane active' id='commentary'><p>{% filter markdown %}{{ obj['comm'] }}{% endfilter %}</p></div>
-              <div role='tabpanel' class='tab-pane' id='bibliography'><p>{% filter markdown %}{{ obj['bibl'] }}{% endfilter %}</p></div>
-            
-          </div> 
-        </div>
+              <div class='tab-content'>
+
+                  <div role='tabpanel' class='tab-pane active' id='commentary'>
+                      <p>{% filter markdown %}{{ obj['comm'] }}{% endfilter %}</p>
+                      {{ get_people(obj) }}
+                  </div>
+                  <div role='tabpanel' class='tab-pane' id='bibliography'>
+                      <p>{% filter markdown %}{{ obj['bibl'] }}{% endfilter %}</p>
+                      {{ get_people(obj) }}
+                  </div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
     <div class='col-xs-4'>

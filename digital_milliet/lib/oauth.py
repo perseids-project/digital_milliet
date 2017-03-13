@@ -92,9 +92,13 @@ class OAuthHelper(object):
         Gets the current user from the session
         :return { uri => <uri>, name => <name> }
         """
-        if session['oauth_user_uri']:
-            return { 'uri': session['oauth_user_uri'],
-                     'name': session['oauth_user_name'] or session['oauth_user_uri']}
+        if session and session['oauth_user_uri']:
+            user = { 'uri': session['oauth_user_uri'] }
+            if 'oauth_user_name' in session:
+                user['name'] = session['oauth_user_name']
+            else:
+                user['name'] = session['oauth_user_uri']
+            return user
         else:
             return None
 

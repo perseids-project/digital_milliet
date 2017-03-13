@@ -3,6 +3,7 @@
 from flask import request, jsonify, url_for, session
 import os, requests
 import re
+from MyCapytain.common.reference import URN
 from bson.objectid import ObjectId
 
 class AuthorBuilder(object):
@@ -34,6 +35,7 @@ class AuthorBuilder(object):
             target = data_dict['commentary'][0]['hasTarget']
             cite_urn = data_dict['commentary'][0]['hasBody']['@id']
             if (type(target) is str):
+                urn = URN(target)
                 millnum = cite_urn.split('.')[2]
                 t_parts = target.split(':')
                 urn_parts = t_parts[3].split('.')
@@ -65,6 +67,10 @@ class AuthorBuilder(object):
         except TypeError:
             pass
         except KeyError:
+            pass
+        except ValueError:
+            pass
+        except:
             pass
 
     def make_author(self,resp):

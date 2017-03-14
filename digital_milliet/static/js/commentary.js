@@ -23,10 +23,15 @@ function get_cts(textURI, textType){
             if(cts_obj.checkXML() === true) {
 
               var psg = cts_obj.getXml("passage", "xml")[0].textContent;
-              $("#"+textType+" p").html(psg);
+              if (psg) {
+              	psg = $.trim(psg);
+							}
+              $(textType).html(psg);
 
             } else {
-              $("#"+textType+" p").html("We are sorry, this text is not availible at this time");
+            	if ($(textType).html() === "") {
+                $(textType).html("We are sorry, this text is not availible at this time");
+              }
             }
           },
 	      error :  function(status, statusText) {

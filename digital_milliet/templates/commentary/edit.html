@@ -1,4 +1,5 @@
 {% extends "base.html"%}
+{% from "commentary/get_text.html" import get_text with context %}
 {% block content %}
  {{ super() }}
 	<div >
@@ -18,9 +19,13 @@
             <legend>{{ 'Text:' }}</legend>
             {% if 'orig_uri' in obj %}
               <input name="orig_uri" type='text' value={{obj['orig_uri']}} size=60> </input>
-            {% else %}
-              <textarea id="orig_text" name='orig_text' rows="10" cols="80">{{ obj['orig_text'] }}</textarea>
+               <p>{{ get_text(obj['orig_uri'], '#orig_text') }}</p>
             {% endif %}
+              <select name="orig_lang" id="orig_lang">
+                  <option value="grc" {% if obj['orig_lang'] == 'grc' %} selected='selected' {% endif %}>{{ ('Ancient Greek') }}</option>
+                  <option value="lat" {% if obj['orig_lang'] == 'lat' %} selected='selected' {% endif %}>{{ ('Latin') }}</option>
+              </select>
+            <textarea id="orig_text" name='orig_text' rows="10" cols="80">{{ obj['orig_text'] }}</textarea>
           </div>
         </div>
 
@@ -39,10 +44,7 @@
         <div class="row">
           <div class="col-md-6">
             <legend>{{ 'Bibliography:' }}</legend>
-              <div class='markdownify-menu' data-target='b1text'>
-                <a class='btn--insert' data-type='link' href='javascript:void(0)'>link</a>
-              </div>
-            <textarea class="markdown" id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
+            <textarea id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
           </div>
         </div>
 

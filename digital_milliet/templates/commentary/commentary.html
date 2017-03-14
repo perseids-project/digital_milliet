@@ -5,7 +5,7 @@
 
   <div class='row'>
     <div class='col-md-6'>
-      <div id="auth_head"> <h2>{{ info['auth'] }}, {{ info['work'] }} {{ info['passage'] }} </h2></div>
+      <div id="auth_head"> <h2>{% if info['auth'] %}{{ info['auth'] }}, {{ info['work'] }} {{ info['passage'] }}{% endif %}</h2></div>
     </div>
     <div class='col-xs-8'>
       <div class='row'>
@@ -16,7 +16,7 @@
             <div id='origin_text'>
               <!-- going to need a way for all of the text fields to grab text if uri, or display char field if not -->
               {% if 'orig_uri' in obj %}
-                <p>{{ get_text(obj['orig_uri'], 'origin_text') }}</p>
+                <p>{{ get_text(obj['orig_uri'], '#origin_text p') }}</p>
               {% else %}
                 <p>{{ obj['orig_text'] }}</p>
               {% endif %}
@@ -35,7 +35,7 @@
             <div class='tab-content'>
               <div role='tabpanel' class='tab-pane' id={{ obj['t1_lang']}}>
                 {% if 't1_uri' in obj %}
-                  <p>{{ get_text(obj['t1_uri'], 'eng') }}</p>
+                  <p>{{ get_text(obj['t1_uri'], '#eng p') }}</p>
                 {% else %}
                   <p>{{ obj['t1_text'] }}</p>
                 {% endif %}
@@ -43,7 +43,7 @@
               </div>
               <div role='tabpanel' class='tab-pane' id={{ obj['t2_lang']}}>
                 {% if 't2_uri' in obj %}
-                  <p>{{ get_text(obj['t2_uri'], 'fra') }}</p>
+                  <p>{{ get_text(obj['t2_uri'], '#fra p') }}</p>
                 {% else %}
                   <p>{{ obj['t2_text'] }}</p>
                 {% endif %}

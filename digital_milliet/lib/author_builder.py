@@ -32,7 +32,7 @@ class AuthorBuilder(object):
         :return: None
         """
         try:
-            target = data_dict['commentary'][0]['hasTarget']
+            target = data_dict['commentary'][0]['hasTarget'][0]
             cite_urn = data_dict['commentary'][0]['hasBody']['@id']
             if (type(target) is str):
                 urn = URN(target)
@@ -51,26 +51,34 @@ class AuthorBuilder(object):
                     if resp['urn_status'] is not 'invalid':
                         author = self.make_author(resp)
 
-            works = author['works']
-            if not works:
-                works.append(self.make_work(work_id, millnum, pasg))
-            else:
-                work = next((ent for ent in works if ent['cts_id'] == work_id), None)
-                if work is None:
+            # we may still not have an author here, if the catalog lookup didn't succeed
+            if author is not None:
+                works = author['works']
+                if not works:
                     works.append(self.make_work(work_id, millnum, pasg))
                 else:
-                    if millnum not in work['millnums']:
-                        l = [millnum, pasg]
-                        work['millnums'].append(l)
+                    work = next((ent for ent in works if 'cts_id' in ent and ent['cts_id'] == work_id), None)
+                    if work is None:
+                        works.append(self.make_work(work_id, millnum, pasg))
+                    else:
+                        if millnum not in work['millnums']:
+                            l = [millnum, pasg]
+                            work['millnums'].append(l)
 
-            self.mongo.db.annotation.update({'_id' : author['_id']}, author)
-        except TypeError:
+                self.mongo.db.annotation.update({'_id' : author['_id']}, author)
+            else:
+                print("Unable to get catalog info for " + target)
+        except TypeError as err:
+            print("Invalid data for author build",err)
             pass
-        except KeyError:
+        except KeyError as err:
+            print("Invalid data for author build",err)
             pass
-        except ValueError:
+        except ValueError as err:
+            print("Invalid data for author build",err)
             pass
         except:
+            print("Invalid data for author build")
             pass
 
     def make_author(self,resp):
@@ -97,9 +105,9 @@ class AuthorBuilder(object):
         :return:
         """
         w_resp = self.catalog.lookup_work(work_id)
+        work = {}
         for w in w_resp:
             if w['urn_status'] is not 'invalid':
-                work = {}
                 work['title'] = w['title_eng']
                 work['cts_id'] = w['work']
                 l = [[millnum, pasg]]

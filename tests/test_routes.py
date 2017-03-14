@@ -31,7 +31,7 @@ class TestRoutes(DigitalMillietTestCase):
 
     def test_commentary_by_millnum(self):
         rv = self.client.get('/commentary/261').data.decode()
-        self.assertIn('<h2>Xenophon, Memorabilia 3.10.1-3.10.5 </h2>',rv,'Header Info Missing')
+        self.assertIn('<h2>Xenophon, Memorabilia 3.10.1-3.10.5</h2>',rv,'Header Info Missing')
 
     def test_api(self):
         rv = self.client.get('/api/commentary/261').data.decode()
@@ -94,6 +94,8 @@ class TestRoutes(DigitalMillietTestCase):
         submit_data = dict(
             mongo_id = m,
             orig_uri ="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
+            orig_text= "",
+            orig_lang="grc",
             c1text ="",
             b1text = "",
             t1_uri = "urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:3.10.1-3.10.5",
@@ -112,6 +114,8 @@ class TestRoutes(DigitalMillietTestCase):
         submit_data = dict(
             mongo_id = m,
             orig_uri ="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
+            orig_text= "",
+            orig_lang="grc",
             c1text ="",
             b1text = "",
             t1_text = "some new translation text",

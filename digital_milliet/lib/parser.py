@@ -58,13 +58,13 @@ class Parser(object):
         record = self.mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
         record['commentary'][0]['hasBody']['chars'] = form['c1text']
         record['bibliography'][0]['hasBody']['chars'] = form['b1text']
+        cite_urn = record['commentary'][0]['hasBody']['@id']
+        millnum = cite_urn.split('.')[2]
 
 
         if 't1_text' in form:
             if form['t1_text'] != '':
                 if not record['translation'][0]['hasBody'] is dict:
-                    cite_urn = record['commentary'][0]['hasBody']['@id']
-                    millnum = cite_urn.split('.')[2]
                     # if we have switched from a uri to text then make sure we have the structure in place
                     record['translation'][0]['hasBody'] = self.build_transl("t1", millnum, form['t1_text'], None, None, form['lang1'])
                 else:
@@ -76,8 +76,6 @@ class Parser(object):
         if 't2_text' in form:
             if form['t2_text'] != '':
                 if not record['translation'][1]['hasBody'] is dict:
-                    cite_urn = record['commentary'][0]['hasBody']['@id']
-                    millnum = cite_urn.split('.')[2]
                     # if we have switched from a uri to text then make sure we have the structure in place
                     record['translation'][1]['hasBody'] = self.build_transl("t2", millnum, form['t2_text'], None, None, form['lang2'])
                 else:
@@ -90,19 +88,29 @@ class Parser(object):
         record['bibliography'][0]['modified'] = modtime
         record['translation'][0]['modified'] = modtime
         record['translation'][1]['modified'] = modtime
+        record['translation'][0]['hasTarget'] = form['orig_uri']
+        record['translation'][1]['hasTarget'] = form['orig_uri']
         self.update_contributors(record['commentary'][0])
         self.update_contributors(record['bibliography'][0])
         self.update_contributors(record['translation'][0])
         self.update_contributors(record['translation'][1])
 
-        if 'orig_uri' in form:
-            record['commentary'][0]['hasTarget'] = form['orig_uri']
-        else:
-            record['commentary'][0]['hasTarget']['chars'] = form['orig_text']
+        if (type(record['commentary'][0]['hasTarget']) is not list):
+            main_text = dict(
+                [("@id", self.make_uri(millnum,'l1')),
+                 ("format", "text"),
+                 ("chars", ""),
+                 ("language", "")
+                ])
+            record['commentary'][0]['hasTarget'] = ["",main_text]
+        record['commentary'][0]['hasTarget'][0] = form['orig_uri']
+        record['commentary'][0]['hasTarget'][1]['chars'] = form['orig_text']
+        record['commentary'][0]['hasTarget'][1]['language'] = form['orig_lang']
 
         rv =  None
         if self.validate_annotation(record):
             rv = self.mongo.db.annotation.save(record)
+            self.builder.author_db_build(record)
         return rv
 
 
@@ -132,17 +140,17 @@ class Parser(object):
         date = datetime.datetime.today()
         milnum = vals['milnum'].zfill(3)
         person = self.make_person()
+        primary_source_uri = ""
         if vals['l1uri']:
-            main_text = vals['l1uri']
+            primary_source_uri = vals['l1uri']
         elif vals['own_uri_l1']:
-            main_text = vals['own_uri_l1']
-        else:
-            main_text = dict(
-                [("@id", self.make_uri(milnum,'l1')),
-                 ("format", "text"),
-                 ("chars", vals['l1text']),
-                 ("language", vals['select_l1'])
-                ])
+            primary_source_uri = vals['own_uri_l1']
+        main_text = dict(
+            [("@id", self.make_uri(milnum,'l1')),
+             ("format", "text"),
+             ("chars", vals['l1text']),
+             ("language", vals['select_l1'])
+            ])
 
         annotation = dict([
             ("commentary", [dict([
@@ -157,7 +165,7 @@ class Parser(object):
                 ("chars", vals['c1text']),
                 ("language", "eng")
               ])),
-              ("hasTarget", main_text),
+              ("hasTarget", [primary_source_uri,main_text]),
               ("motivatedBy", "oa:commenting")
             ])]),
             ("bibliography", [dict([
@@ -182,7 +190,7 @@ class Parser(object):
               ("annotatedAt", str(date)),
               ("creator",person),
               ("hasBody", self.build_transl("t1", vals['milnum'], vals['t1text'], vals['t1uri'], vals['own_uri_t1'], vals['lang_t1'])),
-              ("hasTarget", main_text),
+              ("hasTarget", primary_source_uri),
               ("motivatedBy", "oa:linking")
               ]),
               dict([
@@ -192,7 +200,7 @@ class Parser(object):
               ("annotatedAt", str(date)),
               ("creator",person),
               ("hasBody", self.build_transl("t2", vals['milnum'], vals['t2text'], vals['t2uri'], vals['own_uri_t2'], vals['lang_t2'])),
-              ("hasTarget", main_text),
+              ("hasTarget", primary_source_uri),
               ("motivatedBy", "oa:linking")
               ])
             ]),
@@ -306,13 +314,14 @@ class Parser(object):
                     result[t_num+'_text'] = text
                     result[t_num+'_lang'] = "eng"
                     pass
-            if (type(obj['commentary'][0]['hasTarget']) is dict):
-                result['orig_text'] = obj['commentary'][0]['hasTarget']['chars']
-            else:
-                #import pdb; pdb.set_trace()
-                result['orig_uri'] = obj['commentary'][0]['hasTarget']
-                #uri_arr = obj['commentary'][0]['hasTarget'].split(':')
-                #result['orig_text']= cts_retrieve(uri_arr)
+        if (type(obj['commentary'][0]['hasTarget']) is list):
+            result['orig_uri'] = obj['commentary'][0]['hasTarget'][0]
+            result['orig_text'] = obj['commentary'][0]['hasTarget'][1]['chars']
+        elif (type(obj['commentary'][0]['hasTarget']) is dict):
+            result['orig_uri'] = ""
+            result['orig_text'] = obj['commentary'][0]['hasTarget']['chars']
+        else:
+            result['orig_uri'] = obj['commentary'][0]['hasTarget']
 
         return result
 
@@ -325,8 +334,7 @@ class Parser(object):
         :return: True if valid False if not
         """
         try:
-            if isinstance(annotation['commentary'][0]['hasTarget'],str):
-                urn = URN(annotation['commentary'][0]['hasTarget'])
+            urn = URN(annotation['commentary'][0]['hasTarget'][0])
         except ValueError as err:
             raise ValueError("Invalid commentary target - not parseable as URN")
         try:

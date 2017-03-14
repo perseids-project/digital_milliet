@@ -53,7 +53,6 @@ class Views(object):
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
 
-
         return render_template('/commentary/commentary.html', obj=parsed_obj, info=auth_info, millnum=millnum)
 
     @OAuthHelper.oauth_required

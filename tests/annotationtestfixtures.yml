@@ -23,7 +23,12 @@
           “ artists who followed their art as a business\" (τῶν τὰς τέχνας ἐχόντων)."
         format: text
         language: eng
-      hasTarget: urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5
+      hasTarget:
+        - urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5
+        - "@id":  http://perseids.org/collections/urn:cite:perseus:digmil.999.11
+          chars: ""
+          language: "grc"
+          format: "text"
       motivatedBy: oa:commenting
     images: []
     tags: []
@@ -73,7 +78,12 @@
           “ artists who followed their art as a business\" (τῶν τὰς τέχνας ἐχόντων)."
         format: text
         language: eng
-      hasTarget: this is an invalid urn
+      hasTarget:
+        - this is an invalid urn
+        - "@id":  http://perseids.org/collections/urn:cite:perseus:digmil.999.11
+          chars: ""
+          language: "grc"
+          format: "text"
       motivatedBy: oa:commenting
     images: []
     tags: []
@@ -123,7 +133,12 @@
           “ artists who followed their art as a business\" (τῶν τὰς τέχνας ἐχόντων)."
         format: text
         language: eng
-      hasTarget: urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:3.10
+      hasTarget:
+        - urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5
+        - "@id":  http://perseids.org/collections/urn:cite:perseus:digmil.999.11
+          chars: ""
+          language: "grc"
+          format: "text"
       motivatedBy: oa:commenting
     images: []
     tags: []
@@ -173,7 +188,12 @@
           “ artists who followed their art as a business\" (τῶν τὰς τέχνας ἐχόντων)."
         format: text
         language: eng
-      hasTarget: urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:3.10
+      hasTarget:
+        - urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5
+        - "@id":  http://perseids.org/collections/urn:cite:perseus:digmil.999.11
+          chars: ""
+          language: "grc"
+          format: "text"
       motivatedBy: oa:commenting
     images: []
     tags: []

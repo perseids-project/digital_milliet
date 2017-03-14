@@ -204,9 +204,13 @@ def parse_it(obj):
     else:
       t_num = "t1" 
       text = transl['hasBody']
-      lang = re.search('\D+', text.split('-')[1]).group(0)
-      result[t_num+'_uri'] = text
-      result[t_num+'_lang'] = lang
+      try:
+          lang = re.search('\D+', text.split('-')[1]).group(0)
+          result[t_num+'_uri'] = text
+          result[t_num+'_lang'] = lang
+      except:
+          result[t_num+'_text'] = text
+          result[t_num+'_lang'] = "eng"
 
   if (type(obj['commentary'][0]['hasTarget']) is dict):
     result['orig_text'] = obj['commentary'][0]['hasTarget']['chars']

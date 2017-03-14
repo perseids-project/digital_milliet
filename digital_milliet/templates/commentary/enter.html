@@ -32,15 +32,7 @@
         </div>
     </div>
 
-	{% with messages = get_flashed_messages() %}
-  	{% if messages %}
-	    <ul class=flashes>
-	    {% for message in messages %}
-	      <li>{{ message }}</li>
-	    {% endfor %}
-	    </ul>
-	  {% endif %}
-	{% endwith %}
+    {% include 'flashes.html' %}
 	<div>
       <form id='input_form' action="create" method="POST">
         <input type="hidden" name="l1"/>

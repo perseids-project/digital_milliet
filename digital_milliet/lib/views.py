@@ -66,9 +66,9 @@ class Views(object):
         form = request.form
         saved = self.parser.edit_save(form)
         if saved:
-            flash('Edit successfully saved')
+            flash('Edit successfully saved','success')
         else:
-            flash('Error!')
+            flash('Error!','danger')
 
         return redirect('commentary')
 
@@ -77,10 +77,10 @@ class Views(object):
     def create(self):
         millnum = self.parser.save_from_form(request.form.to_dict())
         if millnum is not None:
-            flash('Annotation successfully created!')
+            flash('Annotation successfully created!','success')
             return redirect('commentary/' + str(millnum))
         else:
-            flash('Error saving!')
+            flash('Error saving!','danger')
             return redirect('new')
 
     def api_data_get(self, millnum):

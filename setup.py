@@ -10,7 +10,7 @@ setup(
         "Flask-OAuthlib>=0.9.3",
         "Flask-Babel==0.9",
         "Flask-Bower==1.0.1",
-        "requests>=2.5.0",
+        "requests>=2.8.1",
         "Flask-Cache==0.13.1",
         "requests-cache==0.4.9",
         "flask-cors==2.0.0",

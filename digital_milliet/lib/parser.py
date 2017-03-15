@@ -410,7 +410,7 @@ class Parser(object):
                     found = True
                     break
             if not found:
-                if 'creator' in annotation_dict and annotation_dict['creator']['id'] != person['id']:
+                if 'creator' not in annotation_dict or annotation_dict['creator']['id'] != person['id']:
                     contributors.append(person)
 
     #This and the commented out lines above in parse_it and the commented out imports are for the new CTS service

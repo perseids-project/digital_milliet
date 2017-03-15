@@ -21,7 +21,7 @@
         <li><a href="{{url_for('about')}}">About</a></li>
         {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
           <li class="logout">
-            <a href="/oauth/logout?next={{ request.url }}">Logout</a>
+          <a href="{{url_for('r_oauth_logout')}}?next={{ request.url }}">Logout</a>
           </li>
         {% else %}
           <li><a href="{{url_for('r_oauth_login')}}?next={{ request.url }}">Login</a></li>

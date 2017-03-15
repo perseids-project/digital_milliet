@@ -18,7 +18,7 @@
           <div class="col-md-6">
             <legend>{{ 'Text:' }}</legend>
             {% if 'orig_uri' in obj %}
-              <input name="orig_uri" type='text' value={{obj['orig_uri']}} size=60> </input>
+              <input name="orig_uri" type='text' value="{{obj['orig_uri']}}" size="60"> </input>
                <p>{{ get_text(obj['orig_uri'], '#orig_text') }}</p>
             {% endif %}
               <select name="orig_lang" id="orig_lang">

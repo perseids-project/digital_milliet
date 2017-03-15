@@ -88,8 +88,9 @@ class Parser(object):
         record['bibliography'][0]['modified'] = modtime
         record['translation'][0]['modified'] = modtime
         record['translation'][1]['modified'] = modtime
-        record['translation'][0]['hasTarget'] = form['orig_uri']
-        record['translation'][1]['hasTarget'] = form['orig_uri']
+        if (form['orig_uri'] != ''):
+            record['translation'][0]['hasTarget'] = form['orig_uri']
+            record['translation'][1]['hasTarget'] = form['orig_uri']
         self.update_contributors(record['commentary'][0])
         self.update_contributors(record['bibliography'][0])
         self.update_contributors(record['translation'][0])
@@ -334,7 +335,8 @@ class Parser(object):
         :return: True if valid False if not
         """
         try:
-            urn = URN(annotation['commentary'][0]['hasTarget'][0])
+            if (annotation['commentary'][0]['hasTarget'][0] != ''):
+                urn = URN(annotation['commentary'][0]['hasTarget'][0])
         except ValueError as err:
             raise ValueError("Invalid commentary target - not parseable as URN")
         try:

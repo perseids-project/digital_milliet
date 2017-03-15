@@ -15,10 +15,10 @@
             <!-- Need to define some css for the text boxes, max height, scrolling, etc -->
             <div id='origin_text'>
               <!-- going to need a way for all of the text fields to grab text if uri, or display char field if not -->
-              {% if 'orig_uri' in obj %}
-                <p>{{ get_text(obj['orig_uri'], '#origin_text p') }}</p>
-              {% else %}
+              {% if 'orig_text' in obj and obj['orig_text'] != '' %}
                 <p>{{ obj['orig_text'] }}</p>
+              {% elif 'orig_uri' in obj and obj['orig_uri'] != '' %}
+                <p>{{ get_text(obj['orig_uri'], '#origin_text p') }}</p>
               {% endif %}
             </div>
           </div>

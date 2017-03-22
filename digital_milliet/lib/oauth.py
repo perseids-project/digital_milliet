@@ -3,12 +3,16 @@ from flask import redirect, url_for, session, request, jsonify, render_template
 from functools import wraps
 
 class OAuthHelper(object):
-    """
-    Helper class providing OAuth2 functionality to the application
+    """ Helper class providing OAuth2 functionality to the application
     Implements flask_oauthlib.client
     """
 
     def __init__(self,app):
+        """ Constructor
+
+        :param app: the wrapped flask app
+        :type app: Flask
+        """
         oauth = OAuth(app)
         self.authobj = oauth.remote_app(
             app.config['OAUTH_NAME'],
@@ -29,11 +33,10 @@ class OAuthHelper(object):
         app.add_url_rule('/oauth/logout',view_func = self.r_oauth_logout)
 
     def r_oauth_login(self):
-        """
-        Route for OAuth2 Login
+        """ Route for OAuth2 Login
 
-        :param next next url
-        :type str
+        :param next: next url
+        :type next: string
 
         :return: Redirects to OAuth Provider Login URL
         """
@@ -45,9 +48,9 @@ class OAuthHelper(object):
 
 
     def r_oauth_authorized(self):
-        """
-        Route for OAuth2 Authorization callback
-        :return: {"template"}
+        """ Route for OAuth2 Authorization callback
+
+        :return: renders template
         """
         resp = self.authobj.authorized_response()
         if resp is None:
@@ -71,9 +74,12 @@ class OAuthHelper(object):
             return render_template('authorized.html', username=session['oauth_user_name'])
 
     def r_oauth_logout(self):
-        """
-        Route to clear the oauth data from the session
-        :return: {"template"}
+        """ Route to clear the oauth data from the session
+
+        :param next: next url
+        :type next: string
+
+        :return: redirects to next or renders template
         """
         session.pop('oauth_user_uri', None)
         session.pop('oauth_user_name', None)
@@ -84,17 +90,21 @@ class OAuthHelper(object):
             return render_template('index.html')
 
     def oauth_token(self,token=None):
-        """
-        tokengetter function
+        """ tokengetter function
+
+        :param token: the Oauth token
+        :type token: string
+
         :return: the current access token
-        :rtype str
+        :rtype: string
         """
         return session.get('oauth_token')
 
     def current_user(self):
-        """
-        Gets the current user from the session
-        :return { uri => <uri>, name => <name> }
+        """ Gets the current user from the session
+
+        :return: { uri => <uri>, name => <name> }
+        :rtype: dict
         """
         if session and session['oauth_user_uri']:
             user = { 'uri': session['oauth_user_uri'] }
@@ -107,13 +117,15 @@ class OAuthHelper(object):
             return None
 
     def user_in_community(self,user_communities=[]):
-        """
-        Checks to see if the user is the authorized community for editing
+        """ Checks to see if the user is the authorized community for editing
+
         This is a hack specific to the Perseids OAuth provider used as a way
         to limit editing of DM records to members of a specific community in Perseids
         Eventually editing could be delegated entirely to Perseids
+
         :return: True if the user name is listed in the configured community members,
                  False if the user name is not listed
+        :rtype: bool
         """
         if self.enforce_community_id:
             return user_communities.__contains__(self.enforce_community_id)
@@ -121,9 +133,10 @@ class OAuthHelper(object):
             return True
 
     def oauth_required(f):
-        """
-        decorator to add to a view to require an oauth user
+        """ decorator to add to a view to require an oauth user
+
         :return: decorated function
+        :rtype: func
         """
         @wraps(f)
         def decorated_function(*args, **kwargs):

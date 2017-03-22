@@ -7,29 +7,30 @@ from MyCapytain.common.reference import URN
 from bson.objectid import ObjectId
 
 class AuthorBuilder(object):
-    """
-    Provides methods for building new Author records in the database
-    :param db: Mongo Db Handle
-    :type db: PyMongo
-    :param catalog: Catalog API Manager
-    :type catalog: Catalog
+    """ Provides methods for building new Author records in the database
     """
 
     def __init__(self, db=None, catalog=None):
+        """ Constructor
+
+        :param db: Mongo Db Handle
+        :type db: PyMongo
+        :param catalog: Catalog API Manager
+        :type catalog: Catalog
+        """
         self.mongo = db
         self.catalog = catalog
 
     def author_db_build(self,data_dict):
-        """
-        Adds or Updates Author Records in the Annotation Database
+        """ Adds or Updates Author Records in the Annotation Database
+
         Author Records contain authority name  and work information
         and are populated as annotations referencing an author and work
         are added to the annotator store so that they can be used for browsing
 
         :param data_dict: the full annotation
-        :type data_dict dict of the annotation
+        :type data_dict: dict
 
-        :return: None
         """
         try:
             target = data_dict['commentary'][0]['hasTarget'][0]
@@ -82,11 +83,13 @@ class AuthorBuilder(object):
             pass
 
     def make_author(self,resp):
-        """
-        Make an author from a catalog record and insert it in the database
-        :param millnum:
-        :param pasg:
-        :return:
+        """ Make an Author db record from a catalog record and insert it in the database
+
+        :param resp: the response from teh catalog lookup
+        :type resp: dict
+
+        :return: the new Author db record
+        :rtype: dict
         """
         author = {}
         author['name'] = resp['authority_name']
@@ -98,11 +101,17 @@ class AuthorBuilder(object):
 
 
     def make_work(self,work_id, millnum, pasg):
-        """
-        Make a work from a catalog record
-        :param millnum:
-        :param pasg:
-        :return:
+        """ Make a work record from a catalog record
+
+        :param work_id: the CTS URN of a work
+        :type work_id: string
+        :param millnum: the Milliet number
+        :type millnum: string
+        :param pasg: the passage component from the work
+        :type pasg: string
+
+        :return: the work record
+        :rtype: dict
         """
         w_resp = self.catalog.lookup_work(work_id)
         work = {}
@@ -115,10 +124,13 @@ class AuthorBuilder(object):
         return work
 
     def process_comm(self,comm_list):
-        """
-        Extract a sorted list of milliet numbers from a set of commentary annotations
+        """ Extract a sorted list of milliet numbers from a set of commentary annotations
+
         :param comm_list: set of commentary annotations
+        :type comm_list: list
+
         :return: sorted list of milliet numbers
+        :rtype: list
         """
         millnum_list = []
         convert = lambda text: int(text) if text.isdigit() else text

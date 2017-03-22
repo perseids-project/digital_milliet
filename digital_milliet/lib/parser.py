@@ -12,20 +12,19 @@ from MyCapytain.common.reference import URN
 
 
 class Parser(object):
+    """ Parses data for retrieval/storage to/from the database
     """
-    Parse Data for retrieva/storage to/from the database
-
-       :param db Mongo Db Handle
-       :type db PyMongo
-
-       :param builder  helper for building new Author records
-        :type builder AuthorBuilder
-
-        :param config configuration dictionary
-        :type config dict
-    """
-
     def __init__(self,db=None,builder=None,config=None,auth=None):
+        """ Parser object
+
+        :param db: Mongo Db Handle
+        :type db: PyMongo
+        :param builder:  helper for building new Author records
+        :type builder: AuthorBuilder
+        :param config: configuration dictionary
+        :type config: dict
+        """
+
         self.mongo = db
         self.builder = builder
         self.config = config
@@ -33,10 +32,13 @@ class Parser(object):
 
 
     def save_from_form(self,vals):
-        """
-        Save a new set of annotations from the input form
-        :param vals:
-        :return: the nilliet number for the saved annotations or None if the record couldn't be saved
+        """Save a new set of annotations from the input form
+
+        :param vals: key/value pairs from input form
+        :type vals: dict
+
+        :return: the Milliet number for the saved annotations or None if the record couldn't be saved
+        :rtype: string
         """
         data = self.make_annotation(vals)
         raw_id = data['commentary'][0]['hasBody']['@id']
@@ -48,10 +50,13 @@ class Parser(object):
         return rv
 
     def edit_save(self,form):
-        """
-        Save an edited set of annotations to the db
-        :param form:
-        :return:  True if successful False if not
+        """Save an edited set of annotations to the db
+
+        :param form: key/value pairs from edit form
+        :type form: dict
+
+        :return: True if successful False if not
+        :rtype: bool
         """
 
         modtime = datetime.datetime.utcnow().isoformat()
@@ -116,10 +121,13 @@ class Parser(object):
 
 
     def add_to_db(self,data_dict):
-        """
-         Add a new set of annotations ot the database
-        :param data_dict:
+        """Add a new set of annotations ot the database
+
+        :param data_dict: Data dictionary
+        :type data_dict: dict
+
         :return: the inserted db record or None if the record already existed
+        :rtype: dict
         """
         cid = data_dict["commentary"][0]["hasBody"]["@id"]
         exists = self.mongo.db.annotation.find_one({"commentary.hasBody.@id" : cid})
@@ -133,10 +141,13 @@ class Parser(object):
 
 
     def make_annotation(self, vals):
-        """
-        Make a structure for the annotation from a set of key/value pairs
-        :param vals:
-        :return: the annotation as a JSON structure
+        """Make a structure for the annotation from a set of key/value pairs
+
+        :param vals: key/value pairs from input
+        :type values:
+
+        :return: the annotation
+        :rtype: dict
         """
         date = datetime.datetime.today()
         milnum = vals['milnum'].zfill(3)
@@ -213,9 +224,10 @@ class Parser(object):
 
 
     def uid(self):
-        """
-        Create a unique id for an annotation
+        """Create a unique id for an annotation
+
         :return: uid
+        :rtype: string
         """
         uuid = 'digmilann.' + str(uuid4())
         return uuid
@@ -223,15 +235,23 @@ class Parser(object):
 
 
     def build_transl(self,num, milnum, text, uri, own_uri, lang):
-        """
-        Build the body of a translation annotation
-        :param num:
-        :param milnum:
-        :param text:
-        :param uri:
-        :param own_uri:
-        :param lang:
+        """ Build the body of a translation annotation.
+
+        :param num: the translation identifier (t1 or t2)
+        :type num: string
+        :param milnum: the Milliet number for the annotation
+        :type milnum: string
+        :param text: the text of the translation (None if uri or own_uri is supplied)
+        :type text: String
+        :param uri: the uri of a translation - this is expected to be a CTS URN that appears in the linked cts repository
+        :type uri: string
+        :param own_uri: an user-supplied uri for a translation - this is for an externally linked translation text
+        :type own_uri: string
+        :param lang: the language code of the translation ('fra' or 'eng')
+        :type lang: string
+
         :return: the body of the translation annotation
+        :rtype: string (for a URI) or dict (if an embedded body)
         """
         if not uri and not own_uri:
             body = dict([
@@ -250,10 +270,15 @@ class Parser(object):
 
 
     def get_it(self,millnum):
-        """
-        Get the first set of annotations that target the supplied Milliet Number
+        """Get the first set of annotations that target the supplied Milliet Number
+
         :param millnum:  Milliet Number
-        :return: the annotation set as a dict
+        :type milnum: string
+
+        :return: the annotation
+        :rtype: dict
+
+        :raises 404 Not Found Exception: if the annotation is not found
         """
         obj = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : self.make_uri(millnum,'c1')})
         parsed_obj = self.parse_it(obj)
@@ -276,10 +301,13 @@ class Parser(object):
 
 
     def parse_it(self,obj):
-        """
-        Parse a db record into a dict
+        """ Parse a db record into a dict setup for views
+
         :param obj: the db record
-        :return:  parsed as a dict
+        :type obj: dict
+
+        :return:  Parsed version of the record
+        :rtype: dict
         """
         result = {}
         result['mid'] = obj['_id']
@@ -327,12 +355,16 @@ class Parser(object):
         return result
 
     def validate_annotation(self,annotation):
-        """
-        Validate the structure of an annotation.
+        """Validate the structure of an annotation.
 
         This is not foolproof but it attempts to catch some errors that could come in from mistakes
         in data entry. It would be good to make sure these all couldn't occur to begin with.
+
+        :param annotation: the annotation record
+        :type annotation: dict
+
         :return: True if valid False if not
+        :rtype: bool
         """
         try:
             if (annotation['commentary'][0]['hasTarget'][0] != ''):
@@ -353,10 +385,13 @@ class Parser(object):
 
 
     def process_comm(self,comm_list):
-        """
-        Extract a sorted list of milliet numbers from a set of commentary annotations
+        """ Extract a sorted list of milliet numbers from a set of commentary annotations
+
         :param comm_list: set of commentary annotations
-        :return: sorted list of milliet numbers
+        :type comm_list: list
+
+        :return: sorted list of extracted Milliet numbers
+        :rtype: list
         """
         millnum_list = []
         convert = lambda text: int(text) if text.isdigit() else text
@@ -374,16 +409,28 @@ class Parser(object):
         return sorted(millnum_list,key=alphanum_key)
 
     def make_uri(self, milnum, subcoll):
-        """
-        Make a URI for an annotation
-        :return:  uri
+        """ Make a Cite Collection URI for an annotation
+
+        N.B. this is not a valid implementation of the CITE protocol, as it does not support
+        CITE collections.  Future implementations should consider replacing this with a different identifier syntax.
+
+        :param: milnum: The Milliet number
+        :type: milnum: string
+
+        :param: subcoll: the subcollection identifier (e.g. commentary, bibliography, etc.)
+        :type: string
+
+        :return:  the compiled URI
+        :rtype: string
         """
         return self.config['CITE_URI_PREFIX'] +  self.config['CITE_COLLECTION'] + '.' + milnum + '.' + subcoll
 
     def make_person(self):
-        """
-        Make a person for an annotation (i.e for contributor or creator)
-        :return: a dict with the person attributes
+        """ Make a Person for an annotation (i.e for contributor or creator)
+        Uses the URI identifier for the user of the currently authenticated session
+
+        :return: Person properties suitable for inclusion in the annotation
+        :rtype: dict
         """
         person = self.auth.current_user()
         if person:
@@ -396,10 +443,14 @@ class Parser(object):
             return None
 
     def update_contributors(self,annotation_dict=dict):
-        """
-        Update the contributors for an annotation
+        """ Update the contributors for an annotation
+
+        Inserts a Person object for the currently authenticated user if she doesn't already appear
+        as either creator or contributor.
+
         :param annotation_dict: the annotation to update
-        :return: None - annotation updated in place
+        :type annotation_dict: dict
+
         """
         contributors = annotation_dict.setdefault('contributor',[])
         person = self.make_person()
@@ -412,33 +463,3 @@ class Parser(object):
             if not found:
                 if 'creator' not in annotation_dict or annotation_dict['creator']['id'] != person['id']:
                     contributors.append(person)
-
-    #This and the commented out lines above in parse_it and the commented out imports are for the new CTS service
-    #using MyCapytains to access it. For now, since there are not as many texts that are CTS/TEI compliant
-    #meaning we lose access to texts with the switch, the javascript call in commentary.js will have to do.
-    def cts_retrieve(self,uri_arr):
-        orig_uri = ":".join(uri_arr[:4])
-        cts = cts5.CTS('http://cts.perseids.org/api/cts/', inventory="digmill")
-        text = Text(orig_uri, cts)
-        ref = reference.Reference(reference = uri_arr[4])
-        try:
-            passg = text.getPassage(ref)
-        except IndexError:
-            passg = ""
-
-        return passg
-
-
-
-    def get_from_cite_coll(self,target_list):
-        a_addr = "http://catalog.perseus.org/cite-collections/api/authors/search?"
-        w_addr = "http://catalog.perseus.org/cite-collections/api/works/search?"
-        #this isn't finished!! need to pull info out of the target list and batch send the urns to the cite collections
-        #then need to match it all back up again?S
-        if auth in auth_work_list:
-            if work in auth_work_list[auth]:
-                pass
-            else:
-                auth_work_list[auth].append(work).sort()
-        else:
-            auth_work_list[auth] = [work]

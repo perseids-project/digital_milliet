@@ -3,6 +3,10 @@ from flask import redirect, url_for, session, request, jsonify, render_template
 from functools import wraps
 
 class OAuthHelper(object):
+    """
+    Helper class providing OAuth2 functionality to the application
+    Implements flask_oauthlib.client
+    """
 
     def __init__(self,app):
         oauth = OAuth(app)

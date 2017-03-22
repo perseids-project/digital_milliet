@@ -8,12 +8,11 @@ from bson.objectid import ObjectId
 
 class AuthorBuilder(object):
     """
-      Provides methods for building new Author records in the database
-
-       :param db Mongo Db Handle
-       :type db PyMongo
-       :param catalog Catalog API Manager
-       :type catalog Catalog
+    Provides methods for building new Author records in the database
+    :param db: Mongo Db Handle
+    :type db: PyMongo
+    :param catalog: Catalog API Manager
+    :type catalog: Catalog
     """
 
     def __init__(self, db=None, catalog=None):
@@ -29,6 +28,7 @@ class AuthorBuilder(object):
 
         :param data_dict: the full annotation
         :type data_dict dict of the annotation
+
         :return: None
         """
         try:

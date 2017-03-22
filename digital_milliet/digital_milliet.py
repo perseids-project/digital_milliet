@@ -26,12 +26,6 @@ class DigitalMilliet(object):
 
     def init_app(self,config_file=None):
 
-        config = {
-            "development" : "digital_milliet.lib.config.DevelopmentConfig",
-            "testing" : "digital_milliet.lib.config.TestingConfig",
-            "default" : "digital_milliet.lib.config.BaseConfig"
-        }
-        self.app.config.from_object(config["default"])
         self.app.config.from_pyfile(config_file,silent=False)
         self.app.secret_key = self.app.config['SECRET_KEY']
         self.bower = Bower(self.app)

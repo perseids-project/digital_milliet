@@ -5,12 +5,22 @@
 .. image:: https://readthedocs.org/projects/pip/badge/?version=phase2
    :target: http://digital-milliet.readthedocs.io/en/phase2/
 
+Digital Milliet
+===============
+
 The Digitat Milliet is a Python Flask Application backed by a Mongo DB database.  It supports the creation and display
 of an interactive collection of ancient Greek and Latin texts about painting. It is a digital interpretation of
 "The Recueil des textes grecs et latins relatifs à la peinture ancienne" (“Collection of Greek and Latin Texts
 Concerning Ancient Painting”), the initiative of a French academic painter, Paul Milliet, who had a passion for ancient
 Greek culture.
 
+Installation Instructions
+*************************
+
+Pending...
+
+Design Overview
+****************
 The aim behind the design of the application was to support the representation of each entry in the original "Recueil"
 as a graph of annotations, with the primary annotation being a Commentary targeting a stable CTS URN identifier
 of the primary source Greek or Latin text which was the subject of the entry in the "Receuil". This commentary annotation
@@ -19,9 +29,9 @@ interface, this is referred to as the "Milliet Number".) Additional annotations 
 French and English translations of the primary source text, and eventually Images representing the described artwork
 and semantic tag annotations on the images, the primary source texts, the translations and the commentary.  Entries
 are indexed for browsing both by Milliet Number and Author/Work/Passage of the target primary source text passage.
-Author and Work information for each primary source text is retrieved from the Perseus Catalog. We have used a
-non-standard form of a CITE URN to assign identifiers to each individual annotation in the graph. This may eventually be
-replaced by UUIDs or other identifier system.
+Author and Work information for each primary source text is retrieved from the Perseus Catalog (http://catalog.perseus.org/). 
+We have used a non-standard form of a CITE URN to assign identifiers to each individual annotation in the graph. This may 
+eventually be replaced by UUIDs or other identifier system.
 
 In order to facilitate data reuse and interoperability we represent these annotations according to the Open Annotation
 data model, a standard data model for serializing annotations on resources in the world wide web.
@@ -33,6 +43,6 @@ API endpoint, we also allow for embedded textual content instead of and in addit
 Images, when implemented, will use the IIIF standard for referencing and annotation.  A design for semantic tagging
 of textual content has not yet been decided upon.
 
-The code depends upon components of the CapiTainS suite for interaction with CTS endpoints and validation of CTS URN
+The code depends upon components of the CapiTainS suite (https://github.com/capitains) for interaction with CTS endpoints and validation of CTS URN
 syntax.
 

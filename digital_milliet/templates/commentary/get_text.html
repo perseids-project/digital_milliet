@@ -1,0 +1,8 @@
+{% macro get_text(uri, type) %}
+	<script type="text/javascript">
+		$(function(){
+			var textURI = "{{uri}}";
+			get_cts(textURI, "{{type}}");
+		});
+	</script>
+{%- endmacro %}

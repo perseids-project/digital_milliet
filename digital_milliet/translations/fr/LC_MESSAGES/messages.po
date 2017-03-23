@@ -1,0 +1,652 @@
+# French translations for PROJECT.
+# Copyright (C) 2017 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-03-01 09:52-0500\n"
+"PO-Revision-Date: 2017-03-01 09:52-0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: digital_milliet/templates/commentary/enter.html:55
+msgid "Enter Metadata:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:56
+msgid "Milliet Number:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:57
+msgid "Enter the Milliet number for this passage and associated commentary"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:64
+msgid "Select primary source text:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:67
+msgid "Search for a primary source text:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:70
+#: digital_milliet/templates/commentary/enter.html:140
+#: digital_milliet/templates/commentary/enter.html:178
+msgid ""
+"URI Identifer for this text. If a URL, text will be loaded from there. "
+"Plain text only supported."
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:72
+#: digital_milliet/templates/commentary/enter.html:142
+#: digital_milliet/templates/commentary/enter.html:180
+msgid "All available works"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:75
+#: digital_milliet/templates/commentary/enter.html:145
+#: digital_milliet/templates/commentary/enter.html:183
+msgid "Or enter your own text URI:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:81
+#: digital_milliet/templates/commentary/enter.html:151
+#: digital_milliet/templates/commentary/enter.html:189
+msgid "Select"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:84
+#: digital_milliet/templates/commentary/enter.html:100
+#: digital_milliet/templates/commentary/enter.html:117
+#: digital_milliet/templates/commentary/enter.html:154
+#: digital_milliet/templates/commentary/enter.html:161
+#: digital_milliet/templates/commentary/enter.html:192
+#: digital_milliet/templates/commentary/enter.html:199
+msgid "Invalid entry"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:89
+msgid "Primary Source Passage:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:91
+msgid "Text Direction:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:93
+msgid "Left to Right"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:95
+msgid "Right to Left"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:110
+msgid "Enter Commentary:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:123
+msgid "Enter Bibliography:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:134
+msgid "English translation:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:137
+msgid "Search for an English translation:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:158
+msgid "Enter English Translation:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:169
+msgid "French translation:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:175
+msgid "Search for a French translation:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:196
+msgid "Enter French Translation:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/enter.html:207
+msgid "Save Annotation"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:3
+msgid "Language:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:5
+msgid "English"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:6
+msgid "French"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:7
+msgid "Latin"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:8
+msgid "Greek (Ancient -1453)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:9
+msgid "Arabic"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:10
+msgid "Chinese"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:11
+msgid "Afrikaans"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:12
+msgid "Akkadian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:13
+msgid "Albanian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:14
+msgid "Amharic"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:15
+msgid "Aragonese"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:16
+msgid "Aramaic (Imperial- 700 BC-300 BC)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:17
+msgid "Aramaic (Samaritan)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:18
+msgid "Armenian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:19
+msgid "Asturian (Bable, Leonese)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:20
+msgid "Avestan"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:21
+msgid "Azerbaijani"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:22
+msgid "Basque"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:23
+msgid "Bengali"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:24
+msgid "Berber"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:25
+msgid "Bosnian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:26
+msgid "Breton"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:27
+msgid "Bulgarian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:28
+msgid "Bulgarian (Old, Old Church Slavonic)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:29
+msgid "Burmese"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:30
+msgid "Catalan"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:31
+msgid "Chagatai"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:32
+msgid "Coptic"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:33
+msgid "Cornish"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:34
+msgid "Croatian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:35
+msgid "Czech"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:36
+msgid "Danish"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:37
+msgid "Dutch (Flemish)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:38
+msgid "Dutch (Middle, 1050-1350)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:39
+msgid "Egyptian (Ancient)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:40
+msgid "Elamite"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:41
+msgid "English (Middle, 1100-1500)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:42
+msgid "English (Old, 450-1100)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:43
+msgid "Estonian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:44
+msgid "Finnish"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:45
+msgid "French (Middle, 1400-1600)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:46
+msgid "French (Old, 842c. 1400)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:47
+msgid "Ge'ez"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:48
+msgid "Georgian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:49
+msgid "German (Low, Low Saxon)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:50
+msgid "German (Middle-High, 1050-1500)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:51
+msgid "German (Old-High, 750-1050)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:52
+msgid "German"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:53
+msgid "Gothic"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:54
+msgid "Greek (Modern, 1453-)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:55
+msgid "Gujarati"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:56
+msgid "Hebrew"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:57
+msgid "Hindi"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:58
+msgid "Hittite"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:59
+msgid "Hungarian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:60
+msgid "Icelandic"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:61
+msgid "Indonesian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:62
+msgid "Irish (Modern)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:63
+msgid "Irish (Middle 900-1200)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:64
+msgid "Irish (Old, to 900)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:65
+msgid "Italian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:66
+msgid "Japanese"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:67
+msgid "Javanese"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:68
+msgid "Kannada"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:69
+msgid "Khmer (Central)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:70
+msgid "Korean"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:71
+msgid "Kurdish"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:72
+msgid "Ladino"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:73
+msgid "Lithuanian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:74
+msgid "Malay"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:75
+msgid "Marathi"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:76
+msgid "Nepal Bhasa (Newari)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:77
+msgid "Nepali"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:78
+msgid "Newari (Classical)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:79
+msgid "Norse (Old)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:80
+msgid "Norwegian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:81
+msgid "Norwegian (Bokmål)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:82
+msgid "Norwegian (Nynorsk)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:83
+msgid "Ossetian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:84
+msgid "Pahlavi (Middle Persian)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:85
+msgid "Pali"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:86
+msgid "Pashto"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:87
+msgid "Persian (Farsi)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:88
+msgid "Persian (Old, 600-400 BC)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:89
+msgid "Phoenician"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:90
+msgid "Polish"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:91
+msgid "Portuguese"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:92
+msgid "Prakrit"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:93
+msgid "Provençal (Occitan, -1500)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:94
+msgid "Punjabi (Panjabi)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:95
+msgid "Rajasthani"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:96
+msgid "Romanian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:97
+msgid "Romany"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:98
+msgid "Russian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:99
+msgid "Sanskrit"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:100
+msgid "Scots"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:101
+msgid "Scottish (Gaelic)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:102
+msgid "Serbian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:103
+msgid "Sicilian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:104
+msgid "Sindhi"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:105
+msgid "Sinhalese (Sinhala)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:106
+msgid "Slovak"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:107
+msgid "Slovenian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:108
+msgid "Sogdian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:109
+msgid "Spanish (Castilian)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:110
+msgid "Sumerian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:111
+msgid "Swahili"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:112
+msgid "Swedish"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:113
+msgid "Swiss German (Alsatian)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:114
+msgid "Syriac (Classical)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:115
+msgid "Syriac (Northeastern, Neo-Aramaic)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:116
+msgid "Tagalog"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:117
+msgid "Tajik"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:118
+msgid "Tamil"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:119
+msgid "Tatar"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:120
+msgid "Telugu"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:121
+msgid "Thai"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:122
+msgid "Tibetan"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:123
+msgid "Turkish (Modern)"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:124
+msgid "Turkish (Ottoman, 1500-1928 )"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:125
+msgid "Turkmen"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:126
+msgid "Ugaritic"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:127
+msgid "Ukainian"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:128
+msgid "Urdu"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:129
+msgid "Uzbek"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:130
+msgid "Vietnamese"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:131
+msgid "Walloon"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:132
+msgid "Welsh"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:133
+msgid "Yiddish"
+msgstr ""
+
+#: digital_milliet/templates/commentary/lang_choice.html:137
+msgid "Other*:"
+msgstr ""
+

@@ -1,0 +1,4 @@
+graft digital_milliet/templates
+graft digital_milliet/static
+graft digital_milliet/translations
+graft digital_milliet/messages.pot

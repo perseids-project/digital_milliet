@@ -1,0 +1,27 @@
+{% macro get_people(obj) %}
+    {% if obj['creator'] or obj['contributor']  %}
+        <div class="provenance">
+            <h5>Annotation Authors and Editors</h5>
+            <ul class="list-unstyled">
+            {% if obj['creator'] and 'name' in obj['creator'] %}
+                <li class="creator">Created by:
+                    <ul>
+                        <li>{{ obj['creator']['name'] }}</li>
+                    </ul>
+                </li>
+            {% endif %}
+            {% if obj['contributor'] %}
+                <li class="contributors">Contributors:
+                    <ul>
+                        {% for c in obj['contributor'] %}
+                            {% if 'name' in c %}
+                                <li>{{ c['name'] }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+{%- endmacro %}

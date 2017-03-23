@@ -1,0 +1,93 @@
+{% extends "base.html"%}
+{% from "commentary/get_text.html" import get_text with context %}
+{% block content %}
+ {{ super() }}
+	<div >
+ 
+      <form id='input_form' action="save_edit" method="POST">
+        <input type='hidden' name='mongo_id' value={{obj['mid']}}>
+        <div class="row">
+          <fieldset id="align-enter-title"  class="col-md-6">
+            <legend>{{ 'Edit Commentary:' }}</legend>
+            <label for="milnum">{{ 'Milliet Number:'+millnum }}</label>
+          </fieldset>
+        </div>
+
+        <!-- inital text -->
+        <div class="row">
+          <div class="col-md-6">
+            <legend>{{ 'Text:' }}</legend>
+            {% if 'orig_uri' in obj %}
+              <input name="orig_uri" type='text' value="{{obj['orig_uri']}}" size="60"> </input>
+               <p>{{ get_text(obj['orig_uri'], '#orig_text') }}</p>
+            {% endif %}
+              <select name="orig_lang" id="orig_lang">
+                  <option value="grc" {% if obj['orig_lang'] == 'grc' %} selected='selected' {% endif %}>{{ ('Ancient Greek') }}</option>
+                  <option value="lat" {% if obj['orig_lang'] == 'lat' %} selected='selected' {% endif %}>{{ ('Latin') }}</option>
+              </select>
+            <textarea id="orig_text" name='orig_text' rows="10" cols="80">{{ obj['orig_text'] }}</textarea>
+          </div>
+        </div>
+
+        <!-- Commentary -->
+        <div class="row">
+          <div class="col-md-6">
+            <legend>{{ 'Commentary:' }}</legend>          
+              <div class='markdownify-menu' data-target='c1text'>
+                <a class='btn--insert' data-type='link' href='javascript:void(0)'>link</a>
+              </div>
+            <textarea class='markdown' id="c1text" name="c1text" rows="10" cols="80" data-lnum="c1">{{ obj['comm'] }}</textarea>
+          </div>
+        </div>
+
+        <!-- Bibliography information -->
+        <div class="row">
+          <div class="col-md-6">
+            <legend>{{ 'Bibliography:' }}</legend>
+            <textarea id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
+          </div>
+        </div>
+
+        <!-- Translation 1 -->
+
+        <div class="row">
+          <div class="col-md-6">
+            <legend>{{ 'Translation 1:' }}</legend>
+              {% if 't1_uri' in obj %}
+              <input name="t1_uri" type='text' value="{obj['t1_uri']}}" size="60"
+                     pattern="urn:cts:.+?:.+\..+\.(.+):[^\-]+(-[^-]+)?"
+                     title="Must be a valid CTS URN"> </input>
+              {% else %}
+              <select name="lang1" id="lang1">
+                <option value="eng" {% if obj['t1_lang'] == 'eng' %} selected='selected' {% endif %}>{{ ('English') }}</option>
+                <option value="fra" {% if obj['t1_lang'] == 'fra' %} selected='selected' {% endif %}>{{ ('French') }}</option>
+              </select>
+              <textarea name="t1_text" rows="10" cols="80">{{ obj['t1_text'] }}</textarea>
+              {% endif %}
+          </div>
+        </div>
+
+        <!-- Translation 2 -->
+        <div class="row">
+          <div class="col-md-6">
+            <legend>{{ 'Translation 2:' }}</legend>
+            {% if 't2_uri' in obj %}
+             <input name="t2_uri" type='text' value="{{obj['t2_uri']}}" size="60"
+                pattern="urn:cts:.+?:.+\..+\.(.+):[^\-]+(-[^-]+)?"
+                title="Must be a valid CTS URN"> </input>
+            {% else %}
+              <select name="lang2" id="lang2">
+                <option value="eng" {% if obj['t2_lang'] == 'eng' %} selected='selected' {% endif %}>{{ ('English') }}</option>
+                <option value="fra" {% if obj['t2_lang'] == 'fra' %} selected='selected' {% endif %}>{{ ('French') }}</option>
+              </select>
+              <textarea name="t2_text" rows="10" cols="80">{{ obj['t2_text'] }}</textarea>
+            {% endif %}   
+          </div>
+        </div>
+        
+          <input type="submit" value="Save Changes" style="float: right; width:200px;"/>
+        
+      </form> 
+ 
+  </div>
+{% endblock %}

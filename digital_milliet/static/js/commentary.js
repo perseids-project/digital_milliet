@@ -16,7 +16,7 @@ $(function () {
 
 
 function get_cts(textURI, textType){
-	var endpoint = new CTS.endpoint.XQ("http://cts.perseids.org/api/cts/?");
+	var endpoint = new CTS.endpoint.XQ("https://cts.perseids.org/api/cts/?");
 	var cts_obj = new CTS.text.Passage(textURI, endpoint, "digmill")
 	cts_obj.retrieve({
 		success : function(data) {

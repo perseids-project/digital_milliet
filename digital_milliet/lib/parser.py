@@ -268,6 +268,22 @@ class Parser(object):
         return body
 
 
+    def remove_it(self,millnum):
+        """Remove the annotation set that targets the supplied Milliet Number
+
+        :param millnum:  Milliet Number
+        :type milnum: string
+
+        :return: the number of records removed
+        :rtype: int
+
+        :raises 404 Not Found Exception: if the annotation is not found
+        """
+        removed = self.mongo.db.annotation.delete_many({"commentary.hasBody.@id" : self.make_uri(millnum,'c1')})
+        author_removed = 0
+        if removed.deleted_count > 0:
+          author_removed = self.builder.author_millnum_remove(millnum)
+        return removed.deleted_count + author_removed
 
     def get_it(self,millnum):
         """Get the first set of annotations that target the supplied Milliet Number
@@ -282,7 +298,7 @@ class Parser(object):
         """
         obj = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id" : self.make_uri(millnum,'c1')})
         parsed_obj = self.parse_it(obj)
-        info = self.mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$elemMatch' :{'$in': [millnum]}}}})
+        info = self.builder.author_millnum_get(millnum)
         auth_info = {}
         if info is None:
             auth_info['auth'] = ""

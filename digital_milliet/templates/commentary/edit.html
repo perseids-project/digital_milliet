@@ -84,10 +84,20 @@
             {% endif %}   
           </div>
         </div>
-        
-          <input type="submit" value="Save Changes" style="float: right; width:200px;"/>
-        
-      </form> 
- 
+        <div class="row">
+           <div class="col-md-6">
+              <input type="submit" value="Save Changes" style="float: right; width:200px;"/>
+           </div>
+        </div>
+      </form>
+      <form id='input_form' action="/delete" method="POST" onsubmit="return confirm('Are you sure?');">
+          <div class="row">
+              <div class="col-md-6">
+                <input type="hidden" name="millnum" value="{{ millnum }}"/>
+                <input type="submit" value="Delete Record" style="float:right; width:200px;"/>
+              </div>
+          </div>
+      </form>
+
   </div>
 {% endblock %}

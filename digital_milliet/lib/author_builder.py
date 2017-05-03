@@ -82,6 +82,34 @@ class AuthorBuilder(object):
             print("Invalid data for author build")
             pass
 
+    def author_millnum_get(self,millnum):
+        """ Get an author record for a milliet number
+
+        :param millnum: the milliet number to remove
+        :type millnum: string
+
+        """
+        return self.mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$elemMatch' :{'$in': [millnum]}}}})
+
+    def author_millnum_remove(self,millnum):
+        """ Remove a milliet number mapping from an author record
+
+        :param millnum: the milliet number to remove
+        :type millnum: string
+
+        """
+        info = self.mongo.db.annotation.find_one({'works.millnums' : {'$elemMatch':  {'$elemMatch' :{'$in': [millnum]}}}})
+        removed = 0
+        if info is not None:
+            for work in info['works']:
+                for tup in work['millnums']:
+                    if millnum in tup:
+                        work['millnums'].pop(work['millnums'].index(tup))
+                        removed = removed + 1
+        self.mongo.db.annotation.update({'_id' : info['_id']}, info)
+        return removed
+
+
     def make_author(self,resp):
         """ Make an Author db record from a catalog record and insert it in the database
 

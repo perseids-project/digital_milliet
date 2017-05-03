@@ -54,8 +54,6 @@ Run the code
     python run.py
 
 
-
-
 Design Overview
 ****************
 The aim behind the design of the application was to support the representation of each entry in the original "Recueil"

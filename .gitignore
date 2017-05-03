@@ -3,6 +3,7 @@
 
 # Packages *.egg
 *.egg-info
+*.egg
 dist
 build
 eggs
@@ -15,7 +16,7 @@ env
 flask
 bower_components
 tmp
-venv
+venv*
 # Installer logs
 pip-log.txt
 # Unit test / coverage reports

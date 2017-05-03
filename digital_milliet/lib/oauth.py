@@ -28,6 +28,7 @@ class OAuthHelper(object):
         self.authobj.tokengetter(self.oauth_token)
         self.authcallback = app.config['OAUTH_CALLBACK_URL']
         self.enforce_community_id = app.config['ENFORCE_COMMUNITY_ID']
+        self.auth_override = app.config['OAUTH_USER_OVERRIDE']
         app.add_url_rule('/oauth/login',view_func = self.r_oauth_login)
         app.add_url_rule('/oauth/authorized',view_func = self.r_oauth_authorized)
         app.add_url_rule('/oauth/logout',view_func = self.r_oauth_logout)
@@ -41,6 +42,13 @@ class OAuthHelper(object):
         :return: Redirects to OAuth Provider Login URL
         """
         session['next'] = request.args.get('next','')
+        # overrides the oauth functionality for ease of development
+        # this override should not be used in production
+        if self.auth_override is not None:
+            session['oauth_user_uri'] = self.auth_override['oauth_user_uri']
+            session['oauth_user_name'] = self.auth_override['oauth_user_name']
+            return redirect(session['next'])
+
         callback_url = self.authcallback
         if callback_url is None:
             callback_url = url_for('.r_oauth_authorized', _external=True)

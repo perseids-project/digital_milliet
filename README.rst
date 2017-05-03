@@ -17,7 +17,44 @@ Greek culture.
 Installation Instructions
 *************************
 
-Pending...
+Install Prerequisites:
+
+* mongodb
+* python 3.5, pip and virtualenv
+
+.. code-block:: shell
+
+    sudo apt-get install -y python3-pip python3-dev build-essential mongo
+
+Clone the repository
+
+.. code-block:: shell
+
+    git clone https://github.com/perseids-project/digital_milliet
+
+Setup the sample data
+
+.. code-block:: shell
+
+    mongorestore digital_milliet/db/sample
+
+Create a virtual environment
+
+.. code-block:: shell
+
+    cd digital_milliet
+    virtualenv -p /path/to/python3 venv
+    source venv/bin/activate
+    python setup.py install
+
+Run the code
+
+.. code-block:: shell
+
+    python run.py
+
+
+
 
 Design Overview
 ****************

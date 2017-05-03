@@ -28,7 +28,9 @@ class OAuthHelper(object):
         self.authobj.tokengetter(self.oauth_token)
         self.authcallback = app.config['OAUTH_CALLBACK_URL']
         self.enforce_community_id = app.config['ENFORCE_COMMUNITY_ID']
-        self.auth_override = app.config['OAUTH_USER_OVERRIDE']
+        self.auth_override = None
+        if 'OAUTH_USER_OVERRIDE' in app.config:
+            self.auth_override = app.config['OAUTH_USER_OVERRIDE']
         app.add_url_rule('/oauth/login',view_func = self.r_oauth_login)
         app.add_url_rule('/oauth/authorized',view_func = self.r_oauth_authorized)
         app.add_url_rule('/oauth/logout',view_func = self.r_oauth_logout)

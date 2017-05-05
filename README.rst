@@ -17,6 +17,8 @@ Greek culture.
 Installation Instructions
 *************************
 
+The following instructions are for setting up a Development environment for Digital Milliet.
+
 Install Prerequisites:
 
 * mongodb
@@ -52,6 +54,18 @@ Run the code
 .. code-block:: shell
 
     python run.py
+
+
+Or deploy in Docker container
+
+.. code-block:: shell
+
+    git clone https://github.com/perseids-project/digital_milliet
+    docker build digital_milliet_image
+    docker run -p 5000:5000 -t -i digital_milliet_image
+
+For production deployment, see Puppetfile 
+
 
 
 Design Overview

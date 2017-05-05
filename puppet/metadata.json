@@ -1,0 +1,23 @@
+{
+  "name": "digital_milliet",
+  "version": "0.0.1",
+  "author": "Bridget Almas",
+  "license": "GPL-3.0",
+  "summary": "A module for Digital Milliet",
+  "source": "#TODO",
+  "operatingsystem_support": [
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ "14.04" ]
+    }
+   ],
+  "dependencies": [
+    { "name": "puppetlabs/firewall", "version_requirement": ">= 1.8.0 < 2.0.0" },
+    { "name": "puppetlabs/stdlib", "version_requirement": ">= 4.11.0 < 5.0.0" },
+    { "name": "puppetlabs/vcsrepo", "version_requirement": ">= 1.5.0" },
+    { "name": "puppetlabs/apache", "version_requirement": ">= 1.11.0" },
+    { "name": "stankevick/python", "version_requirement": ">= 1.12.0 < 2.0.0" },
+    { "name": "artberri/puppet-nvm", "version_requirement": ">= 1.12.0 < 2.0.0" }
+  ],
+  "data_provider": "hiera"
+}

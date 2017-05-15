@@ -5,8 +5,9 @@
       <link rel="stylesheet" media="screen" type="text/css" href="{{ url_for('static', filename='css/commentary.enter.css')}}"/>
       <link rel="stylesheet" type="text/css" href="{{ bower_url_for('capitains-sparrow.typeahead', 'src/css/jquery.cts.typeahead.css') }}" />
       <link href='https://fonts.googleapis.com/css?family=Cinzel:400,700' rel='stylesheet' type='text/css'>
-      <link rel='stylesheet' href="{{ bower_url_for('codemirror','lib/codemirror.css') }}"></link>
-      <link rel="stylesheet" href="{{ bower_url_for('jquery.markdownify','lib/jquery.markdownify.css') }}"></link>
+      <link rel='stylesheet' href="{{ bower_url_for('codemirror','lib/codemirror.css') }}" />
+      <link rel="stylesheet" href="{{ bower_url_for('jquery.markdownify','lib/jquery.markdownify.css') }}" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
       <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
       <script language="javascript" type="text/javascript" src="{{ url_for('static', filename="js/commentary.enter.js")}}"></script>
       <script src="{{ bower_url_for('handlebars', 'handlebars.min.js') }}"></script>
@@ -24,6 +25,18 @@
       <script src="{{ bower_url_for('jquery.markdownify', 'lib/jquery.markdownify.js') }}"></script>
       <meta name="viewport" content = "width=device-width, initial-scale=1.0">
       {% import "commentary/lang_choice.html" as lang %}
+      <style type="text/css">
+          #iiif-fieldset .buttons a.button {
+              max-width:100px;
+              height:2.3125rem;
+              line-height:2.3125rem;
+              padding:0 2.3125rem;
+          }
+          #iiif-fieldset .buttons a.button .fa {
+              line-height:2.3125rem;
+          }
+          .rem-input { display:inline-block; }
+      </style>
 	</head>
     <body class="body">
     <div class="alpheios-ignore">
@@ -186,6 +199,19 @@
               </fieldset>
             </div>
           </div>
+
+        <!-- IIIF Manifests -->
+        <fieldset class="row" id="iiif-fieldset">
+            <legend>IIIF Manifests</legend>
+            <div class="row collapse" id="original-iiif-input">
+                <div class="small-9 columns">
+                    <input type="url" name="iiif[]" class="form-control" placeholder="Address of IIIF Manifests"/>
+                </div>
+                <div class="small-3 columns buttons button-group">
+                    <a class="add-input button" href="#"><i class="fa fa-plus-square" aria-label="Add a field"></i> </a>
+                </div>
+            </div>
+        </fieldset>
         <button id="submit_button" type="submit" style="float: right; width:200px;">{{ _('Save Annotation') }}</button>
       </form> 
       

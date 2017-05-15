@@ -221,26 +221,80 @@ function CTSError(error,a_lnum) {
 
 }
 
+var remove_input = function(target) {
+  target.remove();
+};
+var add_input = function(after, name, counter) {
+
+         /*   <div class="row collapse" id="original-iiif-input">
+                <div class="small-9 columns">
+                    <input type="url" name="iiif[]" class="form-control" placeholder="Address of IIIF Manifests"/>
+                </div>
+                <div class="small-3 columns buttons">
+                    <a class="add-input button postfix" href="#"><i class="fa fa-plus-square" aria-label="Add a field"></i> </a>
+                </div>
+            </div>
+          */
+      counter += 1;
+      var label = after.find("label").text();
+      var placeholder = after.find("input").attr("placeholder");
+      var formgroup = $('<div class="row collapse" />');
+      var input_container = $('<div class="small-9 columns" />');
+      var buttons_container = $('<div class="small-3 columns buttons button-group" />');
+      var input = $('<input type="url" name="'+name+'[]" placeholder="' + placeholder + '" />');
+      var add = $('<a class="add-input button" href="#"><i class="fa fa-plus-square" aria-label="Add a field"></i></a>');
+      var rem = $('<a class="rem-input button alert" href="#"><i class="fa fa-minus-square" aria-label="Remove a field"></i></a>');
+
+      formgroup.append(input_container);
+      input_container.append(input);
+
+      formgroup.append(buttons_container);
+      buttons_container.append(add);
+      buttons_container.append(rem);
+
+      add.on("click", function (e) {
+          e.preventDefault();
+          add_input(formgroup, name, counter);
+          add.hide();
+      });
+      rem.on("click", function (e) {
+          e.preventDefault();
+          remove_input(formgroup);
+          after.find("add-input").show();
+      });
+
+      after.after(formgroup);
+
+  };
+
 //check the milnum for prior use
-$(function() {
+$(document).ready(function() {
   $("#milnum").change(function() {
-  var num = $("#milnum").val();
-  //removes 'commentary' from the end of the url
-  var url = $("#config").attr('data-verify-millnum-url');
-  //call to the digmill api service
-  $.ajax({
-      type: "GET",
-      contentType: 'application/json',
-      dataType: 'json',
-      url: url.concat(num),
-      success: function(data) {
-        //if it returns non-empty json response, then there is already a record with that number
-         alert("Milliet Number "+num+" has already been used");
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-         //if the number is not in the db, it will throw a 404, so we should "fail" silently and 
-         //let the editor get on with their entering of data
-      }       
-    });
+      var num = $("#milnum").val();
+      //removes 'commentary' from the end of the url
+      var url = $("#config").attr('data-verify-millnum-url');
+      //call to the digmill api service
+      $.ajax({
+          type: "GET",
+          contentType: 'application/json',
+          dataType: 'json',
+          url: url.concat(num),
+          success: function(data) {
+            //if it returns non-empty json response, then there is already a record with that number
+             alert("Milliet Number "+num+" has already been used");
+          },
+          error: function(XMLHttpRequest, textStatus, errorThrown) {
+             //if the number is not in the db, it will throw a 404, so we should "fail" silently and
+             //let the editor get on with their entering of data
+          }
+      });
   });
+
+  $("#original-iiif-input a.add-input").on("click", function(e) {
+     console.log(e);
+     e.preventDefault();
+     console.log($(this).parents("#original-iiif-input"));
+     add_input($(this).parents("#original-iiif-input"), "iiif", 1);
+  });
+
 });

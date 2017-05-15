@@ -30,13 +30,17 @@
          format: "text"
       motivatedBy: oa:commenting
     images:
-    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+    - "@context":
+          oa: http://www.w3.org/ns/oa-context-20130208.json
+          dc: http://purl.org/dc/elements/1.1/
       "@id": digmilann.-1337
       "@type": oa:Annotation
-      annotatedAt: '2015-09-08T16:03:35.061Z'
-      hasBody: http://iiif.biblissima.fr/manifests/ark:/12148/btv1b8304485j/manifest.json
-      hasTarget: http://perseids.org/collections/urn:cite:perseus:digmil.999.11
-      motivatedBy: oa:linking
+      "oa:annotatedAt": '2015-09-08T16:03:35.061Z'
+      "oa:hasBody":
+        "@id": http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json
+        "dc:publisher": BNF
+      "oa:hasTarget": http://perseids.org/collections/urn:cite:perseus:digmil.261.c1
+      "oa:motivatedBy": oa:linking
     tags: []
     translation:
     - "@context": http://www.w3.org/ns/oa-context-20130208.json

@@ -41,7 +41,7 @@
     <body class="body">
     <div class="alpheios-ignore">
         <div id="alph-page-header">
-            <img style="max-height:130px; margin-top:-7px;" src="{{ url_for('static', filename='img/digmilbanner.png')}}"/> </a>
+            <img style="max-height:130px; margin-top:-7px;" src="{{ url_for('static', filename='img/digmilbanner.png')}}"/>
         </div>
     </div>
 
@@ -58,7 +58,7 @@
         <div class="row">
           <fieldset id="align-enter-title"  class="large-9 columns">
             <label for="milnum">{{ _('Milliet Number:') }}
-                <input placeholder="{{ _('Enter the Milliet number for this passage and associated commentary') }}" type="text" id="milnum" name="milnum" pattern="(\w\d[-_\.])+" maxlength="100" size="100" />
+                <input placeholder="{{ _('Enter the Milliet number for this passage and associated commentary') }}" type="text" id="milnum" name="milnum" pattern="[-_\.\w\d]+" maxlength="100" size="100" />
             </label>
           </fieldset>
         </div>
@@ -204,15 +204,18 @@
         <fieldset class="row" id="iiif-fieldset">
             <legend>IIIF Manifests</legend>
             <div class="row collapse" id="original-iiif-input">
-                <div class="small-9 columns">
-                    <input type="url" name="iiif" class="form-control" placeholder="Address of IIIF Manifests"/>
+                <div class="small-5 columns">
+                    <input type="url" name="iiif[]" class="form-control" placeholder="Address of IIIF Manifests"/>
+                </div>
+                <div class="small-4 columns">
+                    <input type="text" name="iiif_publisher[]" class="form-control" placeholder="Publisher"/>
                 </div>
                 <div class="small-3 columns buttons button-group">
                     <a class="add-input button" href="#"><i class="fa fa-plus-square" aria-label="Add a field"></i> </a>
                 </div>
             </div>
         </fieldset>
-        <button id="submit_button" type="submit" style="float: right; width:200px;">{{ _('Save Annotation') }}</button>
+          <button type="submit" id="submit_button" style="float: right; width:200px;">{{ _('Save Annotation') }}"</button>
       </form> 
       
     </div>

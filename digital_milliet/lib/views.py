@@ -76,9 +76,10 @@ class Views(object):
     @OAuthHelper.oauth_required
     def create(self):
         data = request.form.to_dict()
-        if "iiif" in data:
-            data["iiif"] = request.form.getlist("iiif")
-        millnum = self.parser.save_from_form(request.form.to_dict())
+        if "iiif[]" in data:
+            data["iiif"] = request.form.getlist("iiif[]")
+            data["iiif_publisher"] = request.form.getlist("iiif_publisher[]")
+        millnum = self.parser.save_from_form(data)
         if millnum is not None:
             flash('Annotation successfully created!','success')
             return redirect('commentary/' + str(millnum))

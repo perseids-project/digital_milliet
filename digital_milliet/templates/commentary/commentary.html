@@ -8,31 +8,29 @@
     <script type="text/javascript" src="{{url_for('static', filename='js/commentary.js')}}"></script>
     <script type="text/javascript" src="{{ url_for("static", filename='js/mirador/mirador.min.js') }}"></script>
     <script type="text/javascript">
+        {% if 'images' in obj %}
         $(document).ready(function(e) {
-            var manifests = $.map($("input[name='manifest']"), function(value) {
-                return {manifestUri : value.value, location: value.value};
-            });
-            if (manifests.length > 0) {
-                var mirador = Mirador({
-                    id: "mirador-container",
-                    data: manifests,
-                    buildPath: "{{ url_for("static", filename="js/mirador/") }}",
-                    windowObjects: [
-                      {
+            var manifests = {{ obj["images"]|tojson|safe }};
+            var mirador = Mirador({
+                id: "mirador-container",
+                data: manifests,
+                buildPath: "{{ url_for("static", filename="js/mirador/") }}",
+                windowObjects: $.map(manifests, function(key, index) {
+                    return {
                         loadedManifest: manifests[0].manifestUri,
                         viewType: "ImageView",
-                        displayLayout: false,
-                        bottomPanel: false,
+                        displayLayout: true,
+                        bottomPanel: true,
                         sidePanel: false,
-                        showAddFromURLBox:false
-                      }
-                    ],
-                      mainMenuSettings: {
-                        show: false
-                      }
-                });
-            }
+                        showAddFromURLBox: false
+                    };
+                }),
+                  mainMenuSettings: {
+                    show: false
+                  }
+            });
         });
+        {%  endif %}
     </script>
 {% endblock %}
 
@@ -118,10 +116,6 @@
       </div>
     </div>
     <div class='col-xs-4' style="height:100%;">
-      <!-- images -->
-        {% if 'images' in obj %}
-          {% for img in obj['images'] %}<input type="hidden" name="manifest" value="{{ img }}"/>{% endfor %}
-        {% endif %}
       <div id="mirador-container" style="height:100%;"></div>
     </div>
   </div>

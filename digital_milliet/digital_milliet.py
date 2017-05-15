@@ -1,7 +1,7 @@
 # coding=utf8
-from flask.ext.babel import Babel
-from flask.ext.cors import CORS
-from flask.ext.pymongo import PyMongo
+from flask_babel import Babel
+from flask_cors import CORS
+from flask_pymongo import PyMongo
 from flask_bower import Bower
 from flaskext.markdown import Markdown
 

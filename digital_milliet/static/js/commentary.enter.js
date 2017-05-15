@@ -241,7 +241,7 @@ var add_input = function(after, name, counter) {
       var formgroup = $('<div class="row collapse" />');
       var input_container = $('<div class="small-9 columns" />');
       var buttons_container = $('<div class="small-3 columns buttons button-group" />');
-      var input = $('<input type="url" name="'+name+'[]" placeholder="' + placeholder + '" />');
+      var input = $('<input type="url" name="'+name+'" placeholder="' + placeholder + '" />');
       var add = $('<a class="add-input button" href="#"><i class="fa fa-plus-square" aria-label="Add a field"></i></a>');
       var rem = $('<a class="rem-input button alert" href="#"><i class="fa fa-minus-square" aria-label="Remove a field"></i></a>');
 

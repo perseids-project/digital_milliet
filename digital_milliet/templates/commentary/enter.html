@@ -47,7 +47,7 @@
 
     {% include 'flashes.html' %}
 	<div>
-      <form id='input_form' action="create" method="POST">
+      <form id='input_form' action="{{ url_for('.create') }}" method="POST">
         <input type="hidden" name="l1"/>
         <input type="hidden" name="c1"/>
         <input type="hidden" name="b1"/>
@@ -58,7 +58,7 @@
         <div class="row">
           <fieldset id="align-enter-title"  class="large-9 columns">
             <label for="milnum">{{ _('Milliet Number:') }}
-                <input placeholder="{{ _('Enter the Milliet number for this passage and associated commentary') }}" type="text" id="milnum" name="milnum" pattern="[\w \d-_\.]+" maxlength="100" size="100" />
+                <input placeholder="{{ _('Enter the Milliet number for this passage and associated commentary') }}" type="text" id="milnum" name="milnum" pattern="(\w\d[-_\.])+" maxlength="100" size="100" />
             </label>
           </fieldset>
         </div>
@@ -205,7 +205,7 @@
             <legend>IIIF Manifests</legend>
             <div class="row collapse" id="original-iiif-input">
                 <div class="small-9 columns">
-                    <input type="url" name="iiif[]" class="form-control" placeholder="Address of IIIF Manifests"/>
+                    <input type="url" name="iiif" class="form-control" placeholder="Address of IIIF Manifests"/>
                 </div>
                 <div class="small-3 columns buttons button-group">
                     <a class="add-input button" href="#"><i class="fa fa-plus-square" aria-label="Add a field"></i> </a>

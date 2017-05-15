@@ -1,11 +1,46 @@
 {% extends "base.html" %}
 {% from "commentary/get_text.html" import get_text with context %}
 {% from "commentary/get_people.html" import get_people with context %}
+
+{% block morecss %}<link rel="stylesheet" media="screen" href="{{url_for('static', filename='js/mirador/css/mirador-combined.min.css')}}" />{% endblock %}
+
+{% block morejavascript %}
+    <script type="text/javascript" src="{{url_for('static', filename='js/commentary.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename='js/mirador/mirador.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            var manifests = $.map($("input[name='manifest']"), function(value) {
+                return {manifestUri : value.value, location: value.value};
+            });
+            if (manifests.length > 0) {
+                var mirador = Mirador({
+                    id: "mirador-container",
+                    data: manifests,
+                    buildPath: "{{ url_for("static", filename="js/mirador/") }}",
+                    windowObjects: [
+                      {
+                        loadedManifest: manifests[0].manifestUri,
+                        viewType: "ImageView",
+                        displayLayout: false,
+                        bottomPanel: false,
+                        sidePanel: false,
+                        showAddFromURLBox:false
+                      }
+                    ],
+                      mainMenuSettings: {
+                        show: false
+                      }
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
 
   <div class='row'>
     <div class='col-md-6'>
-      <div id="auth_head"> <h2>{% if info['auth'] %}{{ info['auth'] }}, {{ info['work'] }} {{ info['passage'] }}{% endif %}</h2></div>
+      <div id="auth_head"><h2>{% if info['auth'] %}{{ info['auth'] }}, {{ info['work'] }} {{ info['passage'] }}{% endif %}</h2></div>
     </div>
     <div class='col-xs-8'>
       <div class='row'>
@@ -82,20 +117,12 @@
           </div>
       </div>
     </div>
-    <div class='col-xs-4'>
+    <div class='col-xs-4' style="height:100%;">
       <!-- images -->
-      <div class='well'> 
         {% if 'images' in obj %}
-          {% for img in obj['images'] %}
-            <div class='row'>
-              <div class='col-xs-12'>
-                <img src="{{ url_for('static', filename='img') }}"/>
-              </div>
-            </div>
-          {% endfor %}
+          {% for img in obj['images'] %}<input type="hidden" name="manifest" value="{{ img }}"/>{% endfor %}
         {% endif %}
-      </div>
-      
+      <div id="mirador-container" style="height:100%;"></div>
     </div>
   </div>
   <div class='row'>

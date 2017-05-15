@@ -75,6 +75,9 @@ class Views(object):
     #for catching requests from the perseids-client-apps form and saving the data
     @OAuthHelper.oauth_required
     def create(self):
+        data = request.form.to_dict()
+        if "iiif" in data:
+            data["iiif"] = request.form.getlist("iiif")
         millnum = self.parser.save_from_form(request.form.to_dict())
         if millnum is not None:
             flash('Annotation successfully created!','success')

@@ -40,12 +40,12 @@
         <input type="hidden" name="b1"/>
         <input type="hidden" name="t1"/>
         <input type="hidden" name="t2"/>
-        <div id="config" data-verify-millnum-url="api/commentary/" data-cts-api="{{ cts_api }}" data-cts-version="{{ cts_version }}"/>
+        <input type="hidden" id="config" data-verify-millnum-url="api/commentary/" data-cts-api="{{ cts_api }}" data-cts-version="{{ cts_version }}" />
 
         <div class="row">
           <fieldset id="align-enter-title"  class="large-9 columns">
             <label for="milnum">{{ _('Milliet Number:') }}
-            <input placeholder="{{ _('Enter the Milliet number for this passage and associated commentary') }}" type="text" id="milnum" name="milnum" pattern="[\w \d-_\.]+" maxlength="100" size="100"></input>
+                <input placeholder="{{ _('Enter the Milliet number for this passage and associated commentary') }}" type="text" id="milnum" name="milnum" pattern="[\w \d-_\.]+" maxlength="100" size="100" />
             </label>
           </fieldset>
         </div>
@@ -58,7 +58,7 @@
                   <div class="textdriver" id="l1textdriver" data-lnum="l1"></div>
                   <div>
                       <input placeholder="{{ _('URI Identifer for this text. If a URL, text will be loaded from there. Plain text only supported.') }}"
-                             type="url" id="l1uri" name="l1uri" size="100" class="texturi" data-lnum="l1" data-lang=""></input>
+                             type="url" id="l1uri" name="l1uri" size="100" class="texturi" data-lnum="l1" data-lang="" />
                       <div class="worklist"><a target="_blank" href="{{cts_browse}}">{{ _('All available works') }}</a></div>
                   </div>
                   <div class="ownuri">
@@ -85,14 +85,11 @@
                       <label for="l1-dir-rtl">{{ _('Right to Left') }}</label>
                   </div>
                   <div>
-                  <div>
                       <textarea id="l1text" name="l1text" rows="10" cols="80" data-lnum="l1"></textarea>
                       <small class="error" id="l1texterror" style="display:none;">{{ _('Invalid entry') }}</small>
                   </div>
               </fieldset>
           </div>
-        </div>
-        </div>
         </div>
 
         <!-- Commentary -->
@@ -127,7 +124,7 @@
                   <div class="textdriver" id="t1textdriver" data-lnum="t1"></div>
                   <div>
                       <input placeholder="{{ _('URI Identifer for this text. If a URL, text will be loaded from there. Plain text only supported.') }}"
-                             type="url" id="t1uri" name="t1uri" size="100" class="texturi" data-lnum="t1" data-lang="eng"></input>
+                             type="url" id="t1uri" name="t1uri" size="100" class="texturi" data-lnum="t1" data-lang="eng" />
                       <div class="worklist"><a target="_blank" href="{{cts_browse}}">{{ _('All available works') }}</a></div>
                   </div>
                   <div class="ownuri">
@@ -147,7 +144,7 @@
                   <legend>{{ _('Enter English Translation:') }}</legend>
                   <div>
                     <textarea id="t1text" name="t1text" rows="10" cols="80" data-lnum="t1"></textarea>
-                      <small class="error" id="t1texterror" style="display:none;">{{ _('Invalid entry') }}</small>
+                    <small class="error" id="t1texterror" style="display:none;">{{ _('Invalid entry') }}</small>
                   </div>
               </fieldset>
           </div>
@@ -164,7 +161,7 @@
                   <div class="textdriver" id="t2textdriver" data-lnum="t2"></div>
                   <div>
                       <input placeholder="{{ _('URI Identifer for this text. If a URL, text will be loaded from there. Plain text only supported.') }}"
-                             type="url" id="t2uri" name="t2uri" size="100" class="texturi" data-lnum="t2" data-lang="eng"></input>
+                             type="url" id="t2uri" name="t2uri" size="100" class="texturi" data-lnum="t2" data-lang="eng" />
                       <div class="worklist"><a target="_blank" href="{{cts_browse}}">{{ _('All available works') }}</a></div>
                   </div>
                   <div class="ownuri">
@@ -189,9 +186,6 @@
               </fieldset>
             </div>
           </div>
-        </div>
-          </div>
-        </div>
         <button id="submit_button" type="submit" style="float: right; width:200px;">{{ _('Save Annotation') }}</button>
       </form> 
       

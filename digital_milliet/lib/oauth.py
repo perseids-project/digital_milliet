@@ -43,7 +43,7 @@ class OAuthHelper(object):
 
         :return: Redirects to OAuth Provider Login URL
         """
-        session['next'] = request.args.get('next','')
+        session['next'] = request.args.get('next', '')
         # overrides the oauth functionality for ease of development
         # this override should not be used in production
         if self.auth_override is not None:

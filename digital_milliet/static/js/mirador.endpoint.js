@@ -93,9 +93,10 @@
     deleteAnnotation: function(annotationID, successCallback, errorCallback) {
       var _this = this;
       jQuery.ajax({
-       url: this.delete_uri(annotationID),
+       url: this.delete_uri(),
        type: 'DELETE',
        dataType: 'json',
+       data: JSON.stringify({"@id": annotationID}),
        contentType: "application/json; charset=utf-8",
        success: function(data) {
         if (typeof successCallback === "function") {
@@ -113,14 +114,10 @@
     },
 
     update: function(oaAnnotation, successCallback, errorCallback) {
-      var annotations = this.getAnnotationInEndpoint(oaAnnotation),
       _this = this;
-
-      annotations.forEach(function(annotation) {
-        var annotationID = annotation.id;
-
+      var annotation = _this.getAnnotationInEndpoint(oaAnnotation);
         jQuery.ajax({
-          url: _this.update_uri(annotationID),
+          url: _this.update_uri(),
           type: 'POST',
           dataType: 'json',
           data: JSON.stringify(annotation),
@@ -136,7 +133,6 @@
               errorCallback();
             }
           }
-        });
       });
     },
 
@@ -184,6 +180,8 @@
 
     // Converts OA Annotation to endpoint format
     getAnnotationInEndpoint: function(oaAnnotation) {
+        delete oaAnnotation.endpoint;
+        delete oaAnnotation.permissions;
       return oaAnnotation;
     }
   };

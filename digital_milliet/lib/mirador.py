@@ -29,9 +29,9 @@ class Mirador(object):
         self.app.add_url_rule(
             '/api/mirador', view_func=self.create, methods=["PUT"], endpoint="mirador_create")
         self.app.add_url_rule(
-            '/api/mirador/<annotationId>', view_func=self.update, methods=["POST"], endpoint="mirador_update")
+            '/api/mirador', view_func=self.update, methods=["POST"], endpoint="mirador_update")
         self.app.add_url_rule(
-            '/api/mirador/<annotationId>', view_func=self.delete, methods=['DELETE'], endpoint="mirador_delete")
+            '/api/mirador', view_func=self.delete, methods=['DELETE'], endpoint="mirador_delete")
 
     @staticmethod
     def dump(content, code=200):
@@ -86,12 +86,6 @@ class Mirador(object):
         data["annotatedAt"] = datetime.now().isoformat()
         data["serializedAt"] = data["annotatedAt"]
         data["annotatedBy"] = self.parser.make_person()
-        data["permissions"] = {
-            "read": [],
-            "update": [data["annotatedBy"]["@id"]],
-            "delete": [data["annotatedBy"]["@id"]],
-            "admin": [data["annotatedBy"]["@id"]]
-        }
         data["@id"] = self.parser.make_uri(milliet_number, "anno-{}".format(uuid4()))
 
         if milliet_number is not None:
@@ -103,9 +97,13 @@ class Mirador(object):
         return self.dump(self.simpleFormat(self.get(_id=m_obj, single=True)), code=200)
 
     @OAuthHelper.oauth_required
-    def update(self, annotationId):
-        anno = {}
-        return self.dump({}, code=200)
+    def update(self):
+        data = request.get_json()
+        record = self.get(anno_id=data["@id"], single=True)
+        record.update(data)
+        record["serializedAt"] = datetime.now().isoformat()
+        self.mongo.db.mirador.save(record)
+        return self.dump(record, code=200)
 
     @OAuthHelper.oauth_required
     def delete(self, annotationId):

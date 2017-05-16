@@ -43,16 +43,8 @@
                   "options" : {
                     search_uri : function () { return "{{ url_for(".mirador_search", noCollection=True) }}"; },
                     create_uri : function () { return "{{ url_for(".mirador_create", milliet_number=obj["millnum"]) }}"; },
-                    delete_uri : function (annotationId) {
-                        return "{{ url_for(".mirador_delete", annotationId="_annoId_") }}".replace(
-                            "__annoId_", annotationId
-                        );
-                    },
-                    update_uri : function (annotationId) {
-                        return "{{ url_for(".mirador_update", annotationId="_annoId_") }}".replace(
-                            "__annoId_", annotationId
-                        );
-                    },
+                    delete_uri : function () { return "{{ url_for(".mirador_delete") }}"; },
+                    update_uri : function () { return "{{ url_for(".mirador_update") }}"; },
                     authorized: {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}true{%  else %}false{% endif %}
                   }
                 }

@@ -1,18 +1,18 @@
-
-
 $('#lang_tabs a').click(function (e) {
-	e.preventDefault()
-	$(this).tab('show')
+	e.preventDefault();
+	$(this).tab('show');
 })
 
-$('#lang_tabs a[href="#eng"]').tab('show')
-$('#lang_tabs a[href="#fra"]').tab('show')
-$('#lang_tabs a[href="#commentary"]').tab('show')
-$('#lang_tabs a[href="#bibliography"]').tab('show')
+$('#lang_tabs a[href="#eng"]').tab('show');
+$('#lang_tabs a[href="#fra"]').tab('show');
+$('#lang_tabs a[href="#commentary"]').tab('show');
+$('#lang_tabs a[href="#bibliography"]').tab('show');
+
+/*
 $(function () {
   $('.markdown').markdownify();
 });
-
+*/
 
 
 function get_cts(textURI, textType){

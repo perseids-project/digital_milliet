@@ -2,11 +2,18 @@
 {% from "commentary/get_text.html" import get_text with context %}
 {% from "commentary/get_people.html" import get_people with context %}
 
-{% block morecss %}<link rel="stylesheet" media="screen" href="{{url_for('static', filename='js/mirador/css/mirador-combined.min.css')}}" />{% endblock %}
+{% block morecss %}
+    <link rel="stylesheet" media="screen" href="{{url_for('static', filename='js/mirador/css/mirador-combined.min.css')}}" />
+    <style type="text/css">
+        .mirador-container *, .mirador-container *::after, .mirador-container *::before {
+            box-sizing: content-box;
+        }
+    </style>
+{% endblock %}
 
 {% block morejavascript %}
     <script type="text/javascript" src="{{url_for('static', filename='js/commentary.js')}}"></script>
-    <script type="text/javascript" src="{{ url_for("static", filename='js/mirador/mirador.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename='js/mirador/mirador.js') }}"></script>
     <script type="text/javascript" src="{{ url_for("static", filename='js/mirador.endpoint.js') }}"></script>
     <script type="text/javascript">
         {% if 'images' in obj %}
@@ -16,25 +23,26 @@
                 id: "mirador-container",
                 data: manifests,
                 buildPath: "{{ url_for("static", filename="js/mirador/") }}",
-                windowObjects: $.map(manifests, function(key, index) {
+                windowObjects: $.map(manifests, function(manifest, index) {
                     return {
-                        loadedManifest: manifests[0].manifestUri,
+                        loadedManifest: manifest.manifestUri,
                         viewType: "ImageView",
                         displayLayout: true,
                         bottomPanel: true,
                         sidePanel: false,
-                        showAddFromURLBox: false
+                        showAddFromURLBox: false,
+                        annotationLayer:true
                     };
                 }),
                 mainMenuSettings: {
-                  show: false
+                  //show: true
                 },
                 "annotationEndpoint" : {
                   "name" : "Digital Milliet Annotations",
                   "module" : "MillietEndpoint", //e.g. CatchEndpoint
                   "options" : {
-                    search_uri : function () { return "{{ url_for(".mirador_search") }}"; },
-                    create_uri : function () { return "{{ url_for(".mirador_create", commentary=obj["c1_uri"]) }}"; },
+                    search_uri : function () { return "{{ url_for(".mirador_search", noCollection=True) }}"; },
+                    create_uri : function () { return "{{ url_for(".mirador_create", milliet_number=obj["millnum"]) }}"; },
                     delete_uri : function (annotationId) {
                         return "{{ url_for(".mirador_delete", annotationId="_annoId_") }}".replace(
                             "__annoId_", annotationId
@@ -45,6 +53,7 @@
                             "__annoId_", annotationId
                         );
                     },
+                    authorized: {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}true{%  else %}false{% endif %}
                   }
                 }
             });
@@ -122,11 +131,11 @@
               <div class='tab-content'>
 
                   <div role='tabpanel' class='tab-pane active' id='commentary'>
-                      <p>{% filter markdown %}{{ obj['comm'] }}{% endfilter %}</p>
+                      {% filter markdown %}{{ obj['comm'] }}{% endfilter %}
                       {{ get_people(obj) }}
                   </div>
                   <div role='tabpanel' class='tab-pane' id='bibliography'>
-                      <p>{% filter markdown %}{{ obj['bibl'] }}{% endfilter %}</p>
+                      {% filter markdown %}{{ obj['bibl'] }}{% endfilter %}
                       {{ get_people(obj) }}
                   </div>
               </div>

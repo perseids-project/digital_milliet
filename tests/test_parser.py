@@ -51,8 +51,8 @@ class TestDb(DigitalMillietTestCase):
         )
         with self.app.test_request_context():
           added = self.dm.parser.save_from_form(submit_data)
-        self.assertIsNotNone(added,"Should not have added a new record")
-        self.assertEqual("111",added,"Unexpected response from save")
+        self.assertIsNotNone(added, "Should not have added a new record")
+        self.assertEqual("111", added, "Unexpected response from save")
 
     def test_edit_save_does_not_overrwrite_uri(self):
         with self.client.session_transaction() as sess:

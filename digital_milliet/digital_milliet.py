@@ -16,7 +16,7 @@ from digital_milliet.lib.mirador import Mirador
 class DigitalMilliet(object):
     """ The Digital Milliet Web Application """
 
-    def __init__(self,app=None,config_file="config.cfg"):
+    def __init__(self,app=None, config_file="config.cfg"):
         self.app = None
 
         if app is not None:
@@ -34,7 +34,7 @@ class DigitalMilliet(object):
         self.oauth = OAuthHelper(self.app)
         self.builder = AuthorBuilder(self.mongo,Catalog(self.app))
         self.parser = Parser(db=self.mongo, builder=self.builder, config=self.app.config, auth=self.oauth)
-        self.mirador = Mirador(db=self.mongo, app=self.app)
+        self.mirador = Mirador(db=self.mongo, app=self.app, parser=self.parser)
         self.babel = Babel(self.app)
         self.views = Views(self.app, self.parser, self.mongo, self.builder)
 

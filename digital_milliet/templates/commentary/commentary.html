@@ -7,6 +7,7 @@
 {% block morejavascript %}
     <script type="text/javascript" src="{{url_for('static', filename='js/commentary.js')}}"></script>
     <script type="text/javascript" src="{{ url_for("static", filename='js/mirador/mirador.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename='js/mirador.endpoint.js') }}"></script>
     <script type="text/javascript">
         {% if 'images' in obj %}
         $(document).ready(function(e) {
@@ -25,9 +26,27 @@
                         showAddFromURLBox: false
                     };
                 }),
-                  mainMenuSettings: {
-                    show: false
+                mainMenuSettings: {
+                  show: false
+                },
+                "annotationEndpoint" : {
+                  "name" : "Digital Milliet Annotations",
+                  "module" : "MillietEndpoint", //e.g. CatchEndpoint
+                  "options" : {
+                    search_uri : function () { return "{{ url_for(".mirador_search") }}"; },
+                    create_uri : function () { return "{{ url_for(".mirador_create", commentary=obj["c1_uri"]) }}"; },
+                    delete_uri : function (annotationId) {
+                        return "{{ url_for(".mirador_delete", annotationId="_annoId_") }}".replace(
+                            "__annoId_", annotationId
+                        );
+                    },
+                    update_uri : function (annotationId) {
+                        return "{{ url_for(".mirador_update", annotationId="_annoId_") }}".replace(
+                            "__annoId_", annotationId
+                        );
+                    },
                   }
+                }
             });
         });
         {%  endif %}

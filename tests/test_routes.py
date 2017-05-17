@@ -1,11 +1,7 @@
-import os
 import json
 import re
-import yaml
 from unittest import TestCase
-from digital_milliet.digital_milliet import DigitalMilliet
 from tests.test_dm import DigitalMillietTestCase
-from flask import Flask
 
 
 class TestRoutes(DigitalMillietTestCase, TestCase):
@@ -123,18 +119,90 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv1 = self.client.get('/edit/261').data.decode()
         m = re.search("name='mongo_id' value=(.*)>",rv1).group(1)
-        submit_data = dict(
-            mongo_id = m,
-            orig_uri ="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
-            orig_text= "",
-            orig_lang="grc",
-            c1text ="",
-            b1text = "",
-            t1_uri = "urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:3.10.1-3.10.5",
-            t2_text = ""
+
+        rv = self.client.post('/edit/save_edit', data=self.make_update_data(
+            mongo_id=m,
+            iiif=[
+                "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json",
+                "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"
+            ],
+            iiif_publisher=[
+                "Unknown",
+                "Biblissima"
+            ]
+        ))
+        self.assertEqual(rv.status_code, 302)
+        self.assertIn("/commentary", rv.location)
+
+        # First Edit Check : adding images
+        with self.app.app_context():
+            rec, auth = self.dm.parser.get_milliet("261")
+        self.assertCountEqual(
+            rec["images"],
+            [
+                {'location': 'Unknown',
+                 'manifestUri': 'http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd3997'
+                                '5440cab9b8/info.json'},
+                {'location': 'Biblissima',
+                 'manifestUri': 'http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json'}
+            ]
         )
-        rv = self.client.post('/edit/save_edit', data=submit_data, follow_redirects=True)
-        self.assertIn('Edit successfully saved',rv.data.decode(),"Missing success message")
+        # Editing one
+        rv = self.client.post('/edit/save_edit', data=self.make_update_data(
+            mongo_id=m,
+            iiif=[
+                "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json",
+                "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"
+            ],
+            iiif_publisher=[
+                "BNF",
+                "Biblissima"
+            ]
+        ))
+        self.assertEqual(rv.status_code, 302)
+        self.assertIn("/commentary", rv.location)
+        with self.app.app_context():
+            rec, auth = self.dm.parser.get_milliet("261")
+        self.assertCountEqual(
+            rec["images"],
+            [
+                {'location': 'BNF',
+                 'manifestUri': 'http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd3997'
+                                '5440cab9b8/info.json'},
+                {'location': 'Biblissima',
+                 'manifestUri': 'http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json'}
+            ]
+        )
+        # Removing one
+        rv = self.client.post('/edit/save_edit', data=self.make_update_data(
+            mongo_id=m,
+            iiif=[
+                "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"
+            ],
+            iiif_publisher=[
+                "Biblissima"
+            ]
+        ))
+        self.assertEqual(rv.status_code, 302)
+        self.assertIn("/commentary", rv.location)
+        with self.app.app_context():
+            rec, auth = self.dm.parser.get_milliet("261")
+        self.assertCountEqual(
+            rec["images"],
+            [
+                {'location': 'Biblissima',
+                 'manifestUri': 'http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json'}
+            ]
+        )
+        # Removing all
+        rv = self.client.post('/edit/save_edit', data=self.make_update_data(mongo_id=m))
+        self.assertEqual(rv.status_code, 302)
+        self.assertIn("/commentary", rv.location)
+        with self.app.app_context():
+            rec, auth = self.dm.parser.get_milliet("261")
+        self.assertCountEqual(
+            rec["images"], []
+        )
 
     def test_save_edit_fix_corrupted(self):
         with self.client.session_transaction() as sess:
@@ -158,11 +226,30 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         rv = self.client.post('/edit/save_edit', data=submit_data, follow_redirects=True)
         self.assertIn('Edit successfully saved',rv.data.decode(),"Missing success message")
         with self.app.app_context():
-          rec,auth = self.dm.parser.get_milliet("999")
+            rec,auth = self.dm.parser.get_milliet("999")
         self.assertEqual(rec['t1_text'],"some new translation text")
 
-
-
-
-
-
+    def make_update_data(
+            self,
+            mongo_id,  iiif=[], iiif_publisher=[],
+            orig_uri="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
+            orig_text="",
+            orig_lang="grc",
+            c1text="",
+            b1text="",
+            t1_uri="urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:3.10.1-3.10.5",
+            t2_text=""
+    ):
+            submit_data = dict(
+                mongo_id=mongo_id,
+                orig_uri=orig_uri,
+                orig_text=orig_text,
+                orig_lang=orig_lang,
+                c1text=c1text,
+                b1text=b1text,
+                t1_uri=t1_uri,
+                t2_text=t2_text
+            )
+            submit_data["iiif[]"] = iiif
+            submit_data["iiif_publisher[]"] = iiif_publisher
+            return submit_data

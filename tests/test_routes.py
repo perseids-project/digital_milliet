@@ -7,7 +7,8 @@ from digital_milliet.digital_milliet import DigitalMilliet
 from tests.test_dm import DigitalMillietTestCase
 from flask import Flask
 
-class TestRoutes(DigitalMillietTestCase):
+
+class TestRoutes(DigitalMillietTestCase, TestCase):
 
     def test_index(self):
         rv = self.client.get('/').data.decode()
@@ -22,7 +23,7 @@ class TestRoutes(DigitalMillietTestCase):
         self.assertIn('What is the Digital Milliet?',rv,"Doesn't appear to be the aobut.html")
 
     def test_search(self):
-        rv = self.client.post('/search', data = dict(dropdown='Author',value="Xenophon")).data.decode()
+        rv = self.client.get('/search?in=Author&query=Xenophon').data.decode()
         self.assertIn('Memorabilia',rv,"Search result missing")
 
     def test_commentary(self):
@@ -32,10 +33,11 @@ class TestRoutes(DigitalMillietTestCase):
     def test_commentary_by_millnum(self):
         rv = self.client.get('/commentary/261').data.decode()
         self.assertIn('<h2>Xenophon, Memorabilia 3.10.1-3.10.5</h2>',rv,'Header Info Missing')
+        self.assertNotIn("id=\"mirador-container", rv, "Mirador container should not show for text without images")
 
     def test_api(self):
-        rv = self.client.get('/api/commentary/261').data.decode()
-        self.assertIn('{\n  "bibliography',rv,'API Response Invalid')
+        rv = json.loads(self.client.get('/api/commentary/261').data.decode())
+        self.assertIn("bibliography", rv, 'API Response Invalid')
 
     def test_new_no_session(self):
         rv = self.client.get('/new')
@@ -55,32 +57,62 @@ class TestRoutes(DigitalMillietTestCase):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv = self.client.get('/edit/261').data.decode()
-        self.assertIn('<legend>Edit Commentary:</legend>',rv,"Not the commentary page")
-        self.assertIn('<label for="milnum">Milliet Number:261</label>',rv,"Wrong record being edited")
+        self.assertIn('<h2>Edit Commentary :  261</h2>', rv, "Not the commentary page")
 
     def test_create_no_session(self):
         rv = self.client.post('/create', data = dict(l1text='New text'))
         self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2F',rv.location, "Doesn't redirect to index")
 
-    def create_with_session(self):
+    def test_create_with_session(self):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
             sess['oauth_user_name'] = 'Test User'
         submit_data = dict(
-            milnum = "123",
-            l1_uri = "urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1-1",
-            c1text ="commentary",
-            b1text = "bibliography",
-            t1_uri = "urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:1-1",
-            t2_text = "french translation",
-            t2_lang = "fra"
+            milnum="123",
+            l1uri="urn:cts:greekLit:tlg0012.tlg001.perseus-grc2:1-1",
+            l1text="Οἱ πλεῖστοι τῶν περὶ",
+            select_l1="grc",
+            c1text="commentary",
+            b1text="bibliography",
+            t1uri="urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:1-1",
+            t1text="Dummy translation",
+            own_uri_t1="",
+            lang_t1="eng",
+            t2text="french translation",
+            t2lang="fra",
+            own_uri_t2="",
+            t2uri="",
+            lang_t2="eng"
         )
-        rv = self.client.post('/new', data=submit_data, follow_redirects=True)
-        self.assertIn('Annotation successfully created',rv.data.decode(),"Missing success message")
+        submit_data["iiif[]"] = [
+            "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json",
+            "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"
+        ]
+        submit_data["iiif_publisher[]"] = [
+            "Unknown",
+            "Biblissima"
+        ]
+        rv = self.client.post('/create', data=submit_data)
+        self.assertEqual(rv.status_code, 302)
+        self.assertIn("/commentary/123", rv.location)
+
         with self.app.app_context():
-            rec,auth = self.dm.parser.get_milliet("123")
-        self.assertEqual(rec['creator']['id'],"http://sosol.perseids.org/sosol/User/MyTestUser")
-        self.assertEqual(rec['creator']['name'],"Test User")
+            rec, auth = self.dm.parser.get_milliet("123")
+        self.assertEqual(rec['creator']['@id'], "http://sosol.perseids.org/sosol/User/MyTestUser")
+        self.assertEqual(rec['creator']['name'], "Test User")
+        self.assertCountEqual(
+            rec["images"],
+            [
+                {'location': 'Unknown',
+                 'manifestUri': 'http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd3997'
+                                '5440cab9b8/info.json'},
+                {'location': 'Biblissima',
+                 'manifestUri': 'http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json'}
+            ]
+        )
+
+        rv = self.client.get('/commentary/123').data.decode()
+        self.assertIn("id=\"mirador-container", rv, "Mirador container should not show for text without images")
 
     def test_save_edit_no_session(self):
         rv = self.client.post('/edit/save_edit', data = dict(c1text='Replacing the text'))

@@ -85,13 +85,17 @@
         <!-- IIIF Manifests -->
             <fieldset class="row" id="iiif-fieldset">
                 <legend>IIIF Manifests</legend>
-                {% for manifest in obj["images"] %}
-                    {% if loop.index == 1 %}
-                        {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"], row_id="original-iiif-input") }}
-                    {% else %}
-                        {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"]) }}
-                    {% endif %}
-                {% endfor %}
+                {% if obj["images"]|length > 0 %}
+                    {% for manifest in obj["images"] %}
+                        {% if loop.index == 1 %}
+                            {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"], row_id="original-iiif-input") }}
+                        {% else %}
+                            {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"]) }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {{ iiif(row_id="original-iiif-input") }}
+                {% endif %}
             </fieldset>
         <input type="submit" class="btn btn-primary" value="Save Changes" style="float: right; width:200px;"/>
         

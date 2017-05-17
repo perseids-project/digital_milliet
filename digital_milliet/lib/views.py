@@ -22,7 +22,7 @@ class Views(object):
         app.add_url_rule('/edit/save_edit', view_func=self.save_edit, methods=['POST'])
         app.add_url_rule('/create', view_func=self.create, methods=['POST'])
         app.add_url_rule('/api/commentary/<millnum>', view_func=self.api_data_get, methods=['GET'])
-        app.add_url_rule('/new', view_func=self.new,methods=['GET', 'POST'], strict_slashes=False)
+        app.add_url_rule('/new', view_func=self.new, methods=['GET', 'POST'], strict_slashes=False)
 
     def index(self):
         return render_template('index.html')
@@ -119,7 +119,7 @@ class Views(object):
         return render_template(
             'commentary/enter.html',
             cts_api=self.app.config['CTS_API_URL'],
-            cts_browse = self.app.config['CTS_BROWSE_URL'],
-            cts_version = self.app.config['CTS_API_VERSION']
+            cts_browse=self.app.config['CTS_BROWSE_URL'],
+            cts_version=self.app.config['CTS_API_VERSION']
         )
 

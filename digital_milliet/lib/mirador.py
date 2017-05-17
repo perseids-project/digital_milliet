@@ -106,5 +106,9 @@ class Mirador(object):
         return self.dump(record, code=200)
 
     @OAuthHelper.oauth_required
-    def delete(self, annotationId):
-        return None
+    def delete(self):
+        annotationId = request.get_json()["@id"]
+        status = "error"
+        if self.mongo.db.mirador.delete_one({"@id": annotationId}):
+            status = "success"
+        return self.dump({"status": status})

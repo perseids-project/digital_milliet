@@ -15,7 +15,7 @@ class Views(object):
         app.add_url_rule('/', view_func=self.index)
         app.add_url_rule('/index', view_func=self.index)
         app.add_url_rule('/about', view_func=self.about)
-        app.add_url_rule('/search', view_func=self.search, methods=['POST'])
+        app.add_url_rule('/search', view_func=self.search, methods=['GET'])
         app.add_url_rule('/commentary', view_func=self.commentary)
         app.add_url_rule('/commentary/<millnum>', view_func=self.millnum)
         app.add_url_rule('/edit/<millnum>', view_func=self.edit)
@@ -31,14 +31,18 @@ class Views(object):
         return render_template('about.html')
 
     def search(self):
-        form = request.form
-        if form['dropdown'] == "Author":
-            res = self.mongo.db.annotation.find({"name": form['value']})
-        else:
-            res = self.mongo.db.annotation.find({"works.title": form['value']})
+        """ Search results
+        """
+        query = request.args.get("query")
+        res = None
+        if query:
+            if request.args.get("in") == "Author":
+                res = self.mongo.db.annotation.find({"name": query})
+            else:
+                res = self.mongo.db.annotation.find({"works.title": query})
 
-        if res.count() == 0:
-            res = None
+            if res.count() == 0:
+                res = None
 
         return render_template('search.html', res=res)
 
@@ -71,7 +75,10 @@ class Views(object):
     def save_edit(self):
         """ Save the edit form
         """
-        form = request.form
+        form = request.form.to_dict()
+        if "iiif[]" in form:
+            form["iiif"] = request.form.getlist("iiif[]")
+            form["iiif_publisher"] = request.form.getlist("iiif_publisher[]")
         saved = self.parser.update_commentary(form)
         if saved:
             flash('Edit successfully saved','success')

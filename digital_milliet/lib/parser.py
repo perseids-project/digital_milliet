@@ -111,6 +111,23 @@ class CommentaryHandler(object):
         record['commentary'][0]['hasTarget'][1]['chars'] = form['orig_text']
         record['commentary'][0]['hasTarget'][1]['language'] = form['orig_lang']
 
+        if "iiif" in form and len(form["iiif"]):
+            duets = dict(zip(form["iiif"], form["iiif_publisher"]))
+            images = {k["oa:hasBody"]["@id"]: k for k in record["images"]}
+            to_delete = []
+            for manifestUri, annotation in images.items():
+                if manifestUri in duets and duets[manifestUri] != annotation["oa:hasBody"]["dc:publisher"]:
+                    images[manifestUri] = self.format_manifests_from_form(manifestUri, duets[manifestUri], modtime, millnum, update_anno=annotation)
+                    del duets[manifestUri]
+                elif manifestUri not in duets:
+                    to_delete.append(manifestUri)
+            for manifestUri, publisher in duets.items():
+                images[manifestUri] = self.format_manifests_from_form(manifestUri, publisher, modtime, millnum)
+
+            record["images"] = [anno for key, anno in images.items() if key not in to_delete]
+        else:
+            record["images"] = []
+
         rv = None
         if self.validate_annotation(record):
             rv = self.mongo.db.annotation.save(record)
@@ -208,8 +225,30 @@ class CommentaryHandler(object):
             "images": []
         }
         if "iiif" in form:
-            annotation["images"] = list([
-                {
+            annotation["images"] = [
+                self.format_manifests_from_form(manifest_uri, publisher, date, milnum)
+                for manifest_uri, publisher in zip(form["iiif"], form["iiif_publisher"])
+            ]
+        return annotation
+
+    def format_manifests_from_form(self, manifest_uri, publisher, date, milnum, update_anno=None):
+        """ Helper to format IIIF Manifests given a form
+
+        :param manifest_uri: Manifest URI
+        :param publisher: Publisher
+        :param date: Current date (Isocode)
+        :param milnum: Current milnum
+        :return: Value to set at annotation["images"]
+        """
+        if update_anno is not None:
+            anno = update_anno
+            anno["oa:hasBody"] = {
+                "@id": manifest_uri,
+                "dc:publisher": publisher
+            }
+            anno["oa:serializedAt"] = str(date)
+        else:
+            anno = {
                     "@context": {
                         "oa": "http://www.w3.org/ns/oa-context-20130208.json",
                         "dc": "http://purl.org/dc/elements/1.1/"
@@ -224,9 +263,7 @@ class CommentaryHandler(object):
                     "oa:hasTarget": self.format_uri(milnum, 'c1'),
                     "oa:motivatedBy": "oa:linking"
                 }
-                for manifest_uri, publisher in zip(form["iiif"], form["iiif_publisher"])
-            ])
-        return annotation
+        return anno
 
     def generate_uuid(self):
         """Create a unique id for an annotation

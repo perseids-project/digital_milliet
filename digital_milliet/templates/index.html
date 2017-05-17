@@ -18,16 +18,16 @@
 		<div class="row voffset6">
 			<div class="col-md-12" style="text-align:center">
 				
-				<form id="search_box" class="form-inline" action="search" method="post">
+				<form id="search_box" class="form-inline" action="{{ url_for("search") }}" method="GET">
 					<div class="form-group">
 						<label for="search_dropdown">Search Field</label> 
-		    		<select class="form-control" id="search_dropdown" name="dropdown">
+		    		<select class="form-control" id="search_dropdown" name="in">
 		    			<option>Author</option>
 		    			<option>Title</option>
 		    		</select>
 		    	</div>
 		    	<div class="form-group">
-	        	<input id="term" name="value" type="text" class="form-control" placeholder="Search for...">
+	        	<input id="term" name="query" type="text" class="form-control" placeholder="Search for...">
 	        </div>
 
 		      <button class="btn btn-default" type="submit">Search</button>

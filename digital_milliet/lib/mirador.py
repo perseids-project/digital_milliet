@@ -35,6 +35,12 @@ class Mirador(object):
 
     @staticmethod
     def dump(content, code=200):
+        """ (View system) Returns a response in json with given code
+
+        :param content: BSON encodable object
+        :param code: HTTP Status Code
+        :return: Response
+        """
         return Response(
             dumps(content),
             mimetype='application/json',
@@ -44,8 +50,15 @@ class Mirador(object):
     def get(self, image_uri=None, anno_id=None, _id=None, single=False):
         """ Retrieve annotations
 
-        :param image_uri:
-        :return:
+        :param image_uri: URI of the canvas
+        :type image_uri: str
+        :param anno_id: Public Identifier of the annotation
+        :type anno_id: str
+        :param _id: Private Identifier of the annotation
+        :type _id: str
+        :param single: Retrieve a single annotation instead of a list
+        :type single: bool
+        :return: List of Annotations matching the filters
         """
         if single is True:
             fn = self.mongo.db.mirador.find_one_or_404
@@ -64,9 +77,28 @@ class Mirador(object):
 
     @staticmethod
     def simpleFormat(oAnnotation):
+        """ Simplifiy the format of the annotation (Removes unnecessary information for Mirador)
+
+        :param oAnnotation: Annotation to simplify
+        :return: Simpler Annotation
+        """
         del oAnnotation["_id"]
         oAnnotation["resource"] = [res for res in oAnnotation["resource"] if res["@type"] != "dctypes:Collection"]
         return oAnnotation
+
+    def from_collection(self, digitial_milliet_id):
+        """ Retrieve a list of annotations from a collection
+
+        :param digitial_milliet_id: ID of the Digital Milliet Collection
+        :type digitial_milliet_id: str
+        :return: List of annotation
+        """
+        return [
+            self.simpleFormat(OA)
+            for OA in self.mongo.db.mirador.find({
+                "resource.@id": self.parser.make_uri(digitial_milliet_id)
+            })
+        ]
 
     def search(self):
         if request.args.get("noCollection") is not None:

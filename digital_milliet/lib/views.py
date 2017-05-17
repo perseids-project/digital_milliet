@@ -6,11 +6,12 @@ from flask import render_template, request, jsonify, redirect, session, flash, u
 
 class Views(object):
 
-    def __init__(self, app=None, parser=None, db=None, builder=None):
+    def __init__(self, app=None, parser=None, db=None, builder=None, mirador=None):
         self.app = app
         self.parser = parser
         self.mongo = db
         self.builder = builder
+        self.mirador = mirador
         app.add_url_rule('/', view_func=self.index)
         app.add_url_rule('/index', view_func=self.index)
         app.add_url_rule('/about', view_func=self.about)
@@ -43,8 +44,8 @@ class Views(object):
 
     def commentary(self):
         #add_to_existing_db()
-        comm_list = self.mongo.db.annotation.find({"commentary": {'$exists' : 1}}).sort([("commentary.hasBody.@id" , 1)])
-        auth_list = self.mongo.db.annotation.find({"cts_id": {'$exists' : 1}}).sort([("name" , 1)])
+        comm_list = self.mongo.db.annotation.find({"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
+        auth_list = self.mongo.db.annotation.find({"cts_id": {'$exists': 1}}).sort([("name", 1)])
         millnum_list = self.parser.process_comm(comm_list)
         return render_template('commentary/list.html', millnum_list=millnum_list, auth_list=auth_list)
 
@@ -53,13 +54,13 @@ class Views(object):
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
 
-        return render_template('/commentary/commentary.html', obj=parsed_obj, info=auth_info, millnum=millnum)
+        return render_template('commentary/commentary.html', obj=parsed_obj, info=auth_info, millnum=millnum)
 
     @OAuthHelper.oauth_required
     def edit(self, millnum):
         parsed_obj, auth_info = self.parser.get_it(millnum)
 
-        return render_template('/commentary/edit.html', millnum=millnum, obj=parsed_obj)
+        return render_template('commentary/edit.html', millnum=millnum, obj=parsed_obj)
 
     @OAuthHelper.oauth_required
     def save_edit(self):
@@ -91,6 +92,7 @@ class Views(object):
         res = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id": "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
         #have to remove the _id from mongo because it is bson and bson breaks the json
         del res['_id']
+        res["annotations"] = self.mirador.from_collection(millnum)
         return jsonify(res)
 
     @OAuthHelper.oauth_required

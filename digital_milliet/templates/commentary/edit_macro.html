@@ -1,0 +1,33 @@
+{% macro markdown_menu(target) %}
+    <div class='markdownify-menu btn-group btn-group' data-target='{{ target }}' style="margin-bottom: 1em;">
+      <a class='btn--insert btn btn-default' aria-label="Italic" data-prefix='*' data-suffix='*' href='javascript:void(0)'>&nbsp;<span class="fa fa-italic"></span></a>
+      <a class='btn--insert btn btn-default' aria-label="Bold" data-prefix='**' data-suffix='**' href='javascript:void(0)'>&nbsp;<span class="fa fa-bold"></span></a>
+      <a class='btn--insert btn btn-default' aria-label="Header" data-prefix='# ' href='javascript:void(0)'>&nbsp;<i class="fa fa-header"></i></a>
+      <a class='btn--insert btn btn-default' aria-label="Quote" data-prefix='> ' href='javascript:void(0)'>&nbsp;<i class="fa fa-quote-right"></i></a>
+      <a class='btn--insert btn btn-default' aria-label="List" data-prefix='* ' href='javascript:void(0)'>&nbsp;<i class="fa fa-list-ul"></i></a>
+      <a class='btn--insert btn btn-default' aria-label="Ordered List" data-prefix='1. ' href='javascript:void(0)'>&nbsp;<i class="fa fa-list-ol"></i></a>
+      <a class='btn--insert btn btn-default' aria-label="Link" data-type='link' href='javascript:void(0)'>&nbsp;<i class="fa fa-link" aria-hidden="true"></i></a>
+    </div>
+{% endmacro %}
+
+{% macro translation(tid, obj) %}
+    <fieldset class="row">
+      <legend>{{ 'Translation : ' + tid }}</legend>
+
+      {% if 't'+tid+'_uri' in obj %}
+          <div class="col-md-12">
+              <input class="form-control" name="t{{ tid }}_uri" type='text' value="{obj['t'+tid+'_uri']}}" size="60" pattern="urn:cts:.+?:.+\..+\.(.+):[^\-]+(-[^-]+)?" title="Must be a valid CTS URN" />
+          </div>
+      {% else %}
+      <div class="col-md-4">
+          <select name="lang{{ tid }}" id="lang{{ tid }}" class="form-control">
+            <option value="eng" {% if obj['t'+tid+'_lang'] == 'eng' %} selected='selected' {% endif %}>{{ ('English') }}</option>
+            <option value="fra" {% if obj['t'+tid+'_lang'] == 'fra' %} selected='selected' {% endif %}>{{ ('French') }}</option>
+          </select>
+      </div>
+      <div class="col-md-8">
+          <textarea class="form-control" name="t{{ tid }}_text" rows="10" cols="80">{{ obj['t'+tid+'_text'] }}</textarea>
+      </div>
+      {% endif %}
+    </fieldset>
+{% endmacro %}

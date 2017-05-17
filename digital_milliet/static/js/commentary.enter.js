@@ -37,7 +37,7 @@ $(document).ready(function() {
         event.preventDefault();
         var lnum = $(this).attr("data-lnum");
         var textURI = $("#own_uri_" + lnum).val();
-        load_text(lnum,textURI);
+        load_text(lnum, textURI);
     });
 
     // get parameters from call
@@ -89,6 +89,7 @@ $(document).ready(function() {
          var lnum = $(event.currentTarget).attr("data-lnum");
 	       $("#"+lnum+"text").val($.trim(data.getText().replace(/(\r\n|\n|\r)/gm,"").replace(/\s+/gm," ")));
          detect_language_and_type($("#"+lnum+"text").get(0));
+         $("#own_uri_"+lnum+"_error").hide()
       }
     );
 
@@ -107,15 +108,17 @@ $(document).ready(function() {
 /**
  * Handler for the text_uri input to try to load the text
  */
-function load_text(lnum,uri) {
+function load_text(lnum, uri) {
+    var flash = $("#own_uri_"+lnum+"_error");
     if (! uri)  {
       uri = $("input[name='" + lnum + "uri']").val();
     }
     if (! uri.match(/^http/)) {
        /** allow non-url identifiers to just pass through **/
-        return;
+       flash.removeClass("alert-danger alert-info").addClass("alert-warning").text("The identifier is not a URL").show();
+       return;
     }
-    $("textarea[name='" + lnum + "text']").attr("placeholder","loading...");
+    flash.removeClass("alert-danger alert-warning").addClass("alert-info").text("Loading").show();
     if (uri.match(/^http/)) {
         $.ajax({
             url: uri,
@@ -132,8 +135,9 @@ function load_text(lnum,uri) {
                         // different value types
                         $("input[name='" + lnum + "mime_type']").val("text/xml");
                         $("input[name='" + lnum + "xml']").val("true");
+                        flash.hide()
                     } catch (a_e) {
-                         $("textarea[name='" + lnum + "text']").attr("placeholder","Unable to process text: " + a_e);
+                        flash.removeClass("alert-danger alert-info").addClass("alert-error").text("Unable to process text: " + a_e).show();
                     }
                 } else {
                     // TODO could eventually suppport other input formats
@@ -143,7 +147,7 @@ function load_text(lnum,uri) {
                 $("textarea[name='" + lnum + "text']").val(content);
             },
             error: function(a_req,a_text,a_error) {
-               $("textarea[name='" + lnum + "text']").attr("placeholder","ERROR loading " + uri  +" : " + a_text);
+                flash.removeClass("alert-danger alert-info").addClass("alert-error").text("ERROR loading " + uri  +" : " + a_text).show();
             }
         });
     }
@@ -204,14 +208,16 @@ function detect_language(a_lnum) {
  */
 function CTSError(error,a_lnum) {
     var $input = $("#"+a_lnum+"text"),
-        $error = $("#"+a_lnum+"texterror");
+        $error1 = $("#"+a_lnum+"texterror");
+        $error = $("#own_uri_"+a_lnum+"_error");
     if(error == null || typeof error === "undefined") {
-        $input.removeClass("error");
+        $input.removeClass("alert-danger alert-warning alert-info");
         $error.hide();
+        $error1.hide();
     } else {
-
-        $input.addClass("error");
-        $error.text(error).show();
+        $input.addClass("danger");
+        $error1.text(error).addClass("alert-danger").show();
+        $error.hide();
     }
 
 }
@@ -220,36 +226,29 @@ var remove_input = function(target) {
   target.remove();
 };
 var add_input = function(after, name, counter) {
-
-         /*   <div class="row collapse" id="original-iiif-input">
-                <div class="small-9 columns">
-                    <input type="url" name="iiif[]" class="form-control" placeholder="Address of IIIF Manifests"/>
-                </div>
-                <div class="small-3 columns buttons">
-                    <a class="add-input button postfix" href="#"><i class="fa fa-plus-square" aria-label="Add a field"></i> </a>
-                </div>
-            </div>
-          */
       counter += 1;
       var label = after.find("label").text();
       var placeholder = after.find("input[name='"+name+"[]']").attr("placeholder");
       var placeholder_publisher = after.find("input[name='"+name+"_publisher[]']").attr("placeholder");
-      var formgroup = $('<div class="row collapse" />');
-      var input_container = $('<div class="small-5 columns" />');
-      var input_container_publisher = $('<div class="small-4 columns" />');
-      var buttons_container = $('<div class="small-3 columns buttons button-group" />');
-      var input = $('<input type="url" name="'+name+'[]" placeholder="' + placeholder + '" />');
-      var input_publisher = $('<input type="text" name="'+name+'_publisher[]" placeholder="' + placeholder_publisher + '" />');
-      var add = $('<a class="add-input button" href="#"><i class="fa fa-plus-square" aria-label="Add a field"></i></a>');
-      var rem = $('<a class="rem-input button alert" href="#"><i class="fa fa-minus-square" aria-label="Remove a field"></i></a>');
+      var formgroup = $('<div class="row" />');
+      var input_container_publisher = $('<div class="col-sm-4" />');
+      var input_container = $('<div class="col-sm-8" />');
+      var input_group = $('<div class="input-group"></div>');
 
-      formgroup.append(input_container);
-      input_container.append(input);
+      var buttons_container = $('<div class="input-group-btn" />');
+      var input = $('<input class="form-control" type="url" name="'+name+'[]" placeholder="' + placeholder + '" />');
+      var input_publisher = $('<input class="form-control" type="text" name="'+name+'_publisher[]" placeholder="' + placeholder_publisher + '" />');
+      var add = $('<a class="add-input btn btn-success" href="#">&nbsp;<i class="fa fa-plus-square" aria-label="Add a field"></i>&nbsp;</a>');
+      var rem = $('<a class="rem-input btn btn-danger" href="#">&nbsp;<i class="fa fa-minus-square" aria-label="Remove a field"></i>&nbsp;</a>');
 
       formgroup.append(input_container_publisher);
       input_container_publisher.append(input_publisher);
 
-      formgroup.append(buttons_container);
+      formgroup.append(input_container);
+      input_container.append(input_group);
+      input_group.append(input);
+
+      input_group.append(buttons_container);
       buttons_container.append(add);
       buttons_container.append(rem);
 

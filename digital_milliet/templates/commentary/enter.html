@@ -1,6 +1,6 @@
 {% extends "base.html"%}
 
-{% from "commentary/edit_macro.html" import markdown_menu, translation, lang_choice, cts_text_selector, enter_translation %}
+{% from "commentary/edit_macro.html" import markdown_menu, translation, lang_choice, cts_text_selector, enter_translation, iiif %}
 
 {% block morecss %}
     <link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/font-awesome.min.css')}}" />
@@ -11,27 +11,18 @@
     <link rel="stylesheet" href="{{ bower_url_for('jquery.markdownify','lib/jquery.markdownify.css') }}" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <style type="text/css">
-        #iiif-fieldset .buttons a.button {
-            max-width:100px;
-            height:2.3125rem;
-            line-height:2.3125rem;
-            padding:0 2.3125rem;
+        #iiif-fieldset .manifest_input:first-of-type .rem-input {
+            display:none;
         }
-        #iiif-fieldset .buttons a.button .fa {
-            line-height:2.3125rem;
-        }
-        .rem-input { display:inline-block; }
         .subfield {
             margin:10px 0;
             border-top:1px dashed grey;
             padding:10px 10px 0 10px;
         }
-        .subfield.nopadd {
-            padding:10px 0 0 0;
-        }
         .subfield:first-child {
             border-top:none;
         }
+
     </style>
 {% endblock %}
 {% block morejavascript %}
@@ -141,17 +132,7 @@
         <!-- IIIF Manifests -->
         <fieldset class="row" id="iiif-fieldset">
             <legend>IIIF Manifests</legend>
-            <div class="row" id="original-iiif-input">
-                <div class="col-sm-4"><input type="text" name="iiif_publisher[]" class="form-control" placeholder="Publisher"/></div>
-                <div class="col-sm-8">
-                    <div class="input-group">
-                      <input type="url" name="iiif[]" class="form-control" placeholder="Address of IIIF Manifests"/>
-                      <div class="input-group-btn">
-                          <a class="add-input btn btn-success" href="#">&nbsp;<i class="fa fa-plus-square" aria-label="Add a field"></i>&nbsp;</a>
-                      </div>
-                    </div>
-                </div>
-            </div>
+            {{ iiif(row_id="original-iiif-input") }}
         </fieldset>
         <button type="submit" id="submit_button" style="float: right; width:200px;">{{ _('Save Annotation') }}"</button>
       </form> 

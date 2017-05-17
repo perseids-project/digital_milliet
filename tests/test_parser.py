@@ -28,7 +28,7 @@ class TestDb(DigitalMillietTestCase):
             lang_t2 = "fra"
         )
         with self.app.test_request_context():
-          added = self.dm.parser.save_from_form(submit_data)
+          added = self.dm.parser.create_commentary(submit_data)
         self.assertIsNone(added,"Should not have added a new record")
 
     def test_save_from_form_succeeds_new(self):
@@ -50,7 +50,7 @@ class TestDb(DigitalMillietTestCase):
             lang_t2 = "fra",
         )
         with self.app.test_request_context():
-          added = self.dm.parser.save_from_form(submit_data)
+          added = self.dm.parser.create_commentary(submit_data)
         self.assertIsNotNone(added, "Should not have added a new record")
         self.assertEqual("111", added, "Unexpected response from save")
 
@@ -76,7 +76,7 @@ class TestDb(DigitalMillietTestCase):
             lang2 = "fra",
         )
         with self.app.app_context():
-            added = self.dm.parser.edit_save(submit_data)
+            added = self.dm.parser.update_commentary(submit_data)
         self.assertIsNotNone(added,"Should not have added a new record")
 
     def test_validate_annotation(self):

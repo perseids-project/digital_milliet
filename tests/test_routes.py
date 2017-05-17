@@ -78,7 +78,7 @@ class TestRoutes(DigitalMillietTestCase):
         rv = self.client.post('/new', data=submit_data, follow_redirects=True)
         self.assertIn('Annotation successfully created',rv.data.decode(),"Missing success message")
         with self.app.app_context():
-            rec,auth = self.dm.parser.get_it("123")
+            rec,auth = self.dm.parser.get_milliet("123")
         self.assertEqual(rec['creator']['id'],"http://sosol.perseids.org/sosol/User/MyTestUser")
         self.assertEqual(rec['creator']['name'],"Test User")
 
@@ -126,7 +126,7 @@ class TestRoutes(DigitalMillietTestCase):
         rv = self.client.post('/edit/save_edit', data=submit_data, follow_redirects=True)
         self.assertIn('Edit successfully saved',rv.data.decode(),"Missing success message")
         with self.app.app_context():
-          rec,auth = self.dm.parser.get_it("999")
+          rec,auth = self.dm.parser.get_milliet("999")
         self.assertEqual(rec['t1_text'],"some new translation text")
 
 

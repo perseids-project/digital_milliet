@@ -7,7 +7,7 @@ from flaskext.markdown import Markdown
 
 from digital_milliet.lib.author_builder import AuthorBuilder
 from digital_milliet.lib.oauth import OAuthHelper
-from digital_milliet.lib.parser import Parser
+from digital_milliet.lib.parser import CommentaryHandler
 from digital_milliet.lib.views import Views
 from digital_milliet.lib.catalog import Catalog
 from digital_milliet.lib.mirador import Mirador
@@ -33,7 +33,7 @@ class DigitalMilliet(object):
         self.mongo = PyMongo(self.app)
         self.oauth = OAuthHelper(self.app)
         self.builder = AuthorBuilder(self.mongo,Catalog(self.app))
-        self.parser = Parser(db=self.mongo, builder=self.builder, config=self.app.config, auth=self.oauth)
+        self.parser = CommentaryHandler(db=self.mongo, builder=self.builder, config=self.app.config, auth=self.oauth)
         self.mirador = Mirador(db=self.mongo, app=self.app, parser=self.parser)
         self.babel = Babel(self.app)
         self.views = Views(self.app, self.parser, self.mongo, self.builder, self.mirador)

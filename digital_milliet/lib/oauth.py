@@ -56,7 +56,6 @@ class OAuthHelper(object):
             callback_url = url_for('.r_oauth_authorized', _external=True)
         return self.authobj.authorize(callback=callback_url)
 
-
     def r_oauth_authorized(self):
         """ Route for OAuth2 Authorization callback
 
@@ -117,7 +116,7 @@ class OAuthHelper(object):
         :rtype: dict
         """
         if session and session['oauth_user_uri']:
-            user = { 'uri': session['oauth_user_uri'] }
+            user = {'uri': session['oauth_user_uri']}
             if 'oauth_user_name' in session:
                 user['name'] = session['oauth_user_name']
             else:
@@ -126,7 +125,7 @@ class OAuthHelper(object):
         else:
             return None
 
-    def user_in_community(self,user_communities=[]):
+    def user_in_community(self, user_communities=[]):
         """ Checks to see if the user is the authorized community for editing
 
         This is a hack specific to the Perseids OAuth provider used as a way

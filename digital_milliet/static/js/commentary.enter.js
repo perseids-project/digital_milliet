@@ -225,8 +225,9 @@ function CTSError(error,a_lnum) {
 var remove_input = function(target) {
   target.remove();
 };
-var add_input = function(after, name, counter) {
+var add_input = function(after, model, counter) {
       counter += 1;
+      /*
       var label = after.find("label").text();
       var placeholder = after.find("input[name='"+name+"[]']").attr("placeholder");
       var placeholder_publisher = after.find("input[name='"+name+"_publisher[]']").attr("placeholder");
@@ -251,16 +252,16 @@ var add_input = function(after, name, counter) {
       input_group.append(buttons_container);
       buttons_container.append(add);
       buttons_container.append(rem);
-
-      add.on("click", function (e) {
+     */
+      var formgroup = model.clone();
+      formgroup.attr("id", undefined);
+      formgroup.find(".add-input").on("click", function (e) {
           e.preventDefault();
-          add_input(formgroup, name, counter);
-          add.hide();
+          add_input(formgroup, model, counter);
       });
-      rem.on("click", function (e) {
+      formgroup.find(".rem-input").on("click", function (e) {
           e.preventDefault();
           remove_input(formgroup);
-          after.find("add-input").show();
       });
 
       after.after(formgroup);
@@ -292,7 +293,7 @@ $(document).ready(function() {
 
   $("#original-iiif-input a.add-input").on("click", function(e) {
      e.preventDefault();
-     add_input($(this).parents("#original-iiif-input"), "iiif", 1);
+     add_input($("#original-iiif-input"), $("#original-iiif-input"), 1);
   });
 
 });

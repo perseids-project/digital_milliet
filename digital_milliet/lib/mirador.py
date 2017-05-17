@@ -11,14 +11,14 @@ class Mirador(object):
     """ Parses data for retrieval/storage to/from the database
     """
     def __init__(self, db, app, parser):
-        """ Parser object
+        """ CommentaryHandler object
 
         :param db: Mongo Db Handle
         :type db: PyMongo
         :param app: Flask App
         :type app: Flask
-        :param parser: Parser
-        :type parser: Parser
+        :param parser: CommentaryHandler
+        :type parser: CommentaryHandler
         """
         self.mongo = db
         self.app = app
@@ -96,7 +96,7 @@ class Mirador(object):
         return [
             self.simpleFormat(OA)
             for OA in self.mongo.db.mirador.find({
-                "resource.@id": self.parser.make_uri(digitial_milliet_id)
+                "resource.@id": self.parser.format_uri(digitial_milliet_id)
             })
         ]
 
@@ -117,13 +117,13 @@ class Mirador(object):
         milliet_number = request.args.get("milliet_number")
         data["annotatedAt"] = datetime.now().isoformat()
         data["serializedAt"] = data["annotatedAt"]
-        data["annotatedBy"] = self.parser.make_person()
-        data["@id"] = self.parser.make_uri(milliet_number, "anno-{}".format(uuid4()))
+        data["annotatedBy"] = self.parser.format_person_from_authentificated_user()
+        data["@id"] = self.parser.format_uri(milliet_number, "anno-{}".format(uuid4()))
 
         if milliet_number is not None:
             data["resource"].append({
                 "@type": "dctypes:Collection",
-                "@id": self.parser.make_uri(milliet_number)
+                "@id": self.parser.format_uri(milliet_number)
             })
         m_obj = self.mongo.db.mirador.insert(data)
         return self.dump(self.simpleFormat(self.get(_id=m_obj, single=True)), code=200)

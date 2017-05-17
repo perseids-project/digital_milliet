@@ -46,11 +46,11 @@ class Views(object):
         #add_to_existing_db()
         comm_list = self.mongo.db.annotation.find({"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
         auth_list = self.mongo.db.annotation.find({"cts_id": {'$exists': 1}}).sort([("name", 1)])
-        millnum_list = self.parser.process_comm(comm_list)
+        millnum_list = self.parser.retrieve_millietId_in_commentaries(comm_list)
         return render_template('commentary/list.html', millnum_list=millnum_list, auth_list=auth_list)
 
     def millnum(self, millnum):
-        parsed_obj, auth_info = self.parser.get_it(millnum)
+        parsed_obj, auth_info = self.parser.get_milliet(millnum)
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
 
@@ -58,14 +58,14 @@ class Views(object):
 
     @OAuthHelper.oauth_required
     def edit(self, millnum):
-        parsed_obj, auth_info = self.parser.get_it(millnum)
+        parsed_obj, auth_info = self.parser.get_milliet(millnum)
 
         return render_template('commentary/edit.html', millnum=millnum, obj=parsed_obj)
 
     @OAuthHelper.oauth_required
     def save_edit(self):
         form = request.form
-        saved = self.parser.edit_save(form)
+        saved = self.parser.update_commentary(form)
         if saved:
             flash('Edit successfully saved','success')
         else:
@@ -80,7 +80,7 @@ class Views(object):
         if "iiif[]" in data:
             data["iiif"] = request.form.getlist("iiif[]")
             data["iiif_publisher"] = request.form.getlist("iiif_publisher[]")
-        millnum = self.parser.save_from_form(data)
+        millnum = self.parser.create_commentary(data)
         if millnum is not None:
             flash('Annotation successfully created!','success')
             return redirect('commentary/' + str(millnum))

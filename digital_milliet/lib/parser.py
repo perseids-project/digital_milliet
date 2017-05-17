@@ -21,7 +21,7 @@ class CommentaryHandler(object):
         """
 
         self.mongo = db
-        self.builder = builder
+        self.author_builder = builder
         self.config = config
         self.auth = auth
 
@@ -41,7 +41,7 @@ class CommentaryHandler(object):
         if not exists and self.validate_annotation(data):
             self.mongo.db.annotation.insert(data)
             # Now compile author info
-            self.builder.author_db_build(data)
+            self.author_builder.author_db_build(data)
             return form["milnum"]
         else:
             return None
@@ -114,7 +114,7 @@ class CommentaryHandler(object):
         rv = None
         if self.validate_annotation(record):
             rv = self.mongo.db.annotation.save(record)
-            self.builder.author_db_build(record)
+            self.author_builder.author_db_build(record)
         return rv
 
     def form_to_OpenAnnotation(self, form):

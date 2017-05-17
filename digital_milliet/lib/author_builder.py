@@ -21,7 +21,7 @@ class AuthorBuilder(object):
         self.mongo = db
         self.catalog = catalog
 
-    def author_db_build(self,data_dict):
+    def author_db_build(self, data_dict):
         """ Adds or Updates Author Records in the Annotation Database
 
         Author Records contain authority name  and work information
@@ -35,24 +35,23 @@ class AuthorBuilder(object):
         try:
             target = data_dict['commentary'][0]['hasTarget'][0]
             cite_urn = data_dict['commentary'][0]['hasBody']['@id']
-            if (type(target) is str):
-                urn = URN(target)
-                millnum = cite_urn.split('.')[2]
-                t_parts = target.split(':')
-                urn_parts = t_parts[3].split('.')
-                pasg = t_parts[4]
-                auth_id = urn_parts[0]
-                work_id = ':'.join(t_parts[0:3]) + ':' + '.'.join(urn_parts[0:2])
 
+            URN(target)
+            millnum = cite_urn.split('.')[2]
+            t_parts = target.split(':')
+            urn_parts = t_parts[3].split('.')
+            pasg = t_parts[4]
+            auth_id = urn_parts[0]
+            work_id = ':'.join(t_parts[0:3]) + ':' + '.'.join(urn_parts[0:2])
 
-            author = self.mongo.db.annotation.find_one({"cts_id" : auth_id})
+            author = self.mongo.db.annotation.find_one({"cts_id": auth_id})
             if author is None:
                 response_dict = self.catalog.lookup_author(auth_id)
                 for resp in response_dict:
                     if resp['urn_status'] is not 'invalid':
                         author = self.make_author(resp)
 
-            # we may still not have an author here, if the catalog lookup didn't succeed
+            # We may still not have an author here, if the catalog lookup didn't succeed
             if author is not None:
                 works = author['works']
                 if not works:
@@ -62,21 +61,21 @@ class AuthorBuilder(object):
                     if work is None:
                         works.append(self.make_work(work_id, millnum, pasg))
                     else:
-                        if millnum not in work['millnums']:
-                            l = [millnum, pasg]
-                            work['millnums'].append(l)
+                        exists = [duet for duet in work["millnums"] if duet == [millnum, pasg]]
+                        if len(exists) == 0:
+                            work['millnums'].append([millnum, pasg])
 
-                self.mongo.db.annotation.update({'_id' : author['_id']}, author)
+                self.mongo.db.annotation.update({'_id': author['_id']}, author)
             else:
                 print("Unable to get catalog info for " + target)
         except TypeError as err:
-            print("Invalid data for author build",err)
+            print("Invalid data for author build", err)
             pass
         except KeyError as err:
-            print("Invalid data for author build",err)
+            print("Invalid data for author build", err)
             pass
         except ValueError as err:
-            print("Invalid data for author build",err)
+            print("Invalid data for author build", err)
             pass
         except:
             print("Invalid data for author build")
@@ -96,9 +95,8 @@ class AuthorBuilder(object):
         author['cts_id'] = resp['canonical_id']
         author['works'] = []
         a_id = self.mongo.db.annotation.insert(author)
-        new_auth = self.mongo.db.annotation.find_one({'_id' : a_id})
+        new_auth = self.mongo.db.annotation.find_one({'_id': a_id})
         return new_auth
-
 
     def make_work(self,work_id, millnum, pasg):
         """ Make a work record from a catalog record

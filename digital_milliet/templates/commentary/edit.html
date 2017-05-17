@@ -1,6 +1,6 @@
 {% extends "base.html"%}
 {% from "commentary/get_text.html" import get_text with context %}
-{% from "commentary/edit_macro.html" import markdown_menu, translation %}
+{% from "commentary/edit_macro.html" import markdown_menu, translation, iiif %}
 {% block morecss %}
     <link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/font-awesome.min.css')}}" />
     <style type="text/css">
@@ -15,10 +15,22 @@
     <script src="{{ bower_url_for('codemirror','mode/markdown/markdown.js') }}"></script>
     <script src="{{ bower_url_for('jquery.markdownify', 'lib/jquery.markdownify.js') }}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='js/commentary.js')}}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('static', filename="js/commentary.common.enter-edit.js")}}"></script>
     {% if "orig_uri" in obj %}{{ get_text(obj['orig_uri'], '#orig_text') }}{% endif %}
     <script type="text/javascript">
         $(function () {
           $('.markdown').markdownify();
+
+          var counter = {{ obj["images"]|length }};
+          $(".manifest_input a.add-input").on("click", function(e) {
+             e.preventDefault();
+             add_input($(this).parents(".manifest_input"), $("#iiif-fieldset"));
+          });
+          $(".manifest_input a.rem-input").on("click", function(e) {
+             e.preventDefault();
+             remove_input($(this).parents(".manifest_input"));
+          });
+
         });
     </script>
 {% endblock %}
@@ -69,8 +81,19 @@
 
         <!-- Translation 2 -->
         {{ translation("2", obj) }}
-        
-          <input type="submit" class="btn btn-primary" value="Save Changes" style="float: right; width:200px;"/>
+
+        <!-- IIIF Manifests -->
+            <fieldset class="row" id="iiif-fieldset">
+                <legend>IIIF Manifests</legend>
+                {% for manifest in obj["images"] %}
+                    {% if loop.index == 1 %}
+                        {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"], row_id="original-iiif-input") }}
+                    {% else %}
+                        {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"]) }}
+                    {% endif %}
+                {% endfor %}
+            </fieldset>
+        <input type="submit" class="btn btn-primary" value="Save Changes" style="float: right; width:200px;"/>
         
       </form> 
  

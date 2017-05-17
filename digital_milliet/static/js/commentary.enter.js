@@ -222,51 +222,6 @@ function CTSError(error,a_lnum) {
 
 }
 
-var remove_input = function(target) {
-  target.remove();
-};
-var add_input = function(after, model, counter) {
-      counter += 1;
-      /*
-      var label = after.find("label").text();
-      var placeholder = after.find("input[name='"+name+"[]']").attr("placeholder");
-      var placeholder_publisher = after.find("input[name='"+name+"_publisher[]']").attr("placeholder");
-      var formgroup = $('<div class="row" />');
-      var input_container_publisher = $('<div class="col-sm-4" />');
-      var input_container = $('<div class="col-sm-8" />');
-      var input_group = $('<div class="input-group"></div>');
-
-      var buttons_container = $('<div class="input-group-btn" />');
-      var input = $('<input class="form-control" type="url" name="'+name+'[]" placeholder="' + placeholder + '" />');
-      var input_publisher = $('<input class="form-control" type="text" name="'+name+'_publisher[]" placeholder="' + placeholder_publisher + '" />');
-      var add = $('<a class="add-input btn btn-success" href="#">&nbsp;<i class="fa fa-plus-square" aria-label="Add a field"></i>&nbsp;</a>');
-      var rem = $('<a class="rem-input btn btn-danger" href="#">&nbsp;<i class="fa fa-minus-square" aria-label="Remove a field"></i>&nbsp;</a>');
-
-      formgroup.append(input_container_publisher);
-      input_container_publisher.append(input_publisher);
-
-      formgroup.append(input_container);
-      input_container.append(input_group);
-      input_group.append(input);
-
-      input_group.append(buttons_container);
-      buttons_container.append(add);
-      buttons_container.append(rem);
-     */
-      var formgroup = model.clone();
-      formgroup.attr("id", undefined);
-      formgroup.find(".add-input").on("click", function (e) {
-          e.preventDefault();
-          add_input(formgroup, model, counter);
-      });
-      formgroup.find(".rem-input").on("click", function (e) {
-          e.preventDefault();
-          remove_input(formgroup);
-      });
-
-      after.after(formgroup);
-
-  };
 
 //check the milnum for prior use
 $(document).ready(function() {
@@ -293,7 +248,6 @@ $(document).ready(function() {
 
   $("#original-iiif-input a.add-input").on("click", function(e) {
      e.preventDefault();
-     add_input($("#original-iiif-input"), $("#original-iiif-input"), 1);
+     add_input($("#original-iiif-input"), $("#iiif-fieldset"));
   });
-
 });

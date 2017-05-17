@@ -43,13 +43,16 @@ class Views(object):
         return render_template('search.html', res=res)
 
     def commentary(self):
-        #add_to_existing_db()
+        """ List available commentaries and Milliet entries
+        """
         comm_list = self.mongo.db.annotation.find({"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
         auth_list = self.mongo.db.annotation.find({"cts_id": {'$exists': 1}}).sort([("name", 1)])
         millnum_list = self.parser.retrieve_millietId_in_commentaries(comm_list)
         return render_template('commentary/list.html', millnum_list=millnum_list, auth_list=auth_list)
 
     def millnum(self, millnum):
+        """ Read a Milliet entry
+        """
         parsed_obj, auth_info = self.parser.get_milliet(millnum)
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
@@ -58,12 +61,16 @@ class Views(object):
 
     @OAuthHelper.oauth_required
     def edit(self, millnum):
+        """ Edit the Milliet identified by millnum
+        """
         parsed_obj, auth_info = self.parser.get_milliet(millnum)
 
         return render_template('commentary/edit.html', millnum=millnum, obj=parsed_obj)
 
     @OAuthHelper.oauth_required
     def save_edit(self):
+        """ Save the edit form
+        """
         form = request.form
         saved = self.parser.update_commentary(form)
         if saved:
@@ -73,9 +80,11 @@ class Views(object):
 
         return redirect('commentary')
 
-    #for catching requests from the perseids-client-apps form and saving the data
     @OAuthHelper.oauth_required
     def create(self):
+        """ Create a new entry
+        """
+
         data = request.form.to_dict()
         if "iiif[]" in data:
             data["iiif"] = request.form.getlist("iiif[]")
@@ -89,11 +98,14 @@ class Views(object):
             return redirect('new')
 
     def api_data_get(self, millnum):
-        res = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id": "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"})
-        #have to remove the _id from mongo because it is bson and bson breaks the json
+        """ Read a Milliet entry as a JSON Bag
+        """
+        res = self.mongo.db.annotation.find_one_or_404(
+            {"commentary.hasBody.@id": "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"}
+        )
         del res['_id']
         res["annotations"] = self.mirador.from_collection(millnum)
-        return jsonify(res)
+        return self.mirador.dump(res)
 
     @OAuthHelper.oauth_required
     def new(self):

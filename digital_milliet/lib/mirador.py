@@ -77,7 +77,7 @@ class Mirador(object):
 
     @staticmethod
     def simpleFormat(oAnnotation):
-        """ Simplifiy the format of the annotation (Removes unnecessary information for Mirador)
+        """ Simplify the format of the annotation (Removes unnecessary information for Mirador)
 
         :param oAnnotation: Annotation to simplify
         :return: Simpler Annotation
@@ -101,6 +101,10 @@ class Mirador(object):
         ]
 
     def search(self):
+        """ Search View
+
+        :return: Result of search
+        """
         if request.args.get("noCollection") is not None:
             return self.dump([
                     self.simpleFormat(oAnnotation) for oAnnotation in self.get(image_uri=request.args.get("uri"))
@@ -113,6 +117,10 @@ class Mirador(object):
 
     @OAuthHelper.oauth_required
     def create(self):
+        """ Create View
+
+        :return: Recorded Data
+        """
         data = request.get_json()
         milliet_number = request.args.get("milliet_number")
         data["annotatedAt"] = datetime.now().isoformat()
@@ -130,15 +138,23 @@ class Mirador(object):
 
     @OAuthHelper.oauth_required
     def update(self):
+        """ Update an annotation
+
+        :return: Updated Record
+        """
         data = request.get_json()
         record = self.get(anno_id=data["@id"], single=True)
         record.update(data)
         record["serializedAt"] = datetime.now().isoformat()
         self.mongo.db.mirador.save(record)
-        return self.dump(record, code=200)
+        return self.dump(self.get(anno_id=record["@id"], single=True), code=200)
 
     @OAuthHelper.oauth_required
     def delete(self):
+        """ Delete a record
+
+        :return: Status of deletion
+        """
         annotationId = request.get_json()["@id"]
         status = "error"
         if self.mongo.db.mirador.delete_one({"@id": annotationId}):

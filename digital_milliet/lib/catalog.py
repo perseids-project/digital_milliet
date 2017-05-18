@@ -1,5 +1,6 @@
 #coding utf-8
-import os, requests
+import requests
+
 
 class Catalog(object):
     """ Provides an interface to a Catalog API Endpoint
@@ -27,7 +28,7 @@ class Catalog(object):
         url = str(self.api_endpoint + '/authors/search?canonical_id=' + urn + '&format=json')
         return requests.get(url).json()
 
-    def lookup_work(self,urn=None):
+    def lookup_work(self, urn=None):
         """ Looks up an Work by authority id in the remote Catalog API endpoint
 
         :param urn: The authority id (i.e work CTS URN)

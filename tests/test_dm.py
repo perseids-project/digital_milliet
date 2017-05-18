@@ -37,6 +37,7 @@ class DigitalMillietTestCase(TestCase):
     def teardownDb(self):
         with self.app.app_context():
             self.mongo.db.annotation.drop()
+            self.mongo.db.mirador.drop()
 
     def tearDown(self):
         self.teardownDb()

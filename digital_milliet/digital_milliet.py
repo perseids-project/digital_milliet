@@ -32,11 +32,11 @@ class DigitalMilliet(object):
         self.cors = CORS(self.app)
         self.mongo = PyMongo(self.app)
         self.oauth = OAuthHelper(self.app)
-        self.builder = AuthorBuilder(self.mongo,Catalog(self.app))
-        self.parser = CommentaryHandler(db=self.mongo, authors=self.builder, config=self.app.config, auth=self.oauth)
-        self.mirador = Mirador(db=self.mongo, app=self.app, parser=self.parser)
+        self.authors = AuthorBuilder(self.mongo, Catalog(self.app), app=self.app)
+        self.commentaries = CommentaryHandler(db=self.mongo, authors=self.authors, config=self.app.config, auth=self.oauth)
+        self.mirador = Mirador(db=self.mongo, app=self.app, parser=self.commentaries)
         self.babel = Babel(self.app)
-        self.views = Views(self.app, self.parser, self.mongo, self.builder, self.mirador)
+        self.views = Views(self.app, self.commentaries, self.mongo, self.authors, self.mirador)
 
     def get_db(self):
         return self.mongo

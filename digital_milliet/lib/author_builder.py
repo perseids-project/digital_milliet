@@ -11,7 +11,7 @@ class AuthorBuilder(object):
     """ Provides methods for building new Author records in the database
     """
 
-    def __init__(self, db=None, catalog=None, collection_name="annotation"):
+    def __init__(self, db=None, catalog=None, collection_name="annotation", app=None):
         """ Constructor
 
         :param db: Mongo Db Handle
@@ -22,6 +22,9 @@ class AuthorBuilder(object):
         self.mongo = db
         self.catalog = catalog
         self.__collection_name__ = collection_name
+        self.app = app
+        if app and "AUTHORS_COLLECTION" in self.app.config:
+            self.__collection_name__ = self.app.config["AUTHORS_COLLECTION"]
 
     @property
     def collection(self):

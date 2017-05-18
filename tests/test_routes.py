@@ -94,7 +94,7 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         self.assertIn("/commentary/123", rv.location)
 
         with self.app.app_context():
-            rec, auth = self.dm.parser.get_milliet("123")
+            rec, auth = self.dm.commentaries.get_milliet("123")
         self.assertEqual(rec['creator']['@id'], "http://sosol.perseids.org/sosol/User/MyTestUser")
         self.assertEqual(rec['creator']['name'], "Test User")
         self.assertCountEqual(
@@ -213,7 +213,7 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         self.update_and_assert(self.make_update_data(mongo_id=m, t2_text="Hello there", lang2="fra"))
         # TODO : This should be changed when author are moved to their own collection
         with self.app.app_context():
-            author = self.dm.mongo.db.annotation.find_one_or_404({"cts_id": "tlg0032"})
+            author = self.dm.authors.get_author("tlg0032")
             self.assertCountEqual(
                 author["works"][0]["millnums"], [['999', '3.10.1-3.10.5'], ['261', '3.10.1-3.10.5']],
                 "There should be no passage duplication"
@@ -241,7 +241,7 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         rv = self.client.post('/edit/save_edit', data=submit_data, follow_redirects=True)
         self.assertIn('Edit successfully saved',rv.data.decode(),"Missing success message")
         with self.app.app_context():
-            rec,auth = self.dm.parser.get_milliet("999")
+            rec,auth = self.dm.commentaries.get_milliet("999")
         self.assertEqual(rec['t1_text'],"some new translation text")
 
     def test_create_annotation(self):
@@ -393,7 +393,7 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         :return: Milliet Record
         """
         with self.app.app_context():
-            rec, auth = self.dm.parser.get_milliet(milliet_id)
+            rec, auth = self.dm.commentaries.get_milliet(milliet_id)
         return rec
 
     def insertAnnotation(self):

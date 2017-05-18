@@ -28,7 +28,7 @@ class TestDb(DigitalMillietTestCase):
             lang_t2 = "fra"
         )
         with self.app.test_request_context():
-          added = self.dm.parser.create_commentary(submit_data)
+          added = self.dm.commentaries.create_commentary(submit_data)
         self.assertIsNone(added,"Should not have added a new record")
 
     def test_save_from_form_succeeds_new(self):
@@ -50,7 +50,7 @@ class TestDb(DigitalMillietTestCase):
             lang_t2 = "fra",
         )
         with self.app.test_request_context():
-          added = self.dm.parser.create_commentary(submit_data)
+          added = self.dm.commentaries.create_commentary(submit_data)
         self.assertIsNotNone(added, "Should not have added a new record")
         self.assertEqual("111", added, "Unexpected response from save")
 
@@ -76,21 +76,21 @@ class TestDb(DigitalMillietTestCase):
             lang2 = "fra",
         )
         with self.app.app_context():
-            added = self.dm.parser.update_commentary(submit_data)
-        self.assertIsNotNone(added,"Should not have added a new record")
+            added = self.dm.commentaries.update_commentary(submit_data)
+        self.assertIsNotNone(added, "Should not have added a new record")
 
     def test_validate_annotation(self):
         file = os.path.join(os.path.dirname(__file__), 'annotationtestfixtures.yml')
         with open(file, 'r') as (stream):
             data = yaml.load(stream)
-        self.assertTrue(self.dm.parser.validate_annotation(data['valid']),"Should be a valid annotation")
+        self.assertTrue(self.dm.commentaries.validate_annotation(data['valid']),"Should be a valid annotation")
         with self.assertRaises(ValueError) as context:
-            self.dm.parser.validate_annotation(data['invalid_target'])
+            self.dm.commentaries.validate_annotation(data['invalid_target'])
             self.assertTrue('Invalid commentary target') in context.exception
         with self.assertRaises(ValueError) as context:
-            self.dm.parser.validate_annotation(data['invalid_translation1_body_uri'])
+            self.dm.commentaries.validate_annotation(data['invalid_translation1_body_uri'])
             self.assertTrue('Invalid translation 1 uri') in context.exception
         with self.assertRaises(ValueError) as context:
-            self.dm.parser.validate_annotation(data['invalid_translation2_body_uri'])
+            self.dm.commentaries.validate_annotation(data['invalid_translation2_body_uri'])
             self.assertTrue('Invalid translation 2 uri') in context.exception
 

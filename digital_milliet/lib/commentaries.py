@@ -9,19 +9,19 @@ from MyCapytain.common.reference import URN
 class CommentaryHandler(object):
     """ Parses data for retrieval/storage to/from the database
     """
-    def __init__(self, db=None, builder=None, config=None, auth=None):
+    def __init__(self, db=None, authors=None, config=None, auth=None):
         """ CommentaryHandler object
 
         :param db: Mongo Db Handle
         :type db: PyMongo
-        :param builder:  helper for building new Author records
-        :type builder: AuthorBuilder
+        :param authors:  helper for building new Author records
+        :type authors: AuthorBuilder
         :param config: configuration dictionary
         :type config: dict
         """
 
         self.mongo = db
-        self.author_builder = builder
+        self.author_builder = authors
         self.config = config
         self.auth = auth
 
@@ -307,40 +307,39 @@ class CommentaryHandler(object):
 
         return body
 
-    def get_milliet(self, milliet_id):
+    def get_milliet(self, milliet_id, simplify=True):
         """Get the first set of annotations that target the supplied Milliet Number
 
         :param milliet_id:  Milliet Number
         :type milnum: string
+        :param simplify: If set to True, simplify for the view
+        :type simplify: bool
         :return: Tuple where first element is the set of annotations and the second the author informations
         :rtype: (dict, dict)
 
         :raises 404 Not Found Exception: if the annotation is not found
         """
         obj = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id": self.format_uri(milliet_id, 'c1')})
+        if simplify is False:
+            del obj['_id']
+            return obj
         parsed_obj = self.simplify_milliet(obj)
         parsed_obj["millnum"] = milliet_id
-        info = self.mongo.db.annotation.find_one({
-            'works.millnums': {
-                '$elemMatch': {
-                    '$elemMatch': {
-                        '$in': [milliet_id]
-                    }
-                }
-            }
-        })
-        auth_info = {}
-        if info is None:
-            auth_info['auth'] = ""
-            auth_info['work'] = ""
-            auth_info['passage'] = ""
-        else:
-            auth_info['auth'] = info['name']
-            for w in info['works']:
+
+        auth_info = {
+            "auth": "",
+            "work": "",
+            "passage": ""
+        }
+        for author in self.author_builder.search(query=milliet_id, milliet_id=True):
+            auth_info['auth'] = author['name']
+            for w in author['works']:
                 for tup in w['millnums']:
                     if milliet_id in tup:
                         auth_info['work'] = w['title']
                         auth_info['passage'] = tup[1]
+            break
+
         return parsed_obj, auth_info
 
     def simplify_milliet(self, annotation_set):
@@ -508,7 +507,7 @@ class CommentaryHandler(object):
         """
         if annotation_dict is None:
             annotation_dict = {}
-        contributors = annotation_dict.setdefault('contributor',[])
+        contributors = annotation_dict.setdefault('contributor', [])
         person = self.format_person_from_authentificated_user()
         if person:
             found = False
@@ -519,3 +518,12 @@ class CommentaryHandler(object):
             if not found:
                 if 'creator' not in annotation_dict or annotation_dict['creator']['@id'] != person['@id']:
                     contributors.append(person)
+
+    def get_milliet_identifier_list(self):
+        """ List all known milliet numbers
+
+        :return: List of Milliet Numbers and their commentary ID ?
+        :rtype: tuple
+        """
+        comm_list = self.mongo.db.annotation.find({"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
+        return self.retrieve_millietId_in_commentaries(comm_list)

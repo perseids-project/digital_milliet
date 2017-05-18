@@ -1,16 +1,26 @@
-import json
-
 from digital_milliet.lib.oauth import OAuthHelper
-from flask import render_template, request, jsonify, redirect, session, flash, url_for
+from flask import render_template, request, redirect, session, flash
 
 
 class Views(object):
+    def __init__(self, app=None, commentaries=None, db=None, authors=None, mirador=None):
+        """ Main view system
 
-    def __init__(self, app=None, parser=None, db=None, builder=None, mirador=None):
+        :param app: Flask APP
+        :type app: Flask
+        :param commentaries: Commentary Component
+        :type commentaries: CommentaryHandler
+        :param db: Mongo Data Resolver
+        :type db: PyMongo
+        :param authors: Author Component
+        :type authors: AuthorBuilder
+        :param mirador: Mirador Component
+        :type mirador: Mirador
+        """
         self.app = app
-        self.parser = parser
+        self.commentaries = commentaries
         self.mongo = db
-        self.builder = builder
+        self.authors = authors
         self.mirador = mirador
         app.add_url_rule('/', view_func=self.index)
         app.add_url_rule('/index', view_func=self.index)
@@ -37,10 +47,9 @@ class Views(object):
         res = None
         if query:
             if request.args.get("in") == "Author":
-                res = self.mongo.db.annotation.find({"name": query})
+                res = self.authors.search(query=query, name=True)
             else:
-                res = self.mongo.db.annotation.find({"works.title": query})
-
+                res = self.authors.search(query=query, works=True)
             if res.count() == 0:
                 res = None
 
@@ -49,15 +58,14 @@ class Views(object):
     def commentary(self):
         """ List available commentaries and Milliet entries
         """
-        comm_list = self.mongo.db.annotation.find({"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
-        auth_list = self.mongo.db.annotation.find({"cts_id": {'$exists': 1}}).sort([("name", 1)])
-        millnum_list = self.parser.retrieve_millietId_in_commentaries(comm_list)
+        millnum_list = self.commentaries.get_milliet_identifier_list()
+        auth_list = self.authors.author_list()
         return render_template('commentary/list.html', millnum_list=millnum_list, auth_list=auth_list)
 
     def millnum(self, millnum):
         """ Read a Milliet entry
         """
-        parsed_obj, auth_info = self.parser.get_milliet(millnum)
+        parsed_obj, auth_info = self.commentaries.get_milliet(millnum)
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
 
@@ -67,7 +75,7 @@ class Views(object):
     def edit(self, millnum):
         """ Edit the Milliet identified by millnum
         """
-        parsed_obj, auth_info = self.parser.get_milliet(millnum)
+        parsed_obj, auth_info = self.commentaries.get_milliet(millnum)
 
         return render_template('commentary/edit.html', millnum=millnum, obj=parsed_obj)
 
@@ -79,11 +87,11 @@ class Views(object):
         if "iiif[]" in form:
             form["iiif"] = request.form.getlist("iiif[]")
             form["iiif_publisher"] = request.form.getlist("iiif_publisher[]")
-        saved = self.parser.update_commentary(form)
+        saved = self.commentaries.update_commentary(form)
         if saved:
-            flash('Edit successfully saved','success')
+            flash('Edit successfully saved', 'success')
         else:
-            flash('Error!','danger')
+            flash('Error!', 'danger')
 
         return redirect('commentary')
 
@@ -91,12 +99,11 @@ class Views(object):
     def create(self):
         """ Create a new entry
         """
-
         data = request.form.to_dict()
         if "iiif[]" in data:
             data["iiif"] = request.form.getlist("iiif[]")
             data["iiif_publisher"] = request.form.getlist("iiif_publisher[]")
-        millnum = self.parser.create_commentary(data)
+        millnum = self.commentaries.create_commentary(data)
         if millnum is not None:
             flash('Annotation successfully created!','success')
             return redirect('commentary/' + str(millnum))
@@ -107,10 +114,7 @@ class Views(object):
     def api_data_get(self, millnum):
         """ Read a Milliet entry as a JSON Bag
         """
-        res = self.mongo.db.annotation.find_one_or_404(
-            {"commentary.hasBody.@id": "http://perseids.org/collections/urn:cite:perseus:digmil."+millnum+".c1"}
-        )
-        del res['_id']
+        res = self.commentaries.get_milliet(milliet_id=millnum, simplify=False)
         res["annotations"] = self.mirador.from_collection(millnum)
         return self.mirador.dump(res)
 

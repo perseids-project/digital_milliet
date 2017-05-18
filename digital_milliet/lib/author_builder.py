@@ -177,3 +177,33 @@ class AuthorBuilder(object):
             except:
                 pass
         return sorted(millnum_list, key=alphanum_key)
+
+    def author_list(self):
+        """ Get a list of authors
+
+        :return: List of authors record
+        """
+        return self.collection.find({"cts_id": {'$exists': 1}}).sort([("name", 1)])
+
+    def search(self, query, name=None, works=None, milliet_id=None):
+        """ Search authors record (Filters are exclusive)
+
+        :param query: String to search
+        :param name: Search in Name
+        :param works: Search in Works
+        :return: List of matching records
+        """
+        if name is not None:
+            return self.collection.find({"name": query})
+        if works is not None:
+            return self.collection.find({"works.title": query})
+        if milliet_id is not None:
+            return self.collection.find({
+                'works.millnums': {
+                    '$elemMatch': {
+                        '$elemMatch': {
+                            '$in': [query]
+                        }
+                    }
+                }
+            })

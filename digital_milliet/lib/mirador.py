@@ -11,7 +11,7 @@ class Mirador(object):
     """ Parses data for retrieval/storage to/from the database
     """
     def __init__(self, db, app, parser):
-        """ CommentaryHandler object
+        """ Mirador object
 
         :param db: Mongo Db Handle
         :type db: PyMongo
@@ -83,6 +83,9 @@ class Mirador(object):
         :return: Simpler Annotation
         """
         del oAnnotation["_id"]
+        # the dctypes:Collection resource was added to link the IIIF annotation back to the original DM commentary
+        # this is an extension to the IIIF annotation format that breaks the mirador viewer so we take it out before
+        # displaying
         oAnnotation["resource"] = [res for res in oAnnotation["resource"] if res["@type"] != "dctypes:Collection"]
         return oAnnotation
 

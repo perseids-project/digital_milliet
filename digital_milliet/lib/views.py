@@ -115,7 +115,7 @@ class Views(object):
         """ Read a Milliet entry as a JSON Bag
         """
         res = self.commentaries.get_milliet(milliet_id=millnum, simplify=False)
-        res["annotations"] = self.mirador.from_collection(millnum)
+        res["iiif_annotations"] = self.mirador.from_collection(millnum)
         return self.mirador.dump(res)
 
     @OAuthHelper.oauth_required

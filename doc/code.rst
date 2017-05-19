@@ -1,4 +1,4 @@
-Digital Milliet Modules
+Modules
 #######################
 
 .. automodule:: digital_milliet.lib.views

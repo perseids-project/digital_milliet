@@ -6,6 +6,8 @@ from unittest import TestCase
 from digital_milliet.digital_milliet import DigitalMilliet
 from tests.test_dm import DigitalMillietTestCase
 from flask import Flask
+import werkzeug
+
 
 class TestDb(DigitalMillietTestCase):
 
@@ -93,4 +95,14 @@ class TestDb(DigitalMillietTestCase):
         with self.assertRaises(ValueError) as context:
             self.dm.commentaries.validate_annotation(data['invalid_translation2_body_uri'])
             self.assertTrue('Invalid translation 2 uri') in context.exception
+
+
+    def test_remove_it(self):
+        with self.app.app_context():
+          self.assertEqual(1,self.dm.authors.search(query='261', milliet_id=True).count())
+          self.assertIsNotNone(self.dm.commentaries.get_milliet('261'))
+          self.assertEqual(2,self.dm.commentaries.remove_milliet('261'))
+          self.assertEqual(0,self.dm.authors.search(query='261', milliet_id=True).count())
+          with self.assertRaises(werkzeug.exceptions.NotFound):
+            self.assertIsNone(self.dm.commentaries.get_milliet('261'))
 

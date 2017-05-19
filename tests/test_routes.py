@@ -56,6 +56,14 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         rv = self.client.get('/edit/261').data.decode()
         self.assertIn('<h2>Edit Commentary :  261</h2>', rv, "Not the commentary page")
 
+    def test_delete_with_session(self):
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+        rv = self.client.post('/delete', data = dict(millnum='261'), follow_redirects=True)
+        self.assertIn('Record for 261 removed.',rv.data.decode(),"Missing success message")
+        rv = self.client.post('/delete', data = dict(millnum='261'), follow_redirects=True)
+        self.assertIn('Error removing record for 261.',rv.data.decode(),"Missing failure message")
+
     def test_create_no_session(self):
         rv = self.client.post('/create', data = dict(l1text='New text'))
         self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2F',rv.location, "Doesn't redirect to index")

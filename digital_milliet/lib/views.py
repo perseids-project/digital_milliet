@@ -30,6 +30,7 @@ class Views(object):
         app.add_url_rule('/commentary/<millnum>', view_func=self.millnum)
         app.add_url_rule('/edit/<millnum>', view_func=self.edit)
         app.add_url_rule('/edit/save_edit', view_func=self.save_edit, methods=['POST'])
+        app.add_url_rule('/delete', view_func=self.delete, methods=['POST'])
         app.add_url_rule('/create', view_func=self.create, methods=['POST'])
         app.add_url_rule('/api/commentary/<millnum>', view_func=self.api_data_get, methods=['GET'])
         app.add_url_rule('/new', view_func=self.new, methods=['GET', 'POST'], strict_slashes=False)
@@ -70,6 +71,16 @@ class Views(object):
             session['cts_uri'] = parsed_obj['orig_uri']
 
         return render_template('commentary/commentary.html', obj=parsed_obj, info=auth_info, millnum=millnum)
+
+    @OAuthHelper.oauth_required
+    def delete(self):
+        millnum = request.form['millnum']
+        removed = self.commentaries.remove_milliet(millnum)
+        if removed > 0:
+          flash('Record for ' + millnum + ' removed.','success')
+        else:
+          flash('Error removing record for ' + millnum + '.','danger')
+        return redirect('commentary')
 
     @OAuthHelper.oauth_required
     def edit(self, millnum):

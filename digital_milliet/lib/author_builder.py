@@ -57,6 +57,25 @@ class AuthorBuilder(object):
         """
         return self.collection.update({'cts_id': cts_id}, author_record)
 
+    def remove_milliet_id_from_author(self,millnum):
+        """ Remove  milliet number mapping from an author record
+
+        :param millnum: the milliet number to remove
+        :type millnum: string
+        :return: Number of mappings removed
+
+        """
+        removed = 0
+        for author in self.search(query=millnum, milliet_id=True):
+            for work in author['works']:
+                for tup in work['millnums']:
+                    if millnum in tup:
+                        work['millnums'].pop(work['millnums'].index(tup))
+                        removed = removed + 1
+            self.collection.update({'_id' : author['_id']}, author)
+        return removed
+
+
     def author_db_build(self, data_dict):
         """ Adds or Updates Author Records in the Annotation Database
 
@@ -118,7 +137,7 @@ class AuthorBuilder(object):
             pass
 
     def make_author(self, resp):
-        """ Make an Author db record from a catalog record and insert it in the database
+        """" Make an Author db record from a catalog record and insert it in the database
 
         :param resp: the response from teh catalog lookup
         :type resp: dict

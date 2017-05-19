@@ -97,9 +97,21 @@
                     {{ iiif(row_id="original-iiif-input") }}
                 {% endif %}
             </fieldset>
-        <input type="submit" class="btn btn-primary" value="Save Changes" style="float: right; width:200px;"/>
-        
-      </form> 
+        <div class="row">
+            <div class="col-md-12">
+                <input type="submit" class="btn btn-primary" value="Save Changes" style="float:right; width:200px;"/>
+            </div>
+        </div>
+      </form>
  
+      <form id='input_form' action="/delete" method="POST" onsubmit="return confirm('Are you sure?');">
+          <div class="row">
+              <div class="col-md-12">
+                <input type="hidden" name="millnum" value="{{ millnum }}"/>
+                <input type="submit" class="btn btn-primary" value="Delete Record" style="float:right; width:200px;"/>
+              </div>
+          </div>
+      </form>
+
   </div>
 {% endblock %}

@@ -1,0 +1,12 @@
+<%- | String[1] $app_root | -%>
+import os
+import sys
+
+sys.path.insert(0,'<%= $app_root %>')
+print(sys.path)
+
+from flask import Flask
+from digital_milliet.digital_milliet import DigitalMilliet
+
+application = Flask("digital_milliet")
+dm = DigitalMilliet(application,config_file="config.cfg")

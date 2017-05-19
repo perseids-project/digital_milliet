@@ -342,6 +342,26 @@ class CommentaryHandler(object):
 
         return parsed_obj, auth_info
 
+    def remove_milliet(self, milliet_id):
+        """Remove the annotation set that targets the supplied Milliet Number
+
+        :param millnum:  Milliet Number
+        :type milnum: string
+
+        :return: the number of records removed
+        :rtype: int
+
+        :raises 404 Not Found Exception: if the annotation is not found
+        """
+        removed = self.mongo.db.annotation.delete_many(
+            {"commentary.hasBody.@id": self.format_uri(milliet_id, 'c1')})
+        author_removed = 0
+
+        if removed.deleted_count > 0:
+            author_removed = self.author_builder.remove_milliet_id_from_author(milliet_id)
+
+        return removed.deleted_count + author_removed
+
     def simplify_milliet(self, annotation_set):
         """ Parse a db record into a dict setup for views
 

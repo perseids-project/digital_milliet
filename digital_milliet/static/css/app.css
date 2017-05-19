@@ -90,3 +90,6 @@ body {
 .provenance ul li ul li {
   font-style: italic;
 }
+
+fieldset { margin:1em 0;}
+fieldset legend { color: #1344ff;}

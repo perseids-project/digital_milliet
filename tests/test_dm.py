@@ -5,6 +5,7 @@ from unittest import TestCase
 from digital_milliet.digital_milliet import DigitalMilliet
 from flask import Flask
 
+
 class DigitalMillietTestCase(TestCase):
 
     def make_dm(self, app, **kwargs):
@@ -37,6 +38,7 @@ class DigitalMillietTestCase(TestCase):
     def teardownDb(self):
         with self.app.app_context():
             self.mongo.db.annotation.drop()
+            self.mongo.db.mirador.drop()
 
     def tearDown(self):
         self.teardownDb()

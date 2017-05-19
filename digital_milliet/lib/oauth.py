@@ -2,6 +2,7 @@ from flask_oauthlib.client import OAuth
 from flask import redirect, url_for, session, request, jsonify, render_template
 from functools import wraps
 
+
 class OAuthHelper(object):
     """ Helper class providing OAuth2 functionality to the application
     Implements flask_oauthlib.client
@@ -43,7 +44,7 @@ class OAuthHelper(object):
 
         :return: Redirects to OAuth Provider Login URL
         """
-        session['next'] = request.args.get('next','')
+        session['next'] = request.args.get('next', '')
         # overrides the oauth functionality for ease of development
         # this override should not be used in production
         if self.auth_override is not None:
@@ -55,7 +56,6 @@ class OAuthHelper(object):
         if callback_url is None:
             callback_url = url_for('.r_oauth_authorized', _external=True)
         return self.authobj.authorize(callback=callback_url)
-
 
     def r_oauth_authorized(self):
         """ Route for OAuth2 Authorization callback
@@ -83,7 +83,8 @@ class OAuthHelper(object):
         else:
             return render_template('authorized.html', username=session['oauth_user_name'])
 
-    def r_oauth_logout(self):
+    @staticmethod
+    def r_oauth_logout():
         """ Route to clear the oauth data from the session
 
         :param next: next url
@@ -99,7 +100,8 @@ class OAuthHelper(object):
         else:
             return render_template('index.html')
 
-    def oauth_token(self,token=None):
+    @staticmethod
+    def oauth_token(token=None):
         """ tokengetter function
 
         :param token: the Oauth token
@@ -110,14 +112,15 @@ class OAuthHelper(object):
         """
         return session.get('oauth_token')
 
-    def current_user(self):
+    @staticmethod
+    def current_user():
         """ Gets the current user from the session
 
         :return: { uri => <uri>, name => <name> }
         :rtype: dict
         """
         if session and session['oauth_user_uri']:
-            user = { 'uri': session['oauth_user_uri'] }
+            user = {'uri': session['oauth_user_uri']}
             if 'oauth_user_name' in session:
                 user['name'] = session['oauth_user_name']
             else:
@@ -126,7 +129,7 @@ class OAuthHelper(object):
         else:
             return None
 
-    def user_in_community(self,user_communities=[]):
+    def user_in_community(self, user_communities=None):
         """ Checks to see if the user is the authorized community for editing
 
         This is a hack specific to the Perseids OAuth provider used as a way
@@ -137,11 +140,15 @@ class OAuthHelper(object):
                  False if the user name is not listed
         :rtype: bool
         """
+
         if self.enforce_community_id:
+            if user_communities is None:
+                user_communities = []
             return user_communities.__contains__(self.enforce_community_id)
         else:
             return True
 
+    @staticmethod
     def oauth_required(f):
         """ decorator to add to a view to require an oauth user
 
@@ -155,7 +162,7 @@ class OAuthHelper(object):
                     # we should really handle redirects on POSTS too but they should only happen if the session
                     # timed out in between requesting a page and submitting it so to keep it simple just redirect
                     # POSTs to the index page
-                    next = url_for('.index',_external=True)
+                    next = url_for('.index', _external=True)
                 else:
                     next = request.url
                 return redirect(url_for('.r_oauth_login', next=next, _external=True))

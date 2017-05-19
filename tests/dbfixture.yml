@@ -52,14 +52,6 @@
         language: fra
       hasTarget: urn:cts:greekLit:tlg0032.tlg002.perseus-grc1:3.10.1-3.10.5
       motivatedBy: oa:linking
-  - cts_id: tlg0032
-    name: Xenophon
-    works:
-    - cts_id: urn:cts:greekLit:tlg0032.tlg002
-      millnums:
-      - - '261'
-        - 3.10.1-3.10.5
-      title: Memorabilia
   - bibliography:
     - "@context": http://www.w3.org/ns/oa-context-20130208.json
       "@id": digmilann.-99999
@@ -120,5 +112,7 @@
     - cts_id: urn:cts:greekLit:tlg0032.tlg002
       millnums:
       - - '999'
+        - 3.10.1-3.10.5
+      - - '261'
         - 3.10.1-3.10.5
       title: Memorabilia

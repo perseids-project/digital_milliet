@@ -1,0 +1,232 @@
+{% macro markdown_menu(target) -%}
+    <div class='markdownify-menu btn-group btn-group' data-target='{{ target }}' style="margin-bottom: 1em;">
+      <a class='btn--insert btn btn-default' aria-label="Italic" data-prefix='*' data-suffix='*' href='javascript:void(0)'>&nbsp;<span class="fa fa-italic"></span></a>
+      <a class='btn--insert btn btn-default' aria-label="Bold" data-prefix='**' data-suffix='**' href='javascript:void(0)'>&nbsp;<span class="fa fa-bold"></span></a>
+      <a class='btn--insert btn btn-default' aria-label="Header" data-prefix='# ' href='javascript:void(0)'>&nbsp;<i class="fa fa-header"></i></a>
+      <a class='btn--insert btn btn-default' aria-label="Quote" data-prefix='> ' href='javascript:void(0)'>&nbsp;<i class="fa fa-quote-right"></i></a>
+      <a class='btn--insert btn btn-default' aria-label="List" data-prefix='* ' href='javascript:void(0)'>&nbsp;<i class="fa fa-list-ul"></i></a>
+      <a class='btn--insert btn btn-default' aria-label="Ordered List" data-prefix='1. ' href='javascript:void(0)'>&nbsp;<i class="fa fa-list-ol"></i></a>
+      <a class='btn--insert btn btn-default' aria-label="Link" data-type='link' href='javascript:void(0)'>&nbsp;<i class="fa fa-link" aria-hidden="true"></i></a>
+    </div>
+{%- endmacro %}
+
+{% macro translation(tid, obj) -%}
+    <fieldset class="row">
+      <legend>{{ 'Translation : ' + tid }}</legend>
+
+      {% if 't'+tid+'_uri' in obj %}
+          <div class="col-md-12">
+              <input class="form-control" name="t{{ tid }}_uri" type='text' value="{{obj['t'+tid+'_uri']}}" size="60" pattern="urn:cts:.+?:.+\..+\.(.+):[^\-]+(-[^-]+)?" title="Must be a valid CTS URN" />
+          </div>
+      {% else %}
+      <div class="col-md-4">
+          <select name="lang{{ tid }}" id="lang{{ tid }}" class="form-control">
+            <option value="eng" {% if obj['t'+tid+'_lang'] == 'eng' %} selected='selected' {% endif %}>{{ ('English') }}</option>
+            <option value="fra" {% if obj['t'+tid+'_lang'] == 'fra' %} selected='selected' {% endif %}>{{ ('French') }}</option>
+          </select>
+      </div>
+      <div class="col-md-8">
+          <textarea class="form-control" name="t{{ tid }}_text" rows="10" cols="80">{{ obj['t'+tid+'_text'] }}</textarea>
+      </div>
+      {% endif %}
+    </fieldset>
+{%- endmacro %}
+
+{% macro cts_text_selector(field_id, lang="") -%}
+    <div class="subfield">
+          <input placeholder="{{ _('URI Identifer for this text. If a URL, text will be loaded from there. Plain text only supported.') }}"
+                 type="url" id="{{ field_id }}uri" name="{{ field_id }}uri" size="100" class="texturi" data-lnum="{{ field_id }}" data-lang="{{ lang }}" />
+          <div class="worklist"><a target="_blank" href="{{cts_browse}}">{{ _('All available works') }}</a></div>
+    </div>
+    <div class="ownuri subfield">
+        <label for="own_uri_{{ field_id }}">{{ _('Or enter your own text URI:') }}</label>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="{{ _('Or enter your own text URI:') }}" id="own_uri_{{ field_id }}" name="own_uri_{{ field_id }}" />
+            <span class="input-group-btn">
+                <a href="#" data-lnum="{{ field_id }}" class="own_uri_trigger btn btn-info">{{ _('Select') }}</a>
+            </span>
+        </div>
+        <div class="alert" role="alert" id="own_uri_{{ field_id }}_error" style="display:none;">{{ _('Invalid entry') }}</div>
+    </div>
+{% endmacro %}
+
+
+{% macro lang_choice(id) -%}
+    <div class="form-group row">
+        <label for="select_{{id}}" class="col-sm-6 control-label">{{ _('Language:') }}</label>
+        <div class="col-sm-4">
+        <select name="select_{{id}}" id="select_{{id}}" class="form-control">
+          <option value="eng">{{ _('English') }}</option>
+          <option value="fra">{{ _('French') }}</option>
+          <option value="lat">{{ _('Latin') }}</option>
+          <option value="grc">{{ _('Greek (Ancient -1453)') }}</option>
+          <option value="ara">{{ _('Arabic') }}</option>
+          <option value="zh">{{ _('Chinese') }}</option>
+          <option value="afr">{{ _('Afrikaans') }}</option>
+          <option value="akk">{{ _('Akkadian') }}</option>
+          <option value="sqi">{{ _('Albanian') }}</option>
+          <option value="amh">{{ _('Amharic') }}</option>
+          <option value="arg">{{ _('Aragonese') }}</option>
+          <option value="arc">{{ _('Aramaic (Imperial- 700 BC-300 BC)') }}</option>
+          <option value="sam">{{ _('Aramaic (Samaritan)') }}</option>
+          <option value="hye">{{ _('Armenian') }}</option>
+          <option value="ast">{{ _('Asturian (Bable, Leonese)') }}</option>
+          <option value="ave">{{ _('Avestan') }}</option>
+          <option value="aze">{{ _('Azerbaijani') }}</option>
+          <option value="eus">{{ _('Basque') }}</option>
+          <option value="ben">{{ _('Bengali') }}</option>
+          <option value="ber">{{ _('Berber') }}</option>
+          <option value="bos">{{ _('Bosnian') }}</option>
+          <option value="bre">{{ _('Breton') }}</option>
+          <option value="bul">{{ _('Bulgarian') }}</option>
+          <option value="chu">{{ _('Bulgarian (Old, Old Church Slavonic)') }}</option>
+          <option value="mya">{{ _('Burmese') }}</option>
+          <option value="cat">{{ _('Catalan') }}</option>
+          <option value="chg">{{ _('Chagatai') }}</option>
+          <option value="cop">{{ _('Coptic') }}</option>
+          <option value="cor">{{ _('Cornish') }}</option>
+          <option value="hrv">{{ _('Croatian') }}</option>
+          <option value="ces">{{ _('Czech') }}</option>
+          <option value="dan">{{ _('Danish') }}</option>
+          <option value="nld">{{ _('Dutch (Flemish)') }}</option>
+          <option value="dum">{{ _('Dutch (Middle, 1050-1350)') }}</option>
+          <option value="egy">{{ _('Egyptian (Ancient)') }}</option>
+          <option value="elx">{{ _('Elamite') }}</option>
+          <option value="enm">{{ _('English (Middle, 1100-1500)') }}</option>
+          <option value="ang">{{ _('English (Old, 450-1100)') }}</option>
+          <option value="est">{{ _('Estonian') }}</option>
+          <option value="fin">{{ _('Finnish') }}</option>
+          <option value="frm">{{ _('French (Middle, 1400-1600)') }}</option>
+          <option value="fro">{{ _('French (Old, 842c. 1400)') }}</option>
+          <option value="gez">{{ _('Ge\'ez') }}</option>
+          <option value="kat">{{ _('Georgian') }}</option>
+          <option value="nds">{{ _('German (Low, Low Saxon)') }}</option>
+          <option value="gmh">{{ _('German (Middle-High, 1050-1500)') }}</option>
+          <option value="goh">{{ _('German (Old-High, 750-1050)') }}</option>
+          <option value="deu">{{ _('German') }}</option>
+          <option value="got">{{ _('Gothic') }}</option>
+          <option value="ell">{{ _('Greek (Modern, 1453-)') }}</option>
+          <option value="guj">{{ _('Gujarati') }}</option>
+          <option value="heb">{{ _('Hebrew') }}</option>
+          <option value="hin">{{ _('Hindi') }}</option>
+          <option value="hit">{{ _('Hittite') }}</option>
+          <option value="hun">{{ _('Hungarian') }}</option>
+          <option value="isl">{{ _('Icelandic') }}</option>
+          <option value="ind">{{ _('Indonesian') }}</option>
+          <option value="gle">{{ _('Irish (Modern)') }}</option>
+          <option value="mga">{{ _('Irish (Middle 900-1200)') }}</option>
+          <option value="sga">{{ _('Irish (Old, to 900)') }}</option>
+          <option value="ita">{{ _('Italian') }}</option>
+          <option value="jpn">{{ _('Japanese') }}</option>
+          <option value="jav">{{ _('Javanese') }}</option>
+          <option value="kan">{{ _('Kannada') }}</option>
+          <option value="khm">{{ _('Khmer (Central)') }}</option>
+          <option value="kor">{{ _('Korean') }}</option>
+          <option value="kur">{{ _('Kurdish') }}</option>
+          <option value="lad">{{ _('Ladino') }}</option>
+          <option value="lit">{{ _('Lithuanian') }}</option>
+          <option value="msa">{{ _('Malay') }}</option>
+          <option value="mar">{{ _('Marathi') }}</option>
+          <option value="new">{{ _('Nepal Bhasa (Newari)') }}</option>
+          <option value="nep">{{ _('Nepali') }}</option>
+          <option value="nwc">{{ _('Newari (Classical)') }}</option>
+          <option value="non">{{ _('Norse (Old)') }}</option>
+          <option value="nor">{{ _('Norwegian') }}</option>
+          <option value="nob">{{ _('Norwegian (Bokmål)') }}</option>
+          <option value="nno">{{ _('Norwegian (Nynorsk)') }}</option>
+          <option value="oss">{{ _('Ossetian') }}</option>
+          <option value="pal">{{ _('Pahlavi (Middle Persian)') }}</option>
+          <option value="pli">{{ _('Pali') }}</option>
+          <option value="pus">{{ _('Pashto') }}</option>
+          <option value="fas">{{ _('Persian (Farsi)') }}</option>
+          <option value="peo">{{ _('Persian (Old, 600-400 BC)') }}</option>
+          <option value="phn">{{ _('Phoenician') }}</option>
+          <option value="pol">{{ _('Polish') }}</option>
+          <option value="por">{{ _('Portuguese') }}</option>
+          <option value="pra">{{ _('Prakrit') }}</option>
+          <option value="pro">{{ _('Provençal (Occitan, -1500)') }}</option>
+          <option value="pan">{{ _('Punjabi (Panjabi)') }}</option>
+          <option value="raj">{{ _('Rajasthani') }}</option>
+          <option value="ron">{{ _('Romanian') }}</option>
+          <option value="rom">{{ _('Romany') }}</option>
+          <option value="rus">{{ _('Russian') }}</option>
+          <option value="san">{{ _('Sanskrit') }}</option>
+          <option value="sco">{{ _('Scots') }}</option>
+          <option value="gla">{{ _('Scottish (Gaelic)') }}</option>
+          <option value="srp">{{ _('Serbian') }}</option>
+          <option value="scn">{{ _('Sicilian') }}</option>
+          <option value="snd">{{ _('Sindhi') }}</option>
+          <option value="sin">{{ _('Sinhalese (Sinhala)') }}</option>
+          <option value="slk">{{ _('Slovak') }}</option>
+          <option value="slv">{{ _('Slovenian') }}</option>
+          <option value="sog">{{ _('Sogdian') }}</option>
+          <option value="spa">{{ _('Spanish (Castilian)') }}</option>
+          <option value="sux">{{ _('Sumerian') }}</option>
+          <option value="swa">{{ _('Swahili') }}</option>
+          <option value="swe">{{ _('Swedish') }}</option>
+          <option value="gsw">{{ _('Swiss German (Alsatian)') }}</option>
+          <option value="syc">{{ _('Syriac (Classical)') }}</option>
+          <option value="syr">{{ _('Syriac (Northeastern, Neo-Aramaic)') }}</option>
+          <option value="tgl">{{ _('Tagalog') }}</option>
+          <option value="tgk">{{ _('Tajik') }}</option>
+          <option value="tam">{{ _('Tamil') }}</option>
+          <option value="tat">{{ _('Tatar') }}</option>
+          <option value="tel">{{ _('Telugu') }}</option>
+          <option value="tha">{{ _('Thai') }}</option>
+          <option value="bod">{{ _('Tibetan') }}</option>
+          <option value="tur">{{ _('Turkish (Modern)') }}</option>
+          <option value="ota">{{ _('Turkish (Ottoman, 1500-1928 )') }}</option>
+          <option value="tuk">{{ _('Turkmen') }}</option>
+          <option value="uga">{{ _('Ugaritic') }}</option>
+          <option value="ukr">{{ _('Ukainian') }}</option>
+          <option value="urd">{{ _('Urdu') }}</option>
+          <option value="uzb">{{ _('Uzbek') }}</option>
+          <option value="vie">{{ _('Vietnamese') }}</option>
+          <option value="wln">{{ _('Walloon') }}</option>
+          <option value="cym">{{ _('Welsh') }}</option>
+          <option value="yid">{{ _('Yiddish') }}</option>
+        </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="other_{{id}}" class="col-sm-6 control-label">{{ _('Other*:') }}</label>
+        <div class="col-sm-4"><input class="form-control" type="text" id="other_{{id}}" name="other_{{id}}" size="3"/></div>
+    </div>
+    <div id="advanced-options-{{id}}" class="advanced-options" style="display: none;" data-lnum="{{id}}"></div>
+{%- endmacro %}
+
+{% macro enter_translation(tid, lang, legend, sublegend) -%}
+<fieldset class="row">
+  <legend>{{ _(legend) }}</legend>
+  <input type="hidden" name="lang_{{ tid }}" value="{{ lang }}"/>
+  <input type="hidden" name="{{ tid }}-direction" value="ltr"/>
+  <div>
+      <div class="col-md-6">
+          <em>{{ _(sublegend) }}</em>
+          <div class="textdriver" id="{{ tid }}textdriver" data-lnum="{{ tid }}"></div>
+          {{ cts_text_selector(tid, lang) }}
+      </div>
+      <div class="col-md-6">
+          <div>
+            <textarea class="form-control" id="{{ tid }}text" name="{{ tid }}text" rows="10" cols="80" data-lnum="{{ tid }}"></textarea>
+            <div class="alert" id="{{ tid }}texterror" style="display:none;">{{ _('Invalid entry') }}</div>
+          </div>
+      </div>
+  </div>
+</fieldset>
+{%- endmacro %}
+
+{% macro iiif(locationUri="", publisher="", row_id="") -%}
+<div class="row manifest_input" id="{{ row_id }}">
+    <div class="col-sm-4"><input type="text" name="iiif_publisher[]" class="form-control" placeholder="Publisher" value="{{ publisher }}" /></div>
+    <div class="col-sm-8">
+        <div class="input-group">
+          <input type="url" name="iiif[]" class="form-control" placeholder="Address of IIIF Manifests" value="{{ locationUri }}"/>
+          <div class="input-group-btn">
+              <a class="rem-input btn btn-danger" href="#">&nbsp;<i class="fa fa-minus-square" aria-label="Remove a field"></i>&nbsp;</a>
+              <a class="add-input btn btn-success" href="#">&nbsp;<i class="fa fa-plus-square" aria-label="Add a field"></i>&nbsp;</a>
+          </div>
+        </div>
+    </div>
+</div>
+{%- endmacro %}

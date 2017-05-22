@@ -10,6 +10,7 @@
     "operatingsystemrelease": [ "14.04", "16.04" ]
     }
    ],
+  "source": "https://github.com/perseids-project/digital_millet",
   "dependencies": [
     { "name": "puppetlabs/firewall", "version_requirement": ">= 1.8.0 < 2.0.0" },
     { "name": "puppetlabs/stdlib", "version_requirement": ">= 4.11.0 < 5.0.0" },

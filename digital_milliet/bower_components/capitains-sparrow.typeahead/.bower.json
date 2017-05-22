@@ -1,0 +1,40 @@
+{
+  "name": "capitains-sparrow.typeahead",
+  "version": "0.0.4",
+  "homepage": "https://github.com/Capitains/jQuery.typeahead",
+  "authors": [
+    "Thibault Clerice <leponteineptique@gmail.com>"
+  ],
+  "description": "CTS API abstractions and jQuery plugin",
+  "main": "dist/cts.jquery.typeahead.min.js",
+  "keywords": [
+    "cts"
+  ],
+  "dependencies": {
+    "capitains-sparrow": "~1.2.1",
+    "jquery": "2.1.3",
+    "typeahead.js": "0.10.5",
+    "handlebars": "3.0.0"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "spec",
+    "examples",
+    "doc",
+    "doc_html"
+  ],
+  "_release": "0.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.4",
+    "commit": "4e21d85e97e6d5be5161608bbc1c429b5972b272"
+  },
+  "_source": "https://github.com/Capitains/jQuery.typeahead.git",
+  "_target": "~0.0.3",
+  "_originalSource": "capitains-sparrow.typeahead"
+}

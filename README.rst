@@ -114,10 +114,13 @@ A design for semantic tagging of textual content has not yet been decided upon.
 Workflow
 ********
 
-The primary workflow for entering a new entry in the Digital Milliet is described in the diagram below. Individual
-components of an entry can also be edited or added separately after the initial data entry, via the Edit interface.
+The primary workflow for entering a new entry in the Digital Milliet is described in the diagram below. 
 
 .. image:: https://github.com/perseids-project/digital_milliet/blob/master/doc/digitalmillietnewcommentaryworkflow.png?raw=true
+
+Individual components of an entry can also be edited or added separately after the initial data entry, via the Edit interface.  
+
+Image annotations can be added, edited and deleted directly using the Mirador viewer. 
 
 Authentication and Authorization
 ********************************

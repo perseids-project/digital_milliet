@@ -16,4 +16,6 @@ Defining Digital Milliet Resources in Hiera
   digital_milliet::ssl_private_key: 'full_path_to_ssl_private_key.key'
   digital_milliet::user: 'user_to_own_the_files'
   digital_milliet::backup_dir: 'backup_directory_for_mongo_db'
+  digital_milliet::python_version: '3.5'
+  digital_milliet::python_apache_package: 'libapache2-mod-wsgi-py3'
 ```

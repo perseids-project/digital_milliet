@@ -5,6 +5,8 @@
 .. image:: https://readthedocs.org/projects/pip/badge/?version=latest
    :target: http://digital-milliet.readthedocs.io/en/latest
 
+Full Documentation at http://digital-milliet.readthedocs.io/en/latest/
+
 Overview
 ========
 
@@ -115,7 +117,7 @@ Workflow
 The primary workflow for entering a new entry in the Digital Milliet is described in the diagram below. Individual
 components of an entry can also be edited or added separately after the initial data entry, via the Edit interface.
 
-.. image:: digitalmillietnewcommentaryworkflow.png
+.. image:: https://github.com/perseids-project/digital_milliet/blob/master/doc/digitalmillietnewcommentaryworkflow.png?raw=true
 
 Authentication and Authorization
 ********************************

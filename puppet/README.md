@@ -9,6 +9,7 @@ Defining Digital Milliet Resources in Hiera
   digital_milliet::app_path: '/'
   digital_milliet::vhost: 'digital_milliet.yourdomain.org'
   digital_milliet::app_version: 'master'
+  digital_milliet::config_file: 'full_path_to_digital_milliet_config_file'
   digital_milliet::repo_url: 'https://github.com/perseids-project/digital_milliet'
   digital_milliet::ssl_cert: 'full_path_to_ssl_certificate_file'
   digital_milliet::ssl_chain: 'full_path_to_ssl_keychain_file'

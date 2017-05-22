@@ -1,5 +1,5 @@
 {% extends "base.html"%}
-{% from "commentary/get_text.html" import get_text with context %}
+{% from "browsing_macro.html" import get_people, get_text %}
 {% from "commentary/edit_macro.html" import markdown_menu, translation, iiif %}
 {% block morecss %}
     <link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/font-awesome.min.css')}}" />

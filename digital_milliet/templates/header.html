@@ -1,33 +1,30 @@
-
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
+<nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
    
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-dropdown">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" rel="home" href="{{url_for('index')}}"> <img style="max-height:130px; margin-top:-7px;" src="{{ url_for('static', filename='img/digmilbanner.png')}}"/> </a>
+      <a class="navbar-brand" rel="home" href="{{url_for('index')}}"> <img src="{{ url_for('static', filename='img/digmilbanner.png')}}"/> </a>
     </div>
     
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav nav-tabs navbar-right">
+    <div class="collapse navbar-collapse" id="navbar-dropdown">
+      <ul class="nav navbar-nav navbar-right">
         <li><a href="{{url_for('commentary')}}">Browse</a></li>
         <li><a href="{{url_for('about')}}">About</a></li>
         {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
-          <li class="logout">
-          <a href="{{url_for('r_oauth_logout')}}?next={{ request.url }}">Logout</a>
-          </li>
+          <li class="logout"><a href="{{url_for('r_oauth_logout')}}?next={{ request.url }}">Logout</a></li>
+          <li><a href="{{url_for('new')}}">Add Record</a></li>
         {% else %}
           <li><a href="{{url_for('r_oauth_login')}}?next={{ request.url }}">Login</a></li>
         {% endif %}
          <!-- Should set this elsewhere... -->
-         <li><a href="{{url_for('new')}}">Add Record</a></li>
         <!-- <li><a href="http://digmill.perseus.org/annotation">Add Record</a></li> -->
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -36,9 +33,4 @@
     {% endif %}
 
   </div><!-- /.container-fluid -->
-  <div class="row vertical-center-row">
-    <div class="text-center col-md-4 col-md-offset-4">
-      <h3 class="text-warning">(Site Under Construction)</h3>
-    </div>
-  </div>
 </nav>

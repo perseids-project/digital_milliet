@@ -1,29 +1,22 @@
 {% extends "base.html" %}
-{% import "auth_list.html" as a_list %}
+{% from "browsing_macro.html" import display_auth_list %}
 
+
+{% block title%}| Browse{% endblock %}
 {% block content %}
+<div class='row'>
+	<div class="col-md-6">
+		<h2>Author and Work</h2>
+		{{ display_auth_list(auth_list) }}
+	</div>
 
-<ul id='browse-tabs' class='nav nav-tabs nav-justified' role="tablist">
-	<li role='presentation' class='active'><a href='#author' aria-controls='author' role='tab' data-toggle='tab'>Author and Work</a></li>
-	<li role='presentation'><a href='#millnum' aria-controls='millnum' role='tab' data-toggle='tab'>Milliet Number</a></li>
-</ul>
-
-<div class='tab-content'>
-	<div role='tabpanel' class='tab-pane active' id='author'>
-    {{ a_list.auth_list(auth_list) }}
-  </div>
-
-  <div role='tabpanel' class='tab-pane' id='millnum'>
-    <div>Digital Milliet Entries and Commentary</div>
+	<div class="col-md-6">
+		<h2>Digital Milliet Entries and Commentary</h2>
 		<ul>
 			{% for num in millnum_list %}
-				<li>{{ num }} <a href="commentary/{{ num }}">View</a> <a href="edit/{{ num }}">Edit</a></li>
+				<li>{{ num }} <a href="{{url_for("commentary", millnum=num)}}">View</a> <a href="{{url_for("edit", millnum=num)}}">Edit</a></li>
 			{% endfor %}
 		</ul>
-
-  </div>
-  
+	</div>
 </div>
-
-
 {% endblock %}

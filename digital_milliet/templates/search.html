@@ -1,16 +1,16 @@
 {% extends "base.html" %}
-{% import "auth_list.html" as a_list %}
+{% from "browsing_macro.html" import display_auth_list %}
+
+{% block title %}| Search Results{% endblock %}
 {% block content %}
 	{{ super() }}
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				{% if res %}
-					{{ a_list.auth_list(res) }}
-				{% else %}
-					No Results. <a href="index"> Search again? </a>
-				{% endif %}
-			</div>
+	<div class="row">
+		<div class="col-md-12">
+			{% if res %}
+				{{ display_auth_list(res) }}
+			{% else %}
+				No Results. <a href="index"> Search again? </a>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

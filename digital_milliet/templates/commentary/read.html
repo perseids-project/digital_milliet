@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% from "browsing_macro.html" import get_people, get_text %}
+
+{% block morecss %}
+    <link rel="stylesheet" media="screen" href="{{url_for('static', filename='js/mirador/css/mirador-combined.min.css')}}" />
+    <style type="text/css">
+        .mirador-container *, .mirador-container *::after, .mirador-container *::before {
+            box-sizing: content-box;
+        }
+    </style>
+{% endblock %}
+
+{% block morejavascript %}
+    <script type="text/javascript" src="{{url_for('static', filename='js/commentary.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename='js/mirador/mirador.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename='js/mirador.endpoint.js') }}"></script>
+    <script type="text/javascript">
+        {% if obj["images"]|length %}
+        $(document).ready(function(e) {
+            var manifests = {{ obj["images"]|tojson|safe }};
+            var mirador = Mirador({
+                id: "mirador-container",
+                data: manifests,
+                buildPath: "{{ url_for("static", filename="js/mirador/") }}",
+                windowObjects: $.map(manifests, function(manifest, index) {
+                    return {
+                        loadedManifest: manifest.manifestUri,
+                        viewType: "ImageView",
+                        displayLayout: true,
+                        bottomPanel: true,
+                        sidePanel: false,
+                        showAddFromURLBox: false,
+                        annotationLayer:true
+                    };
+                }),
+                mainMenuSettings: {
+                  //show: true
+                },
+                "annotationEndpoint" : {
+                  "name" : "Digital Milliet Annotations",
+                  "module" : "MillietEndpoint", //e.g. CatchEndpoint
+                  "options" : {
+                    search_uri : function () { return "{{ url_for(".mirador_search", noCollection=True) }}"; },
+                    create_uri : function () { return "{{ url_for(".mirador_create", milliet_number=obj["millnum"]) }}"; },
+                    delete_uri : function () { return "{{ url_for(".mirador_delete") }}"; },
+                    update_uri : function () { return "{{ url_for(".mirador_update") }}"; },
+                    authorized: {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}true{%  else %}false{% endif %}
+                  }
+                }
+            });
+        });
+        {%  endif %}
+    </script>
+{% endblock %}
+
+{% block content %}
+
+  <div class='row'>
+    <div class='col-xs-12'>
+      <div id="auth_head"><h2>{% if info['auth'] %}{{ info['auth'] }}, {{ info['work'] }} {{ info['passage'] }}{% endif %}</h2></div>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-md-6' id='origin_text'>
+      <!-- original text -->
+      <!-- Need to define some css for the text boxes, max height, scrolling, etc -->
+      <!-- going to need a way for all of the text fields to grab text if uri, or display char field if not -->
+      {% if 'orig_text' in obj and obj['orig_text'] != '' %}
+        <p>{{ obj['orig_text'] }}</p>
+      {% elif 'orig_uri' in obj and obj['orig_uri'] != '' %}
+        <p>{{ get_text(obj['orig_uri'], '#origin_text p') }}</p>
+      {% endif %}
+    </div>
+    <div class='col-md-6'>
+      <!-- translations -->
+      <!-- really these ought to be generated based on the attached translations but this will work for now, only need to change how the tab is named, reference a list or something -->
+      <ul id='lang_tabs' class='nav nav-tabs nav-justified' role="tablist">
+        <li role='presentation'><a href='#eng' aria-controls='eng' role='tab' data-toggle='tab'>English</a></li>
+        <li role='presentation'><a href='#fra' aria-controls='fra' role='tab' data-toggle='tab'>French</a></li>
+      </ul>
+      <div class='tab-content'>
+        <div role='tabpanel' class='tab-pane' id={{ obj['t1_lang']}}>
+          {% if 't1_uri' in obj %}
+            <p>{{ get_text(obj['t1_uri'], '#eng p') }}</p>
+          {% else %}
+            <p>{{ obj['t1_text'] }}</p>
+          {% endif %}
+          {{ get_people(obj) }}
+        </div>
+        <div role='tabpanel' class='tab-pane' id={{ obj['t2_lang']}}>
+          {% if 't2_uri' in obj %}
+            <p>{{ get_text(obj['t2_uri'], '#fra p') }}</p>
+          {% else %}
+            <p>{{ obj['t2_text'] }}</p>
+          {% endif %}
+          {{ get_people(obj) }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='row'>
+    <!-- commentary and bibliography -->
+    {% if obj["images"]|length > 0 %}
+      <div class='col-md-6'>
+        {{ commentary(obj) }}
+      </div>
+      <div class='col-md-6' style="height:100%;">
+        <div id="mirador-container" style="height:100%;"></div>
+      </div>
+    {% else %}
+      {{ commentary(obj, class='col-xs-12') }}
+    {% endif %}
+  </div>
+
+  <div class='row'>
+    <div class="col-xs-12">
+      <a href="{{url_for('api_data_get', millnum=millnum)}}">Get JSON</a>
+    </div>
+  </div>
+{% endblock %}
+
+{% macro commentary(obj, class='') %}
+<div id="commentary-text" class="{{class}}">
+  <h2>Commentary</h2>
+  {% filter markdown %}{{ obj['comm'] }}{% endfilter %}
+  {{ get_people(obj) }}
+</div>
+<div id="commentary-bibliography" class="{{class}}">
+  <h2>Bibliography</h2>
+  {% filter markdown %}{{ obj['bibl'] }}{% endfilter %}
+  {{ get_people(obj) }}
+</div>
+{% endmacro %}

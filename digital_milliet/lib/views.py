@@ -70,7 +70,7 @@ class Views(object):
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
 
-        return render_template('commentary/commentary.html', obj=parsed_obj, info=auth_info, millnum=millnum)
+        return render_template('commentary/read.html', obj=parsed_obj, info=auth_info, millnum=millnum)
 
     @OAuthHelper.oauth_required
     def delete(self):
@@ -132,7 +132,7 @@ class Views(object):
     @OAuthHelper.oauth_required
     def new(self):
         return render_template(
-            'commentary/enter.html',
+            'commentary/create.html',
             cts_api=self.app.config['CTS_API_URL'],
             cts_browse=self.app.config['CTS_BROWSE_URL'],
             cts_version=self.app.config['CTS_API_VERSION']

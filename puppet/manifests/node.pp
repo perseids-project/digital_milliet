@@ -1,4 +1,4 @@
-class digmill::node {
+class digital_milliet::node {
 
   class { 'nvm':
     version => 'v0.33.0',

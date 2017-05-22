@@ -1,5 +1,5 @@
 # Puppet configuration for Digital Milliet
-class digmill($app_root,
+class digital_milliet($app_root,
               $app_path,
               $app_version,
               $repo_url, 
@@ -7,8 +7,8 @@ class digmill($app_root,
               $ssl_cert,
               $ssl_chain,
               $ssl_private_key) {
-  include digmill::python3
-  include digmill::node 
+  include digital_milliet::python3
+  include digital_milliet::node 
 
   ensure_packages('mongodb')
 
@@ -38,7 +38,7 @@ class digmill($app_root,
   }
 
   file { "${app_root}/app.wsgi":
-    content => epp('digmill/app.wsgi.epp', {
+    content => epp('digital_milliet/app.wsgi.epp', {
       'app_root' => $app_root,
     }),
     require => Vcsrepo[$app_root],
@@ -46,13 +46,13 @@ class digmill($app_root,
   }
 
   file { "${app_root}/digital_milliet/config.cfg":
-    source  => 'puppet:///modules/digmill/config.cfg',
+    source  => 'puppet:///modules/digital_milliet/config.cfg',
     mode    => '0644',
     require => Vcsrepo[$app_root],
   }
 
   file { '/usr/local/bin/build-dm-js':
-    content => epp('digmill/build-dm-js.sh.epp',
+    content => epp('digital_milliet/build-dm-js.sh.epp',
     {
       'node_version' => '0.10.46'
     mode    => '0775',
@@ -74,7 +74,7 @@ class digmill($app_root,
     cwd          => $app_root,
   }
 
-  apache::vhost { 'digmill':
+  apache::vhost { 'digital_milliet':
     servername                  => $vhost,
     port                        => '80',
     docroot                     => $app_root,
@@ -95,7 +95,7 @@ class digmill($app_root,
     ]
   }
 
-  apache::vhost { 'digmill-ssl':
+  apache::vhost { 'digital_milliet-ssl':
     servername                  => $vhost, 
     port                        => '443',
     docroot                     => $app_root,
@@ -119,17 +119,17 @@ class digmill($app_root,
       "set Access-Control-Allow-Headers 'Origin, X-Requested-With, Content-Type, Accept'"
     ]
   }
-  firewall { '100 Allow web traffic for digmill':
+  firewall { '100 Allow web traffic for digital_milliet':
     proto  => 'tcp',
     dport  => '80',
     action => 'accept',
   }
-  firewall { '100 Allow ssltraffic for digmill':
+  firewall { '100 Allow ssltraffic for digital_milliet':
     proto  => 'tcp',
     dport  => '443',
     action => 'accept',
   }
-  firewall { '100 Allow py for digmill':
+  firewall { '100 Allow py for digital_milliet':
     proto  => 'tcp',
     dport  => '5000',
     action => 'accept',

@@ -1,5 +1,5 @@
 # Install Python 3 and mod_wsgi
-class digmill::python3 {
+class digital_milliet::python3 {
   class { 'apache':
     default_vhost => false,
   }

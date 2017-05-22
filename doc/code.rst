@@ -5,7 +5,7 @@ Modules
     :members:
     :private-members:
     :special-members:
-.. automodule:: digital_milliet.lib.parser
+.. automodule:: digital_milliet.lib.commentaries
     :members:
     :private-members:
     :special-members:
@@ -18,6 +18,10 @@ Modules
     :private-members:
     :special-members:
 .. automodule:: digital_milliet.lib.oauth
+    :members:
+    :private-members:
+    :special-members:
+.. automodule:: digital_milliet.lib.mirador
     :members:
     :private-members:
     :special-members:

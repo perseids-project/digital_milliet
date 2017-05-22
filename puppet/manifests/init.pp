@@ -9,10 +9,28 @@ class digital_milliet($app_root,
               $ssl_chain,
               $ssl_private_key,
               $backup_dir,
+              $python_version,
+              $python_apache_package,
               $user) {
-  include digital_milliet::python3
 
   ensure_packages('mongodb')
+  class { 'apache':
+    default_vhost => false,
+  }
+
+  class { 'python':
+    version    => "python${python_version}",
+    pip        => 'present',
+    dev        => 'present',
+    virtualenv => 'present',
+  }
+
+  ensure_packages($python_apache_package)
+
+  class { 'apache::mod::wsgi':
+    mod_path     => "mod_wsgi.so-${python_version}",
+    package_name => $python_apache_package,
+  }
  
   user { $user:
     ensure => present,
@@ -61,7 +79,7 @@ class digital_milliet($app_root,
     docroot                     => $app_root,
     wsgi_daemon_process         => 'dm',
     wsgi_daemon_process_options => {
-      'python-path' => "${app_root}/venv/lib/python3.4/site-packages"
+      'python-path' => "${app_root}/venv/lib/python${python_version}/site-packages"
     },
     wsgi_process_group          => 'dm',
     wsgi_script_aliases         => { $app_path => "${app_root}/app.wsgi" },
@@ -114,7 +132,7 @@ class digital_milliet($app_root,
   }
 
   cron { 'dump-mongo':
-    command => "/usr/bin/mongodump -o $backup_dir >/var/log/mongodump.log 2>&1',
+    command => "/usr/bin/mongodump -o ${backup_dir} >/var/log/mongodump.log 2>&1",
     minute  => '45',
     hour    => '*/6',
   }

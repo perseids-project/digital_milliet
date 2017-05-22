@@ -5,7 +5,7 @@ class digital_milliet::python3 {
   }
 
   class { 'python':
-    version    => '3',
+    version    => 'python3',
     pip        => 'present',
     dev        => 'present',
     virtualenv => 'present',

@@ -4,6 +4,8 @@ class digital_milliet($app_root,
               $app_version,
               $repo_url, 
               $vhost,
+              $user,
+              $user_home,
               $ssl_cert,
               $ssl_chain,
               $ssl_private_key) {
@@ -11,6 +13,10 @@ class digital_milliet($app_root,
   include digital_milliet::node 
 
   ensure_packages('mongodb')
+ 
+  user { $user:
+    ensure => present,
+  }
 
   file { "/etc/ssl/certs/${ssl_cert}":
     source => "puppet:///modules/site/ssl/${ssl_cert}",
@@ -27,6 +33,7 @@ class digital_milliet($app_root,
 
   file { $app_root:
     ensure  => directory,
+    owner   => $user,
   }
 
   vcsrepo { $app_root:
@@ -34,6 +41,7 @@ class digital_milliet($app_root,
     revision => $app_version,
     provider => git,
     source   => $repo_url,
+    user     => $user,
     require  => File[$app_root],
   }
 
@@ -46,6 +54,7 @@ class digital_milliet($app_root,
   }
 
   file { "${app_root}/digital_milliet/config.cfg":
+    owner   => $user,
     source  => 'puppet:///modules/digital_milliet/config.cfg',
     mode    => '0644',
     require => Vcsrepo[$app_root],
@@ -54,13 +63,17 @@ class digital_milliet($app_root,
   file { '/usr/local/bin/build-dm-js':
     content => epp('digital_milliet/build-dm-js.sh.epp',
     {
-      'node_version' => '0.10.46'
+      'node_version' => '0.10.46',
+      'node_user_home' => '/home/vagrant'
+    }),
     mode    => '0775',
+    require => Class['nvm'],
   }
 
   exec { 'dm-bower':
+    user    => $user,
     cwd     => "${app_root}/digital_milliet",
-    command => 'bash --login "/usr/local/bin/build-dm-js"',
+    command => '/bin/bash --login "/usr/local/bin/build-dm-js"',
     require => [File['/usr/local/bin/build-dm-js'],Vcsrepo[$app_root]],
     creates => "${app_root}/digital_milliet/bower_components"
   }

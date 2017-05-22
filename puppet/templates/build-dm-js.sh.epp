@@ -1,6 +1,8 @@
-<%- | String[1] $node_version | -%>
-export NVM_DIR=/home/deployer/.nvm
-source /home/deployer/.nvm/nvm.sh
+<%- | String[1] $node_version,
+      String[1] $node_user_home,
+| -%>
+export NVM_DIR=<%= $node_user_home %>/.nvm
+source <%= $node_user_home %>/.nvm/nvm.sh
 nvm use <%= $node_version %>
 npm install -g bower@1.3.12
 bower install

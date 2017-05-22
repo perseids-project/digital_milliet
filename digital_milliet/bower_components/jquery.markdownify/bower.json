@@ -1,0 +1,19 @@
+{
+  "name": "markdownify",
+  "version": "1.0.2",
+  "main": [
+    "lib/jquery.markdownify.js",
+    "lib/jquery.markdownify.css"
+  ],
+  "ignore": [
+    "**/.*",
+    "components",
+    "demo",
+    "package.json"
+  ],
+  "dependencies" : {
+    "jquery": "2.1.1",
+    "codemirror": "5.12.0",
+    "marked": "0.3.3"
+  }
+}

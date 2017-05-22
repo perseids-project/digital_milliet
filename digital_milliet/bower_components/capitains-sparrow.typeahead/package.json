@@ -1,0 +1,86 @@
+{
+  "name": "capitains-sparrow.typeahead",
+  "description": "jQuery typeahead plugin for CTS repositories",
+  "version": "0.0.4",
+  "keywords": [
+    "CITE",
+    "CTS",
+    "Perseus",
+    "API",
+    "Capitains"
+  ],
+  "dependencies": {
+    "capitains-sparrow": "~1.2.1",
+    "typeahead.js": "~0.10.5",
+    "jquery": "~2",
+    "handlebars": "2.0.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1",
+    "grunt-contrib-concat": "~0.1.2",
+    "grunt-contrib-uglify": "~0.4.x",
+    "grunt-contrib-jasmine": "~0.6.x",
+    "grunt-contrib-clean": "~0.6",
+    "grunt-release": "0.11.0",
+    "grunt-karma": "~0.10",
+    "jasmine": "~2.2",
+    "jasmine-ajax": "~2",
+    "jasmine-jquery": "~2",
+    "jasmine-expect": "~1",
+    "phantomjs": "~1.9",
+    "karma": "~0.12.0",
+    "karma-jasmine": "~0.2.0",
+    "karma-jasmine-jquery": "~0.1",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-firefox-launcher": "~0.1.4",
+    "karma-chrome-launcher": "~0.1"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "build": "grunt build"
+  },
+  "contributors": [
+    {
+      "name": "Thibault Clerice",
+      "email": "",
+      "web": "http://github.com/PonteIneptique"
+    },
+    {
+      "name": "Bridget Almas",
+      "email": "",
+      "web": "http://github.com/Balmas"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Thibault Clerice",
+      "email": "",
+      "web": "http://github.com/PonteIneptique"
+    },
+    {
+      "name": "PerseusDL",
+      "email": "",
+      "web": "http://github.com/PerseusDL"
+    },
+    {
+      "name": "Capitains",
+      "email": "",
+      "web": "http://github.com/Capitains"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/Capitains/jQuery.typeahead/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Capitains/jQuery.typeahead.git"
+  },
+  "licenses": [
+    {
+      "name": "GNU GPL 3.0",
+      "url": "http://www.gnu.org/copyleft/gpl.html"
+    }
+  ],
+  "homepage": "https://github.com/Capitains/jQuery.typeahead/"
+}

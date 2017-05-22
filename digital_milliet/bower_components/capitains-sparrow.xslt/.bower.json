@@ -1,0 +1,38 @@
+{
+  "name": "capitains-sparrow.xslt",
+  "version": "0.0.4",
+  "homepage": "https://github.com/Capitains/jQuery.xslt",
+  "authors": [
+    "Thibault Clerice <leponteineptique@gmail.com>"
+  ],
+  "description": "CTS API abstractions and jQuery plugin",
+  "main": "dist/cts.jquery.xslt.min.js",
+  "keywords": [
+    "cts"
+  ],
+  "dependencies": {
+    "capitains-sparrow": "~1.2.1",
+    "jquery": "2.1.3"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "spec",
+    "examples",
+    "doc",
+    "doc_html"
+  ],
+  "_release": "0.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.4",
+    "commit": "510be8a65b7d8980690ea074696a15c523e1fd2b"
+  },
+  "_source": "https://github.com/Capitains/jQuery.XSLT.git",
+  "_target": "~0.0.3",
+  "_originalSource": "capitains-sparrow.xslt"
+}

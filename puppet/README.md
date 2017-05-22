@@ -10,7 +10,9 @@ Defining Digital Milliet Resources in Hiera
   digital_milliet::vhost: 'digital_milliet.yourdomain.org'
   digital_milliet::app_version: 'master'
   digital_milliet::repo_url: 'https://github.com/perseids-project/digital_milliet'
-  digital_milliet::ssl_cert: 'name_of_ssl_certificate_file.pem'
-  digital_milliet::ssl_chain: 'name_of_ssl_keychain_file.crt'
-  digital_milliet::ssl_private_key: 'name_of_ssl_private_key.key'
+  digital_milliet::ssl_cert: 'full_path_to_ssl_certificate_file'
+  digital_milliet::ssl_chain: 'full_path_to_ssl_keychain_file'
+  digital_milliet::ssl_private_key: 'full_path_to_ssl_private_key.key'
+  digital_milliet::user: 'user_to_own_the_files'
+  digital_milliet::backup_dir: 'backup_directory_for_mongo_db'
 ```

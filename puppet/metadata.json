@@ -3,12 +3,11 @@
   "version": "0.0.1",
   "author": "Bridget Almas",
   "license": "GPL-3.0",
-  "summary": "A module for Digital Milliet",
-  "source": "#TODO",
+  "summary": "A puppet module for Digital Milliet",
   "operatingsystem_support": [
     {
     "operatingsystem": "Ubuntu",
-    "operatingsystemrelease": [ "14.04" ]
+    "operatingsystemrelease": [ "14.04", "16.04" ]
     }
    ],
   "dependencies": [

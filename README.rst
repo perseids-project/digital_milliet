@@ -51,12 +51,11 @@ Create a virtual environment
     source venv/bin/activate
     python setup.py install
 
-Run the code
+Run the code, installing test fixtures and with a fixed user:
 
 .. code-block:: shell
 
-    python run.py
-
+    python runtest.py --install --loggedin
 
 Or deploy in Docker container
 
@@ -151,8 +150,7 @@ the Digital Milliet application. Once a record is created, if it's edited by a u
 added as an additional editor in the updated annotations.
 
 Although not recommended for production use, it is possible to disable the OAuth2 protection by setting the name and URI
-to associate with all records as a configuration setting.  This could be used in combination with a simpler authentication
-method such as HTTP Basic Authorization.
+to associate with all records via the `OAUTH_USER_OVERRIDE` configuration setting.  This could be used in combination with a simpler authentication method such as HTTP Basic Authorization.
 
 OAuth2 provides Authentication but not Authorization support. (By Authorization we mean restricting create/update/delete
 access of Digital Milliet entries to only specific authenticated users.) Implementing a full user model and role-based

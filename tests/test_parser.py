@@ -2,7 +2,9 @@ import os
 import json
 import re
 import yaml
+import datetime
 from unittest import TestCase
+from unittest.mock import patch
 from digital_milliet.digital_milliet import DigitalMilliet
 from tests.test_dm import DigitalMillietTestCase
 from flask import Flask
@@ -105,4 +107,62 @@ class TestDb(DigitalMillietTestCase):
           self.assertEqual(0,self.dm.authors.search(query='261', milliet_id=True).count())
           with self.assertRaises(werkzeug.exceptions.NotFound):
             self.assertIsNone(self.dm.commentaries.get_milliet('261'))
+
+    def test_create_tag_annotation(self):
+        tag = "dummytag"
+        date = datetime.datetime.today()
+        target ="http://dummytarget"
+        expected = {
+            "@context": "http://www.w3.org/ns/oa-context-20130208.json",
+            "@type": "oa:Annotation",
+            "annotatedAt": str(date),
+            "hasTarget": target,
+            "motivatedBy": "oa:tagging",
+            "hasBody": {
+                "@type": "oa:Tag",
+                "chars": tag,
+                "format": "text",
+            }
+        }
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+            sess['oauth_user_name'] = 'MyTestUser'
+        with self.app.app_context():
+            person = self.dm.commentaries.format_person_from_authentificated_user()
+            expected["creator"] = person
+            anno = self.dm.commentaries.create_tag_annotation(tag,target,person,date)
+            self.assertIsNotNone(anno["@id"])
+            self.assertIsNotNone(anno["hasBody"]["@id"])
+            anno.pop("@id")
+            anno["hasBody"].pop("@id")
+            self.assertEqual(expected,anno)
+
+    def test_create_semantic_tag_annotation(self):
+        date = datetime.datetime.today()
+        target ="http://dummytarget"
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+            sess['oauth_user_name'] = 'MyTestUser'
+        for tag in [ "https://w3id.org/myorg/thisisasamplesemantictag",
+                     "http://w3id.org/myorg/thisisasamplesemantictag"]:
+            expected = {
+                "@context": "http://www.w3.org/ns/oa-context-20130208.json",
+                "@type": "oa:Annotation",
+                "annotatedAt": str(date),
+                "hasTarget": target,
+                "motivatedBy": "oa:tagging",
+                "hasBody": {
+                    "@id": tag,
+                    "@type": "oa:SemanticTag"
+                }
+            }
+            with self.app.app_context():
+                person = self.dm.commentaries.format_person_from_authentificated_user()
+                expected["creator"] = person
+                anno = self.dm.commentaries.create_tag_annotation(tag,target,person,date)
+                self.assertIsNotNone(anno["@id"])
+                anno.pop("@id")
+                self.assertEqual(expected,anno)
+
+
 

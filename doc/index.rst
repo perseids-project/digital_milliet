@@ -11,6 +11,7 @@ Welcome to Digital Milliet's documentation
    :caption: Contents:
 
    overview
+   schema
    code
 
 Indices and tables

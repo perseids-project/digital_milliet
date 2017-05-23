@@ -62,7 +62,8 @@ Or deploy in Docker container
 .. code-block:: shell
 
     git clone https://github.com/perseids-project/digital_milliet
-    docker build digital_milliet_image
+    cd digital_milliet 
+    docker build -t digital_milliet_image .
     docker run -p 5000:5000 -t -i digital_milliet_image
 
 For production deployment, see Puppet manifests in the puppet subdirectory of this repository.

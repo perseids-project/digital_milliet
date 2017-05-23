@@ -166,3 +166,53 @@ must be a member of the Perseids Community with that id in order to be able to c
 Digital Milliet. If the `ENFORCE_COMMUNITY_ID` setting is left empty, this functionality is disabled and all
 authenticated users can create, edit or delete entries.
 
+Configuration
+*************
+All deployment specific variables and dependencies are specified in an external configuration file. By default the application looks for a configuration file named `config.cfg` in the digital_milliet base directory.  An alternate
+path can be supplied in an argument to the DigitalMilliet Flask Application:
+
+.. code-block:: shell
+
+DigitalMilliet(app, config_file="path/to/your/config.cfg")
+
+
+The default contents of this configuration file, with explanation of each setting, is provided below:
+
+.. code-block:: shell
+
+# Name of the Mongo database
+MONGO_DBNAME = 'app'
+
+# Secret key for Flask session
+SECRET_KEY = 'development is fun'
+
+# Perseids OAUTH Setup
+# OAUTH_CONSUMER_KEY and OAUTH_CONSUMER_SECRET must be supplied by Perseids Administrator for Production use
+OAUTH_NAME = "digitalmilliet"
+OAUTH_CONSUMER_KEY = 'dummy'
+OAUTH_CONSUMER_SECRET = 'dummy'
+OAUTH_REQUEST_TOKEN_PARAMS = {'scope': 'read'}
+OAUTH_BASE_URL = 'https://sosol.perseids.org/sosol/api/v1/'
+OAUTH_ACCESS_TOKEN_URL = 'https://sosol.perseids.org/sosol/oauth/token'
+OAUTH_ACCESS_TOKEN_METHOD = "POST"
+OAUTH_REQUEST_TOKEN_URL = None
+OAUTH_AUTHORIZE_URL = 'https://sosol.perseids.org/sosol/oauth/authorize'
+OAUTH_CALLBACK_URL = 'https://digmill.perseids.org/digmil/oauth/authorized'
+
+AUTHORS_COLLECTION = "annotation"
+
+# Set this to the ID for the Perseids community id in which membership enables Digital Milliet editorial permissions
+ENFORCE_COMMUNITY_ID = None
+
+# Not to be used in Production: eases development without OAuth Setup
+OAUTH_USER_OVERRIDE = { 'oauth_user_uri' : 'http://sampleuseruri', 'oauth_user_name': 'Sample User' }
+
+# Perseus Catalog API - Used for Lookup of Author and Work Metadata
+CATALOG_API_URL = 'http://catalog.perseus.org/cite-collections/api'
+CITE_URI_PREFIX = 'http://perseids.org/collections/'
+CITE_COLLECTION = 'urn:cite:perseus:digmil'
+
+# CTS API Endpoint for Retrieval of Primary Source Texts and Translations
+CTS_BROWSE_URL = 'https://cts.perseids.org'
+CTS_API_URL = 'https://cts.perseids.org/api/cts/'
+CTS_API_VERSION = 5

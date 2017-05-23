@@ -199,6 +199,7 @@ The default contents of this configuration file, with explanation of each settin
       OAUTH_AUTHORIZE_URL = 'https://sosol.perseids.org/sosol/oauth/authorize'
       OAUTH_CALLBACK_URL = 'https://digmill.perseids.org/digmil/oauth/authorized'
 
+      # Name of the collection for author records (future proofing to enable move to a separate collection)
       AUTHORS_COLLECTION = "annotation"
 
       # Set this to the ID for the Perseids community id in which membership enables Digital Milliet editorial permissions

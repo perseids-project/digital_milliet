@@ -1,0 +1,138 @@
+  - bibliography:
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-16161
+      "@type": oa:Annotation
+      annotatedAt: '2015-09-08T16:03:35.061Z'
+      hasBody:
+        "@id": http://perseids.org/collections/urn:cite:perseus:digmil.261.b1
+        chars: "The bibliography concerning this text is huge. We give only the most recent
+          and important works on this specific passage of Xenophon's Memorabilia."
+        format: text
+        language: eng
+      hasTarget: http://perseids.org/collections/urn:cite:perseus:digmil.261.c1
+      motivatedBy: oa:linking
+    commentary:
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-10061
+      "@type": oa:Annotation
+      annotatedAt: '2015-09-08T16:03:35.061Z'
+      hasBody:
+        "@id": http://perseids.org/collections/urn:cite:perseus:digmil.261.c1
+        chars: "1. This dialogue is the first of three talks between Socrates and three
+          “ artists who followed their art as a business\" (τῶν τὰς τέχνας ἐχόντων)."
+        format: text
+        language: eng
+      hasTarget:
+       - urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5
+       - "@id":  http://perseids.org/collections/urn:cite:perseus:digmil.999.11
+         chars: ""
+         language: "grc"
+         format: "text"
+      motivatedBy: oa:commenting
+    images: []
+    tags:
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-184191
+      "@type": oa:Annotation
+      "annotatedAt": '2015-09-08T16:03:35.061Z'
+      "hasBody":
+        "@id": http://w3id.org/myorg/mysemantictag
+        "@type": "oa:SemanticTag"
+      "hasTarget": http://perseids.org/collections/urn:cite:perseus:digmil.261.c1
+      "motivatedBy": oa:tagging
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-184191
+      "@type": oa:Annotation
+      "annotatedAt": '2015-09-08T16:03:35.061Z'
+      "hasBody":
+        "@id": "http://data.perseids.org/collections/uuid:abcdefg"
+        "@type": "oa:Tag"
+        "format": text
+        "text": "dolphin"
+      "hasTarget": http://perseids.org/collections/urn:cite:perseus:digmil.261.c1
+      "motivatedBy": oa:tagging
+    translation:
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.735261
+      "@type": oa:Annotation
+      annotatedAt: '2015-09-08T16:03:35.061Z'
+      hasBody: urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:3.10.1-3.10.5
+      hasTarget: urn:cts:greekLit:tlg0032.tlg002.perseus-grc1:3.10.1-3.10.5
+      motivatedBy: oa:linking
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.255261
+      "@type": oa:Annotation
+      annotatedAt: '2015-09-08T16:03:35.061Z'
+      hasBody:
+        "@id": http://perseids.org/collections/urn:cite:perseus:digmil.261.t2
+        chars: "Il lui arrivait parfois de converser avec les artistes qui vivent de profession
+          et il leur était utile comme aux autres.\r\nEntrant un jour dans l'atelier du
+          peintre Parrhasios et s'entretenant avec lui : \r\n"
+        format: text
+        language: fra
+      hasTarget: urn:cts:greekLit:tlg0032.tlg002.perseus-grc1:3.10.1-3.10.5
+      motivatedBy: oa:linking
+  - bibliography:
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-99999
+      "@type": oa:Annotation
+      annotatedAt: '2015-09-08T16:03:35.061Z'
+      hasBody:
+        "@id": http://perseids.org/collections/urn:cite:perseus:digmil.999.b1
+        chars: "The bibliography concerning this text is huge. We give only the most recent
+          and important works on this specific passage of Xenophon's Memorabilia."
+        format: text
+        language: eng
+      hasTarget: http://perseids.org/collections/urn:cite:perseus:digmil.999.c1
+      motivatedBy: oa:linking
+    commentary:
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-99991
+      "@type": oa:Annotation
+      annotatedAt: '2015-09-08T16:03:35.061Z'
+      hasBody:
+        "@id": http://perseids.org/collections/urn:cite:perseus:digmil.999.c1
+        chars: "1. This dialogue is the first of three talks between Socrates and three
+          “ artists who followed their art as a business\" (τῶν τὰς τέχνας ἐχόντων)."
+        format: text
+        language: eng
+      hasTarget:
+        - urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5
+        - "@id":  http://perseids.org/collections/urn:cite:perseus:digmil.999.11
+          chars: ""
+          language: "grc"
+          format: "text"
+      motivatedBy: oa:commenting
+    images: []
+    tags: []
+    translation:
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-99992
+      "@type": oa:Annotation
+      annotatedAt: '2015-09-08T16:03:35.061Z'
+      hasBody:
+      hasTarget: urn:cts:greekLit:tlg0032.tlg002.perseus-grc1:3.10.1-3.10.5
+      motivatedBy: oa:linking
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-99993
+      "@type": oa:Annotation
+      annotatedAt: '2015-09-08T16:03:35.061Z'
+      hasBody:
+        "@id": http://perseids.org/collections/urn:cite:perseus:digmil.999.t2
+        chars: "Il lui arrivait parfois de converser avec les artistes qui vivent de profession
+          et il leur était utile comme aux autres.\r\nEntrant un jour dans l'atelier du
+          peintre Parrhasios et s'entretenant avec lui : \r\n"
+        format: text
+        language: fra
+      hasTarget: urn:cts:greekLit:tlg0032.tlg002.perseus-grc1:3.10.1-3.10.5
+      motivatedBy: oa:linking
+  - cts_id: tlg0032
+    name: Xenophon
+    works:
+    - cts_id: urn:cts:greekLit:tlg0032.tlg002
+      millnums:
+      - - '999'
+        - 3.10.1-3.10.5
+      - - '261'
+        - 3.10.1-3.10.5
+      title: Memorabilia

@@ -4,7 +4,6 @@ import re
 import yaml
 import datetime
 from unittest import TestCase
-from unittest.mock import patch
 from digital_milliet.digital_milliet import DigitalMilliet
 from tests.test_dm import DigitalMillietTestCase
 from flask import Flask

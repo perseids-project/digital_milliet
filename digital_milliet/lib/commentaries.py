@@ -593,3 +593,22 @@ class CommentaryHandler(object):
         """
         comm_list = self.mongo.db.annotation.find({"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
         return self.retrieve_millietId_in_commentaries(comm_list)
+
+    def get_existing_tags(self):
+        """ List all existing tag body values
+
+        :return: tags and semantic tags
+        :rtype tuple
+        """
+        tag_list = self.mongo.db.annotation.find({"tags": {'$exists': 1}, '$where': "this.tags.length>1"})
+        tags = {}
+        semantic_tags = {}
+        for row in tag_list:
+            for tag in row["tags"]:
+                if tag['hasBody']['@type'] == 'oa:Tag':
+                    tags[tag['hasBody']['text']] = 1
+                elif tag['hasBody']['@type'] == 'oa:SemanticTag':
+                    semantic_tags[tag['hasBody']['@id']] = 1
+        return tags, semantic_tags
+
+

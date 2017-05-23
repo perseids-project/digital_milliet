@@ -80,7 +80,7 @@ Throughout the code and interface, this is referred to as the "Milliet Number".
 
 Additional annotations in each graph include a Bibliography, French and English translations of the primary source text,
 as well as images representing the described artwork or related material and semantic tag annotations on the images,
-the primry source texts, the translations and the commentary.
+the primary source texts, the translations and the commentary.
 
 Entries are indexed for browsing both by Milliet Number and Author/Work/Passage of the target primary source text passage.
 

@@ -230,3 +230,19 @@
     </div>
 </div>
 {%- endmacro %}
+
+{% macro tags(row_id="", tag="") -%}
+<div class="row tags_input" id="{{ row_id }}">
+    <div class="col-sm-12">
+        <input type="text" name="tags" class="tags typeahead form-control" placeholder="Enter a tag..." value="{{ tag }}"/>
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro semantic_tags(row_id="", semantic_tag="") -%}
+<div class="row semantic_tags_input" id="{{ row_id }}">
+    <div class="col-sm-12">
+         <input type="url" name="semantic_tags" class="semantic-tags typeahead form-control" placeholder="Enter the URL for a controlled vocabulary term..." value="{{ semantic_tag }}"/>
+    </div>
+</div>
+{%- endmacro %}

@@ -17,3 +17,24 @@ var add_input = function(model, target) {
       target.append(formgroup);
 
   };
+
+let tagsbh = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  local: [ ],
+  remote: {
+    url: '/api/tags/text',
+  }
+});
+
+let semtagsbh = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  local: [ ],
+  remote: {
+    url: '/api/tags/semantic',
+  }
+});
+
+tagsbh.initialize();
+semtagsbh.initialize();

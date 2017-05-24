@@ -48,7 +48,7 @@
         "@id": "http://data.perseids.org/collections/uuid:abcdefg"
         "@type": "oa:Tag"
         "format": text
-        "text": "dolphin"
+        "chars": "dolphin"
       "hasTarget": http://perseids.org/collections/urn:cite:perseus:digmil.261.c1
       "motivatedBy": oa:tagging
     translation:

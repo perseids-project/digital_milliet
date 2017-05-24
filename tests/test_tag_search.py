@@ -17,8 +17,8 @@ class TestTagSearch(DigitalMillietTestCase):
 
     def test_search_tags(self):
         with self.app.app_context():
-            expected_tags = { "dolphin": 1}
-            expected_semantic_tags = { "http://w3id.org/myorg/mysemantictag": 1 }
+            expected_tags = [ "dolphin" ]
+            expected_semantic_tags = [ "http://w3id.org/myorg/mysemantictag" ]
             tags,semantic = self.dm.commentaries.get_existing_tags()
             self.assertEqual(expected_tags, tags)
             self.assertEqual(expected_semantic_tags, semantic)

@@ -30,7 +30,27 @@
          format: "text"
       motivatedBy: oa:commenting
     images: []
-    tags: []
+    tags:
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-184191
+      "@type": oa:Annotation
+      "annotatedAt": '2015-09-08T16:03:35.061Z'
+      "hasBody":
+        "@id": http://w3id.org/myorg/mysemantictag
+        "@type": "oa:SemanticTag"
+      "hasTarget": http://perseids.org/collections/urn:cite:perseus:digmil.261.c1
+      "motivatedBy": oa:tagging
+    - "@context": http://www.w3.org/ns/oa-context-20130208.json
+      "@id": digmilann.-184191
+      "@type": oa:Annotation
+      "annotatedAt": '2015-09-08T16:03:35.061Z'
+      "hasBody":
+        "@id": "http://data.perseids.org/collections/uuid:abcdefg"
+        "@type": "oa:Tag"
+        "format": text
+        "chars": "dolphin"
+      "hasTarget": http://perseids.org/collections/urn:cite:perseus:digmil.261.c1
+      "motivatedBy": oa:tagging
     translation:
     - "@context": http://www.w3.org/ns/oa-context-20130208.json
       "@id": digmilann.735261

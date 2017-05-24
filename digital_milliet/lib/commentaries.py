@@ -235,7 +235,7 @@ class CommentaryHandler(object):
         if "tags" in form:
             annotation["tags"] = [
                 self.create_tag_annotation(tag, commentary_uri, person, date)
-                for tag in form["tag"]
+                for tag in filter(len, (form["tags"] + form["semantic_tags"]))
             ]
         return annotation
 
@@ -268,11 +268,12 @@ class CommentaryHandler(object):
                 "@type": "oa:SemanticTag"
             }
         else:
+            # normalize tags to lower case
             annotation["hasBody"] = {
                 "@id": self.generate_uuid(),
                 "@type": "oa:Tag",
                 "format": "text",
-                "chars": tag,
+                "chars": tag.lower() # normalize tags to lower case
             }
         return annotation
 
@@ -462,6 +463,13 @@ class CommentaryHandler(object):
             } for iiif_anno in annotation_set["images"]
         ]
 
+        result["tags"] = [
+           tag['hasBody']['chars'] for tag in annotation_set["tags"] if 'chars' in tag['hasBody']
+        ]
+        result["semantic_tags"] = [
+            tag['hasBody']['@id'] for tag in annotation_set["tags"] if not 'chars' in tag['hasBody']
+        ]
+
         if isinstance(annotation_set['commentary'][0]['hasTarget'], list):
             result['orig_uri'] = annotation_set['commentary'][0]['hasTarget'][0]
             result['orig_text'] = annotation_set['commentary'][0]['hasTarget'][1]['chars']
@@ -600,15 +608,15 @@ class CommentaryHandler(object):
         :return: tags and semantic tags
         :rtype tuple
         """
-        tag_list = self.mongo.db.annotation.find({"tags": {'$exists': 1}, '$where': "this.tags.length>1"})
+        tag_list = self.mongo.db.annotation.find({"tags": {'$exists': 1}, '$where': "this.tags.length>0"})
         tags = {}
         semantic_tags = {}
         for row in tag_list:
             for tag in row["tags"]:
                 if tag['hasBody']['@type'] == 'oa:Tag':
-                    tags[tag['hasBody']['text']] = 1
+                    tags[tag['hasBody']['chars']] = 1
                 elif tag['hasBody']['@type'] == 'oa:SemanticTag':
                     semantic_tags[tag['hasBody']['@id']] = 1
-        return tags, semantic_tags
+        return list(tags.keys()), list(semantic_tags.keys())
 
 

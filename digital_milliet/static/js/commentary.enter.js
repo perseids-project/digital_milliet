@@ -222,25 +222,6 @@ function CTSError(error,a_lnum) {
 
 }
 
-function initialize_tag_typeahead() {
-  $(".tags.typeahead").typeahead(null, {
-    name: 'tags-remote',
-    display: 'value',
-    source: tagsbh.ttAdapter()
-  });
-
-}
-
-function initialize_semantic_tag_typeahead() {
-  $(".semantic-tags.typeahead").typeahead(null, {
-    name: 'semantic-tags-remote',
-    display: 'value',
-    source: semtagsbh.ttAdapter()
-  });
-}
-
-
-
 //check the milnum for prior use
 $(document).ready(function() {
   $("#milnum").change(function() {

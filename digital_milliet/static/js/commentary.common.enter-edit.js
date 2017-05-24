@@ -38,3 +38,20 @@ let semtagsbh = new Bloodhound({
 
 tagsbh.initialize();
 semtagsbh.initialize();
+
+function initialize_tag_typeahead() {
+  $(".tags.typeahead").typeahead(null, {
+    name: 'tags-remote',
+    display: 'value',
+    source: tagsbh.ttAdapter()
+  });
+
+}
+
+function initialize_semantic_tag_typeahead() {
+  $(".semantic-tags.typeahead").typeahead(null, {
+    name: 'semantic-tags-remote',
+    display: 'value',
+    source: semtagsbh.ttAdapter()
+  });
+}

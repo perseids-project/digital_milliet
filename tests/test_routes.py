@@ -23,6 +23,18 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         rv = self.client.get('/search?in=Author&query=Xenophon').data.decode()
         self.assertIn('Memorabilia',rv,"Search result missing")
 
+    def test_search_tags(self):
+        rv = self.client.get('/search?in=Tags&query=dolphin').data.decode()
+        self.assertIn('261',rv,"Search result missing")
+
+    def test_search_semantic_tags(self):
+        rv = self.client.get('/search?in=Tags&query=http%3A%2F%2Fw3id.org%2Fmyorg%2Fmysemantictag').data.decode()
+        self.assertIn('261',rv,"Search result missing")
+
+    def test_search_tags_not_found(self):
+        rv = self.client.get('/search?in=Tags&query=junk').data.decode()
+        self.assertIn('No Results',rv,"Search result missing")
+
     def test_commentary(self):
         rv = self.client.get('/commentary').data.decode()
         self.assertIn('<li>261 <a href="commentary/261">View</a> <a href="edit/261">Edit</a></li>',rv,"Missing Commentary List Item")
@@ -222,6 +234,24 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         rec = self.get_rec()
         self.assertCountEqual(
             rec["images"], []
+        )
+
+    def test_save_edit_with_session_edit_tags(self):
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+        rv1 = self.client.get('/edit/261').data.decode()
+        m = re.search("name='mongo_id' value=(.*)>",rv1).group(1)
+        self.update_and_assert(self.make_update_data(
+            mongo_id=m,
+        ))
+        rec = self.get_rec()
+        self.assertEqual(
+            rec["tags"],
+            ["thing1", "thing2"]
+        )
+        self.assertEqual(
+            rec["semantic_tags"],
+            ["http://example.org/vocab1", "http://example.org/vocab2"]
         )
 
     def test_save_edit_with_session_check_no_duplicate_works(self):

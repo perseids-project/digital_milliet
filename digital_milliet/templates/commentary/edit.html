@@ -3,6 +3,7 @@
 {% from "commentary/edit_macro.html" import markdown_menu, translation, iiif, tags, semantic_tags %}
 {% block morecss %}
     <link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/font-awesome.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ bower_url_for('capitains-sparrow.typeahead', 'src/css/jquery.cts.typeahead.css') }}" />
     <style type="text/css">
         fieldset { margin:1em 0;}
         fieldset legend { color: #1344ff;}
@@ -14,6 +15,7 @@
     <script src="{{ bower_url_for('codemirror','mode/xml/xml.js') }}"></script>
     <script src="{{ bower_url_for('codemirror','mode/markdown/markdown.js') }}"></script>
     <script src="{{ bower_url_for('jquery.markdownify', 'lib/jquery.markdownify.js') }}"></script>
+    <script src="{{ bower_url_for('typeahead.js', 'dist/typeahead.bundle.min.js') }}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='js/commentary.js')}}"></script>
     <script language="javascript" type="text/javascript" src="{{ url_for('static', filename="js/commentary.common.enter-edit.js")}}"></script>
     {% if "orig_uri" in obj %}{{ get_text(obj['orig_uri'], '#orig_text') }}{% endif %}
@@ -30,6 +32,8 @@
              e.preventDefault();
              remove_input($(this).parents(".manifest_input"));
           });
+          initialize_tag_typeahead();
+          initialize_semantic_tag_typeahead();
 
         });
     </script>

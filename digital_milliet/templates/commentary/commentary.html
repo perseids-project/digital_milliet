@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% from "commentary/get_text.html" import get_text with context %}
 {% from "commentary/get_people.html" import get_people with context %}
+{% from "commentary/get_tags.html" import get_tags with context %}
 
 {% block morecss %}
     <link rel="stylesheet" media="screen" href="{{url_for('static', filename='js/mirador/css/mirador-combined.min.css')}}" />
@@ -124,6 +125,7 @@
 
                   <div role='tabpanel' class='tab-pane active' id='commentary'>
                       {% filter markdown %}{{ obj['comm'] }}{% endfilter %}
+                      {{ get_tags(obj) }}
                       {{ get_people(obj) }}
                   </div>
                   <div role='tabpanel' class='tab-pane' id='bibliography'>

@@ -222,7 +222,6 @@ function CTSError(error,a_lnum) {
 
 }
 
-
 //check the milnum for prior use
 $(document).ready(function() {
   $("#milnum").change(function() {
@@ -250,4 +249,8 @@ $(document).ready(function() {
      e.preventDefault();
      add_input($("#original-iiif-input"), $("#iiif-fieldset"));
   });
+
+  initialize_tag_typeahead();
+  initialize_semantic_tag_typeahead();
+
 });

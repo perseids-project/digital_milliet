@@ -1,6 +1,6 @@
 {% extends "base.html"%}
 
-{% from "commentary/edit_macro.html" import markdown_menu, translation, lang_choice, cts_text_selector, enter_translation, iiif %}
+{% from "commentary/edit_macro.html" import markdown_menu, translation, lang_choice, cts_text_selector, enter_translation, iiif, tags, semantic_tags %}
 
 {% block morecss %}
     <link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/font-awesome.min.css')}}" />
@@ -114,6 +114,18 @@
                 <small class="error" id="c1texterror" style="display:none;">{{ _('Invalid entry') }}</small>
             </div>
         </fieldset>
+
+        <!-- Tags Manifests -->
+        <fieldset class="row" id="tags-fieldset">
+            <legend>Tags</legend>
+            {{ tags(row_id="original-tags-input") }}
+        </fieldset>
+
+          <!-- Tags Manifests -->
+          <fieldset class="row" id="semantic-tags-fieldset">
+              <legend>Semantic Tags</legend>
+              {{ semantic_tags(row_id="original-semantic_tags-input") }}
+          </fieldset>
 
         <!-- Bibliography information -->
         <fieldset class="row">

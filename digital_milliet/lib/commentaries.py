@@ -1,5 +1,6 @@
 import datetime
 from uuid import uuid4
+from urllib.parse import urlparse
 import re
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
@@ -127,7 +128,14 @@ class CommentaryHandler(object):
             record["images"] = [anno for key, anno in images.items() if key not in to_delete]
         else:
             record["images"] = []
-
+        # we're just going to recreate the tags for now
+        # iterating through and adding/deleting would be the better thing to do
+        person = self.format_person_from_authentificated_user()
+        if "tags" in form:
+            record["tags"] = [
+                self.create_tag_annotation(tag, cite_urn, person, modtime)
+                for tag in filter(len, (form["tags"] + form["semantic_tags"]))
+            ]
         rv = None
         if self.validate_annotation(record):
             rv = self.mongo.db.annotation.save(record)
@@ -146,6 +154,7 @@ class CommentaryHandler(object):
         date = datetime.datetime.today()
         milnum = form['milnum'].zfill(3)
         person = self.format_person_from_authentificated_user()
+        commentary_uri = self.format_uri(milnum, 'c1')
         primary_source_uri = ""
         if form['l1uri']:
             primary_source_uri = form['l1uri']
@@ -167,7 +176,7 @@ class CommentaryHandler(object):
                     "annotatedAt": str(date),
                     "creator": person,
                     "hasBody": {
-                        "@id": self.format_uri(milnum, 'c1'),
+                        "@id": commentary_uri,
                         "format": "text",
                         "chars": form['c1text'],
                         "language": "eng",
@@ -189,7 +198,7 @@ class CommentaryHandler(object):
                         "chars": form['b1text'],
                         "language": "eng"
                     },
-                    "hasTarget": self.format_uri(milnum, 'c1'),
+                    "hasTarget": commentary_uri,
                     "motivatedBy": "oa:linking"
                 }
             ],
@@ -229,7 +238,52 @@ class CommentaryHandler(object):
                 self.format_manifests_from_form(manifest_uri, publisher, date, milnum)
                 for manifest_uri, publisher in zip(form["iiif"], form["iiif_publisher"])
             ]
+
+        if "tags" in form:
+            annotation["tags"] = [
+                self.create_tag_annotation(tag, commentary_uri, person, date)
+                for tag in filter(len, (form["tags"] + form["semantic_tags"]))
+            ]
         return annotation
+
+    def create_tag_annotation(self, tag, target, creator, date):
+        """ Create a tag annotation
+
+        :param tag: the tag (text or a URI)
+        :type tag: string
+        :param target: the target of the annotation
+        :type target: string
+        :param creator: the creator of the annotation
+        :type creator: dict
+        :param date: the date the annotation was created
+        :type date: date
+        :return: Annotation content to set at annotation["tags"]
+        """
+        annotation = {
+            "@context": "http://www.w3.org/ns/oa-context-20130208.json",
+            "@id": self.generate_uuid(),
+            "@type": "oa:Annotation",
+            "annotatedAt": str(date),
+            "creator": creator,
+            "hasTarget": target,
+            "motivatedBy": "oa:tagging"
+        }
+        parsed = urlparse(tag)
+        if parsed.scheme == "http" or parsed.scheme == "https":
+            annotation["hasBody"] = {
+                "@id": tag,
+                "@type": "oa:SemanticTag"
+            }
+        else:
+            # normalize tags to lower case
+            annotation["hasBody"] = {
+                "@id": self.generate_uuid(),
+                "@type": "oa:Tag",
+                "format": "text",
+                "chars": tag.lower() # normalize tags to lower case
+            }
+        return annotation
+
 
     def format_manifests_from_form(self, manifest_uri, publisher, date, milnum, update_anno=None):
         """ Helper to format IIIF Manifests given a form
@@ -416,6 +470,13 @@ class CommentaryHandler(object):
             } for iiif_anno in annotation_set["images"]
         ]
 
+        result["tags"] = [
+           tag['hasBody']['chars'] for tag in annotation_set["tags"] if 'chars' in tag['hasBody']
+        ]
+        result["semantic_tags"] = [
+            tag['hasBody']['@id'] for tag in annotation_set["tags"] if not 'chars' in tag['hasBody']
+        ]
+
         if isinstance(annotation_set['commentary'][0]['hasTarget'], list):
             result['orig_uri'] = annotation_set['commentary'][0]['hasTarget'][0]
             result['orig_text'] = annotation_set['commentary'][0]['hasTarget'][1]['chars']
@@ -547,3 +608,38 @@ class CommentaryHandler(object):
         """
         comm_list = self.mongo.db.annotation.find({"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
         return self.retrieve_millietId_in_commentaries(comm_list)
+
+    def get_existing_tags(self):
+        """ List all existing tag body values
+
+        :return: tags and semantic tags
+        :rtype tuple
+        """
+        tag_list = self.mongo.db.annotation.find({"tags": {'$exists': 1}, '$where': "this.tags.length>0"})
+        tags = {}
+        semantic_tags = {}
+        for row in tag_list:
+            for tag in row["tags"]:
+                if tag['hasBody']['@type'] == 'oa:Tag':
+                    tags[tag['hasBody']['chars']] = 1
+                elif tag['hasBody']['@type'] == 'oa:SemanticTag':
+                    semantic_tags[tag['hasBody']['@id']] = 1
+        return list(tags.keys()), list(semantic_tags.keys())
+
+    def search(self, query, tags=None):
+        """ Search commentary record (Filters are exclusive)
+        currently only searching in tags is supported
+
+        :param query: String to search
+        :param tags: Search in tags
+        :return: List of matching records
+        """
+        parsed = urlparse(query)
+        comm_list = None
+        if parsed.scheme == "http" or parsed.scheme == "https":
+            comm_list = self.mongo.db.annotation.find({"tags.hasBody.@id": query}).sort([("commentary.hasBody.@id",1)])
+        else:
+            comm_list = self.mongo.db.annotation.find({"tags.hasBody.chars": query}).sort([("commentary.hasBody.@id",1)])
+        return self.retrieve_millietId_in_commentaries(comm_list)
+
+

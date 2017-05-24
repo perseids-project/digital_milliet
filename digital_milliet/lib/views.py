@@ -48,15 +48,22 @@ class Views(object):
         """
         query = request.args.get("query")
         res = None
+        type = request.args.get("in")
         if query:
-            if request.args.get("in") == "Author":
+            if type == "Author":
                 res = self.authors.search(query=query, name=True)
-            else:
+            elif type == "Title":
                 res = self.authors.search(query=query, works=True)
-            if res.count() == 0:
-                res = None
+            else:
+                res = self.commentaries.search(query=query, tags=True)
+            try:
+                if res.count() == 0:
+                    res = None
+            except:
+                if len(res) == 0:
+                    res = None
 
-        return render_template('search.html', res=res)
+        return render_template('search.html', res=res, type=type)
 
     def commentary(self):
         """ List available commentaries and Milliet entries
@@ -69,6 +76,7 @@ class Views(object):
         """ Read a Milliet entry
         """
         parsed_obj, auth_info = self.commentaries.get_milliet(millnum)
+        print(str(parsed_obj))
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
 
@@ -100,6 +108,14 @@ class Views(object):
         if "iiif[]" in form:
             form["iiif"] = request.form.getlist("iiif[]")
             form["iiif_publisher"] = request.form.getlist("iiif_publisher[]")
+        if "tags" in form:
+            form["tags"] = request.form.get("tags").split()
+        else:
+            form["tags"] = []
+        if "semantic_tags" in form:
+            form["semantic_tags"] = request.form.get("semantic_tags").split()
+        else:
+            form["semantic_tags"] = []
         saved = self.commentaries.update_commentary(form)
         if saved:
             flash('Edit successfully saved', 'success')

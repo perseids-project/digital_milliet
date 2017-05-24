@@ -128,7 +128,14 @@ class CommentaryHandler(object):
             record["images"] = [anno for key, anno in images.items() if key not in to_delete]
         else:
             record["images"] = []
-
+        # we're just going to recreate the tags for now
+        # iterating through and adding/deleting would be the better thing to do
+        person = self.format_person_from_authentificated_user()
+        if "tags" in form:
+            record["tags"] = [
+                self.create_tag_annotation(tag, cite_urn, person, modtime)
+                for tag in filter(len, (form["tags"] + form["semantic_tags"]))
+            ]
         rv = None
         if self.validate_annotation(record):
             rv = self.mongo.db.annotation.save(record)
@@ -618,5 +625,21 @@ class CommentaryHandler(object):
                 elif tag['hasBody']['@type'] == 'oa:SemanticTag':
                     semantic_tags[tag['hasBody']['@id']] = 1
         return list(tags.keys()), list(semantic_tags.keys())
+
+    def search(self, query, tags=None):
+        """ Search commentary record (Filters are exclusive)
+        currently only searching in tags is supported
+
+        :param query: String to search
+        :param tags: Search in tags
+        :return: List of matching records
+        """
+        parsed = urlparse(query)
+        comm_list = None
+        if parsed.scheme == "http" or parsed.scheme == "https":
+            comm_list = self.mongo.db.annotation.find({"tags.hasBody.@id": query}).sort([("commentary.hasBody.@id",1)])
+        else:
+            comm_list = self.mongo.db.annotation.find({"tags.hasBody.chars": query}).sort([("commentary.hasBody.@id",1)])
+        return self.retrieve_millietId_in_commentaries(comm_list)
 
 

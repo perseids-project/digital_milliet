@@ -82,7 +82,7 @@ body {
 }
 }
 
-.provenance {
+.provenance, .tags, .semantic_tags {
   font-size: smaller;
   margin-top: 2em;
   border-top: 1px solid #e3e3e3;

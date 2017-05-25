@@ -76,7 +76,6 @@ class Views(object):
         """ Read a Milliet entry
         """
         parsed_obj, auth_info = self.commentaries.get_milliet(millnum)
-        print(str(parsed_obj))
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
 

@@ -23,6 +23,18 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         rv = self.client.get('/search?in=Author&query=Xenophon').data.decode()
         self.assertIn('Memorabilia',rv,"Search result missing")
 
+    def test_search_tags(self):
+        rv = self.client.get('/search?in=Tags&query=dolphin').data.decode()
+        self.assertIn('261',rv,"Search result missing")
+
+    def test_search_semantic_tags(self):
+        rv = self.client.get('/search?in=Tags&query=http%3A%2F%2Fw3id.org%2Fmyorg%2Fmysemantictag').data.decode()
+        self.assertIn('261',rv,"Search result missing")
+
+    def test_search_tags_not_found(self):
+        rv = self.client.get('/search?in=Tags&query=junk').data.decode()
+        self.assertIn('No Results',rv,"Search result missing")
+
     def test_commentary(self):
         rv = self.client.get('/commentary').data.decode()
         self.assertIn('<li>261 <a href="commentary/261">View</a> <a href="edit/261">Edit</a></li>',rv,"Missing Commentary List Item")
@@ -35,6 +47,14 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
     def test_api(self):
         rv = json.loads(self.client.get('/api/commentary/261').data.decode())
         self.assertIn("bibliography", rv, 'API Response Invalid')
+
+    def test_api_tags_text(self):
+        rv = json.loads(self.client.get('/api/tags/text').data.decode())
+        self.assertEqual([{ "value":"dolphin"}], rv, 'API Response Invalid')
+
+    def test_api_tags_semantic(self):
+        rv = json.loads(self.client.get('/api/tags/semantic').data.decode())
+        self.assertEqual([{ "value":"http://w3id.org/myorg/mysemantictag"}], rv, 'API Response Invalid')
 
     def test_new_no_session(self):
         rv = self.client.get('/new')
@@ -87,7 +107,9 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
             t2lang="fra",
             own_uri_t2="",
             t2uri="",
-            lang_t2="eng"
+            lang_t2="eng",
+            tags="term1 term2",
+            semantic_tags="http://example.org/vocabterm"
         )
         submit_data["iiif[]"] = [
             "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json",
@@ -115,6 +137,8 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
                  'manifestUri': 'http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json'}
             ]
         )
+        self.assertEqual(rec['tags'], ["term1","term2"])
+        self.assertEqual(rec['semantic_tags'], ["http://example.org/vocabterm"])
 
         rv = self.client.get('/commentary/123').data.decode()
         self.assertIn("id=\"mirador-container", rv, "Mirador container should not show for text without images")
@@ -210,6 +234,24 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         rec = self.get_rec()
         self.assertCountEqual(
             rec["images"], []
+        )
+
+    def test_save_edit_with_session_edit_tags(self):
+        with self.client.session_transaction() as sess:
+            sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
+        rv1 = self.client.get('/edit/261').data.decode()
+        m = re.search("name='mongo_id' value=(.*)>",rv1).group(1)
+        self.update_and_assert(self.make_update_data(
+            mongo_id=m,
+        ))
+        rec = self.get_rec()
+        self.assertEqual(
+            rec["tags"],
+            ["thing1", "thing2"]
+        )
+        self.assertEqual(
+            rec["semantic_tags"],
+            ["http://example.org/vocab1", "http://example.org/vocab2"]
         )
 
     def test_save_edit_with_session_check_no_duplicate_works(self):
@@ -493,4 +535,6 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
             submit_data["lang2"] = lang2
         submit_data["iiif[]"] = iiif
         submit_data["iiif_publisher[]"] = iiif_publisher
+        submit_data["tags"] = "thing1 thing2"
+        submit_data["semantic_tags"] = "http://example.org/vocab1 http://example.org/vocab2"
         return submit_data

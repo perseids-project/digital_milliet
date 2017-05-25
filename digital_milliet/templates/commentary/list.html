@@ -18,14 +18,14 @@
                 {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
                     {% for num in millnum_list %}
                         <li>
-                            <a href="{{url_for("commentary", millnum=num)}}">{{ num }}</a>
+                            <a href="commentary/{{ num }}">{{ num }}</a>
                             <a class="right" href="{{url_for("edit", millnum=num)}}">Edit</a>
                         </li>
                     {% endfor %}
                 {% else %}
                     {% for num in millnum_list %}
                         <li>
-                            <a href="{{url_for("commentary", millnum=num)}}">{{ num }}</a>
+                            <a href="commentary/{{ num }}">{{ num }}</a>
                         </li>
                     {% endfor %}
                 {% endif %}

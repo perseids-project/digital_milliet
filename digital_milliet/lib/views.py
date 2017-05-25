@@ -1,5 +1,6 @@
 from digital_milliet.lib.oauth import OAuthHelper
-from flask import render_template, request, redirect, session, flash
+from flask import render_template, request, redirect, session, flash, Response
+from bson.json_util import dumps
 
 
 class Views(object):
@@ -33,6 +34,7 @@ class Views(object):
         app.add_url_rule('/delete', view_func=self.delete, methods=['POST'])
         app.add_url_rule('/create', view_func=self.create, methods=['POST'])
         app.add_url_rule('/api/commentary/<millnum>', view_func=self.api_data_get, methods=['GET'])
+        app.add_url_rule('/api/tags/<type>', view_func=self.api_tags_get, methods=['GET'])
         app.add_url_rule('/new', view_func=self.new, methods=['GET', 'POST'], strict_slashes=False)
 
     def index(self):
@@ -46,15 +48,22 @@ class Views(object):
         """
         query = request.args.get("query")
         res = None
+        type = request.args.get("in")
         if query:
-            if request.args.get("in") == "Author":
+            if type == "Author":
                 res = self.authors.search(query=query, name=True)
-            else:
+            elif type == "Title":
                 res = self.authors.search(query=query, works=True)
-            if res.count() == 0:
-                res = None
+            else:
+                res = self.commentaries.search(query=query, tags=True)
+            try:
+                if res.count() == 0:
+                    res = None
+            except:
+                if len(res) == 0:
+                    res = None
 
-        return render_template('search.html', res=res)
+        return render_template('search.html', res=res, type=type)
 
     def commentary(self):
         """ List available commentaries and Milliet entries
@@ -67,6 +76,7 @@ class Views(object):
         """ Read a Milliet entry
         """
         parsed_obj, auth_info = self.commentaries.get_milliet(millnum)
+        print(str(parsed_obj))
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
 
@@ -98,6 +108,14 @@ class Views(object):
         if "iiif[]" in form:
             form["iiif"] = request.form.getlist("iiif[]")
             form["iiif_publisher"] = request.form.getlist("iiif_publisher[]")
+        if "tags" in form:
+            form["tags"] = request.form.get("tags").split()
+        else:
+            form["tags"] = []
+        if "semantic_tags" in form:
+            form["semantic_tags"] = request.form.get("semantic_tags").split()
+        else:
+            form["semantic_tags"] = []
         saved = self.commentaries.update_commentary(form)
         if saved:
             flash('Edit successfully saved', 'success')
@@ -114,6 +132,14 @@ class Views(object):
         if "iiif[]" in data:
             data["iiif"] = request.form.getlist("iiif[]")
             data["iiif_publisher"] = request.form.getlist("iiif_publisher[]")
+        if "tags" in data:
+            data["tags"] = request.form.get("tags").split()
+        else:
+            data["tags"] = []
+        if "semantic_tags" in data:
+            data["semantic_tags"] = request.form.get("semantic_tags").split()
+        else:
+            data["semantic_tags"] = []
         millnum = self.commentaries.create_commentary(data)
         if millnum is not None:
             flash('Annotation successfully created!','success')
@@ -136,5 +162,18 @@ class Views(object):
             cts_api=self.app.config['CTS_API_URL'],
             cts_browse=self.app.config['CTS_BROWSE_URL'],
             cts_version=self.app.config['CTS_API_VERSION']
+        )
+
+    def api_tags_get(self, type):
+        """ Get the existing tags """
+        tags, semantic_tags = self.commentaries.get_existing_tags()
+        if type == 'semantic':
+            json = [ { 'value': tag } for tag in semantic_tags ]
+        else:
+            json = [ { 'value': tag } for tag in tags ]
+        return Response(
+            dumps(json),
+            mimetype='application/json',
+            status=200
         )
 

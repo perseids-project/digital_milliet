@@ -118,33 +118,38 @@
         </section>
       {% endif %}
     </div>
-    <div class="row">
-      <section id="commentary-bibliography" class="col-xs-12">
-        <h2>Bibliography</h2>
-        {% filter markdown %}{{ obj['bibl'] }}{% endfilter %}
-        {{ get_people(obj) }}
-      </section>
-    </div>
-    <div class="row">
-      <section id="commentary-tag" class="col-xs-12">
-        <h2>Tags</h2>
+    {%  if obj['tags'] %}
+      <div class="row">
+        <section id="commentary-tag" class="col-xs-12">
+          <h2>Tags</h2>
           <ul class="list-inline">
-            <li><span class="tag">Tag</span></li>
-            <li><span class="tag">Tag Lorem Ipsum</span></li>
-            <li><span class="tag">Tag Sum Ipsum Lorem</span></li>
+            {% for t in obj['tags'] %}
+               <li><span class="tag">{{ t }}</span></li>
+            {% endfor %}
           </ul>
         </section>
-    </div>
-    <div class="row">
-      <section id="commentary-semantictag" class="col-xs-12">
-        <h2>Semantic Tags</h2>
+      </div>
+    {% endif %}
+    {%  if obj['semantic_tags'] %}
+      <div class="row">
+        <section id="commentary-semantictag" class="col-xs-12">
+          <h2>Semantic Tags</h2>
           <ul class="list-inline">
-            <li><span>http://semantic.com/tag</span></li>
-            <li><span>http://semantic.com/tagTag Lorem Ipsum</span></li>
-            <li><span>http://semantic.com/tagTag Sum Ipsum Lorem</span></li>
+            {% for t in obj['semantic_tags'] %}
+               <li><span>{{ t }}</span></li>
+            {% endfor %}
           </ul>
-      </section>
+        </section>
+      </div>
+    {% endif %}
+    <div class="row">
+        <section id="commentary-bibliography" class="col-xs-12">
+            <h2>Bibliography</h2>
+            {% filter markdown %}{{ obj['bibl'] }}{% endfilter %}
+            {{ get_people(obj) }}
+        </section>
     </div>
+
 
     <aside class='row' id="export">
       <div class="col-xs-12 align-right">

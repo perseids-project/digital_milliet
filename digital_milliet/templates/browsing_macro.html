@@ -22,6 +22,31 @@
 	{% endfor %}
 {%- endmacro %}
 
+{%  macro display_comm_list(list_of_commentaries) -%}
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>Milliet Commentary</h2>
+                  <ul id="milliet-list">
+                      {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
+                          {% for num in list_of_commentaries %}
+                              <li>
+                                  <a href="commentary/{{ num }}">{{ num }}</a>
+                                  <a class="right" href="{{url_for("edit", millnum=num)}}">Edit</a>
+                              </li>
+                          {% endfor %}
+                      {% else %}
+                          {% for num in list_of_commentaries %}
+                              <li>
+                                  <a href="commentary/{{ num }}">{{ num }}</a>
+                              </li>
+                          {% endfor %}
+                      {% endif %}
+
+                  </ul>
+            </div>
+        </div>
+{%- endmacro  %}
+
 {% macro get_people(obj) -%}
     {% if obj['creator'] or obj['contributor']  %}
         <footer class="provenance">
@@ -52,3 +77,4 @@
 		});
 	</script>
 {%- endmacro %}
+

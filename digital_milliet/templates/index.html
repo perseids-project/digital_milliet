@@ -1,40 +1,35 @@
 {% extends "base.html" %}
-{% block content %}
-	{{ super() }}
-	<div class="container-fluid">
-		<div class="jumbotron">			
-			<div class="row">
-				<div class="col-sm-6 img">
-					<h1>Combining Ancient<br/>Text And Image</h1>
-					<p>Welcome to the home of the Digital Milliet! This project collects together digitized passages of Greek and Latin that are related to painting in the ancient world, creating a cross-referenced database that a user can search by author, title, or topic. For more information, please see our <a href="about">about page</a>.</p>
-				</div>
-			</div>
-		</div>
-		<div class="row voffset2">
-			<div class="col-md-4 col-md-offset-4" style="text-align:center">
-				<a role="button" class="btn btn-primary btn-large btn-block" href="commentary">Browse</a>
-			</div>
-		</div>
-		<div class="row voffset6">
-			<div class="col-md-12" style="text-align:center">
-				
-				<form id="search_box" class="form-inline" action="{{ url_for("search") }}" method="GET">
-					<div class="form-group">
-						<label for="search_dropdown">Search Field</label> 
-		    		<select class="form-control" id="search_dropdown" name="in">
-		    			<option>Author</option>
-		    			<option>Title</option>
-		    		</select>
-		    	</div>
-		    	<div class="form-group">
-	        	<input id="term" name="query" type="text" class="form-control" placeholder="Search for...">
-	        </div>
+{% block container_class %}{% endblock%}
+{% block search_bar_class %}no-margin-bottom{% endblock%}
 
-		      <button class="btn btn-default" type="submit">Search</button>
-			
-				</form>
-			</div>
-		</div>
-		
-	</div>
+{% block content %}
+{{ super() }}
+</div>
+<section id="search">            
+    <div class="container">
+        <div class="line"><img class="logo" src="{{ url_for("static", filename='img/logo_Text.png') }}" /></div>
+        <h2 class="line">Combining Ancient Text And Image</h2>
+        <div class="line">
+            <form id="search_box" action="{{ url_for("search") }}" method="GET">
+                <div class="select-container">
+                    <select id="search_dropdown" name="in">
+                        <option>Author</option>
+                        <option>Title</option>
+                    </select>
+                    <div class="carret"><i class="fa fa-caret-down"></i></div>
+                </div>
+                
+                <input id="term" name="query" type="text" class="form-control" placeholder="Search for...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="line">
+            <a role="button" class="btn btn-milliet" href="commentary">Browse</a>
+        </div>
+    </div>
+</section>
+
+<div class="container" id="explanation-text">
+    <p>Welcome to the home of the Digital Milliet! This project collects together digitized passages of Greek and Latin that are related to painting in the ancient world, creating a cross-referenced database that a user can search by author, title, or topic. For more information, please see our <a href="about">about page</a>.</p>
+</div>
 {% endblock %}

@@ -1,0 +1,110 @@
+article#milliet {
+	h1 {
+		margin:0;
+	}
+	h2 {
+		margin-top:0;
+	}
+	> .row {
+		margin-bottom: $default-margin*3;
+	}
+
+	#translation {
+		background-color: $background-translation;
+	}
+
+	#origin_text {
+		margin-top: 0;//$default-margin*2 + $btn-milliet-height;
+	}
+
+	#export {
+		text-align:right;
+	}
+
+	.text {
+		text-align: justify;
+	}
+
+	ol {
+		counter-reset: ol-item;
+		list-style: none;
+
+		> li {
+			counter-increment: ol-item;
+			margin-bottom: 5px;
+			&:before {
+				margin-right: 10px;
+				content: counter(ol-item) ".";
+				width: 1.2em;
+				text-align: center;
+				font-weight:bold;
+				display: inline-block;
+			}
+		}
+	}
+
+	ul.lang-selector {
+		margin: 0 ($default-margin - ($grid-gutter-width/2)) $default-margin ($default-margin - ($grid-gutter-width/2));
+		padding: 0;
+		list-style-type: none;
+		display: flex;
+		> li {
+			display: 			inline-block;
+			height:				$btn-milliet-height;
+			text-transform:		uppercase;
+			background-color:   $btn-milliet-bg-color;
+			text-align:			center;
+			flex-grow:			1;
+			margin-right:		20px;
+
+			&:last-child {
+				margin-right:0px;
+			}
+
+			&.active {
+				background-color: $btn-milliet-bg-color-active;
+			}
+
+			&:hover {
+				background-color: $btn-milliet-bg-color-hover;
+			}
+
+			> a {
+				height:100%;
+				display:block;
+				color:white;
+				width:100%;
+				line-height:	$btn-milliet-height;
+
+				&:hover, &:active, &:focus {
+					text-decoration:	none;
+				}
+
+			}
+		}
+	}
+	.provenance {
+		margin-top: $default-margin;
+		font-size: $font-size-small;
+		font-weight: 300;
+		font-style: italic;
+		ul.contributors {
+			display:inline;
+			margin:0;
+			padding:0;
+			list-style-type:none;
+			> li {
+				display:inline;
+				padding:0;
+				margin:0;
+				&::after {
+					content: ", ";
+				}
+				&:last-child::after {
+					content: "";
+				}
+			}
+		}
+	}
+	
+}

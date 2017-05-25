@@ -1,0 +1,15 @@
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-titles;
+}
+html, body {
+  font-family: $font-family-default;
+}
+
+.row-eq-height-md {
+    @media (min-width: $screen-md-min) {
+		  display: -webkit-box;
+		  display: -webkit-flex;
+		  display: -ms-flexbox;
+		  display:         flex;
+    }
+}

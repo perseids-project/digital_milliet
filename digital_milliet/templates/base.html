@@ -17,12 +17,12 @@
 
         <meta name="viewport" content = "width=device-width, initial-scale=1.0">
 	</head>
-	<body class = "body">
-		<div id="navbar">{% include 'header.html' %}</div>
+	<body>
+		<div id="navbar" class="{% block search_bar_class %}{% endblock%}">{% include 'header.html' %}</div>
 		<div id='wrap' class="{% block container_class %}container{% endblock%}">
         	{% include 'flashes.html' %}
 			<div id="content">{% block content %}{% endblock %}</div>
-    		<div id="footer">{% include 'footer.html' %}</div>
+    		{% include 'footer.html' %}
     	</div>
 	</body>
 </html>

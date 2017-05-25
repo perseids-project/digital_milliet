@@ -10,6 +10,8 @@
     </style>
 {% endblock %}
 
+{% block title %}Milliet {{millnum}}{% if info['auth'] %} : {{ info['auth'] }}, {{ info['work'] }}, {{ info['passage']|clean_ref  }}{% endif %}{% endblock %}
+
 {% block morejavascript %}
     <script type="text/javascript" src="{{url_for('static', filename='js/commentary.js')}}"></script>
     <script type="text/javascript" src="{{ url_for("static", filename='js/mirador/mirador.js') }}"></script>
@@ -54,80 +56,100 @@
 {% endblock %}
 
 {% block content %}
-
-  <div class='row'>
-    <div class='col-xs-12'>
-      <div id="auth_head"><h2>{% if info['auth'] %}{{ info['auth'] }}, {{ info['work'] }} {{ info['passage'] }}{% endif %}</h2></div>
+  <article id="milliet">
+    <div class='row'>
+      <div class='col-xs-12'  id="auth_head">
+        <h1 property="dc:title">{% if info['auth'] %}{{ info['auth'] }}, <i>{{ info['work'] }}</i>, {{ info['passage']|clean_ref }}{% endif %}</h1>
+      </div>
     </div>
-  </div>
-  <div class='row'>
-    <div class='col-md-6' id='origin_text'>
-      <!-- original text -->
-      <!-- Need to define some css for the text boxes, max height, scrolling, etc -->
-      <!-- going to need a way for all of the text fields to grab text if uri, or display char field if not -->
-      {% if 'orig_text' in obj and obj['orig_text'] != '' %}
-        <p>{{ obj['orig_text'] }}</p>
-      {% elif 'orig_uri' in obj and obj['orig_uri'] != '' %}
-        <p>{{ get_text(obj['orig_uri'], '#origin_text p') }}</p>
+    <div class='row row-eq-height-md'>
+      <section class='col-md-6 text' id='origin_text'>
+        <!-- original text -->
+        <!-- Need to define some css for the text boxes, max height, scrolling, etc -->
+        <!-- going to need a way for all of the text fields to grab text if uri, or display char field if not -->
+        {% if 'orig_text' in obj and obj['orig_text'] != '' %}
+          <p>{{ obj['orig_text'] }}</p>
+        {% elif 'orig_uri' in obj and obj['orig_uri'] != '' %}
+          <p>{{ get_text(obj['orig_uri'], '#origin_text p') }}</p>
+        {% endif %}
+      </section>
+      <section id="translation" class='col-md-6 text'>
+        <!-- translations -->
+        <ul id='lang_tabs' role="tablist" class="lang-selector">
+          <li role='presentation' class="active"><a href='#eng' aria-controls='eng' role='tab' data-toggle='tab'>English</a></li>
+          <li role='presentation'><a href='#fra' aria-controls='fra' role='tab' data-toggle='tab'>French</a></li>
+        </ul>
+        <div class='tab-content'>
+          <div role='tabpanel' class='tab-pane active' id={{ obj['t1_lang']}}>
+            {% if 't1_uri' in obj %}
+              <p>{{ get_text(obj['t1_uri'], '#eng p') }}</p>
+            {% else %}
+              <p>{{ obj['t1_text'] }}</p>
+            {% endif %}
+            {{ get_people(obj) }}
+          </div>
+          <div role='tabpanel' class='tab-pane' id={{ obj['t2_lang']}}>
+            {% if 't2_uri' in obj %}
+              <p>{{ get_text(obj['t2_uri'], '#fra p') }}</p>
+            {% else %}
+              <p>{{ obj['t2_text'] }}</p>
+            {% endif %}
+            {{ get_people(obj) }}
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class='row'>
+      <!-- commentary and bibliography -->
+      {% if obj["images"]|length > 0 %}
+        <div class='col-md-6' style="height:100%;">
+          <div id="mirador-container" style="height:100%;"></div>
+        </div>
+        <section class='col-md-6 text'>
+          <h2>Commentary</h2>
+          {% filter markdown %}{{ obj['comm'] }}{% endfilter %}
+          {{ get_people(obj) }}
+        </section>
+      {% else %}
+        <section id="commentary-text" class="col-xs-12">
+          <h2>Commentary</h2>
+          {% filter markdown %}{{ obj['comm'] }}{% endfilter %}
+          {{ get_people(obj) }}
+        </section>
       {% endif %}
     </div>
-    <div class='col-md-6'>
-      <!-- translations -->
-      <!-- really these ought to be generated based on the attached translations but this will work for now, only need to change how the tab is named, reference a list or something -->
-      <ul id='lang_tabs' class='nav nav-tabs nav-justified' role="tablist">
-        <li role='presentation'><a href='#eng' aria-controls='eng' role='tab' data-toggle='tab'>English</a></li>
-        <li role='presentation'><a href='#fra' aria-controls='fra' role='tab' data-toggle='tab'>French</a></li>
-      </ul>
-      <div class='tab-content'>
-        <div role='tabpanel' class='tab-pane' id={{ obj['t1_lang']}}>
-          {% if 't1_uri' in obj %}
-            <p>{{ get_text(obj['t1_uri'], '#eng p') }}</p>
-          {% else %}
-            <p>{{ obj['t1_text'] }}</p>
-          {% endif %}
-          {{ get_people(obj) }}
-        </div>
-        <div role='tabpanel' class='tab-pane' id={{ obj['t2_lang']}}>
-          {% if 't2_uri' in obj %}
-            <p>{{ get_text(obj['t2_uri'], '#fra p') }}</p>
-          {% else %}
-            <p>{{ obj['t2_text'] }}</p>
-          {% endif %}
-          {{ get_people(obj) }}
-        </div>
-      </div>
+    <div class="row">
+      <section id="commentary-bibliography" class="col-xs-12">
+        <h2>Bibliography</h2>
+        {% filter markdown %}{{ obj['bibl'] }}{% endfilter %}
+        {{ get_people(obj) }}
+      </section>
     </div>
-  </div>
-  <div class='row'>
-    <!-- commentary and bibliography -->
-    {% if obj["images"]|length > 0 %}
-      <div class='col-md-6'>
-        {{ commentary(obj) }}
-      </div>
-      <div class='col-md-6' style="height:100%;">
-        <div id="mirador-container" style="height:100%;"></div>
-      </div>
-    {% else %}
-      {{ commentary(obj, class='col-xs-12') }}
-    {% endif %}
-  </div>
+    <div class="row">
+      <section id="commentary-tag" class="col-xs-12">
+        <h2>Tags</h2>
+          <ul class="list-inline">
+            <li><span class="tag">Tag</span></li>
+            <li><span class="tag">Tag Lorem Ipsum</span></li>
+            <li><span class="tag">Tag Sum Ipsum Lorem</span></li>
+          </ul>
+        </section>
+    </div>
+    <div class="row">
+      <section id="commentary-semantictag" class="col-xs-12">
+        <h2>Semantic Tags</h2>
+          <ul class="list-inline">
+            <li><span>http://semantic.com/tag</span></li>
+            <li><span>http://semantic.com/tagTag Lorem Ipsum</span></li>
+            <li><span>http://semantic.com/tagTag Sum Ipsum Lorem</span></li>
+          </ul>
+      </section>
+    </div>
 
-  <div class='row'>
-    <div class="col-xs-12">
-      <a href="{{url_for('api_data_get', millnum=millnum)}}">Get JSON</a>
-    </div>
-  </div>
+    <aside class='row' id="export">
+      <div class="col-xs-12 align-right">
+        <a class="btn-milliet sm" href="{{url_for('api_data_get', millnum=millnum)}}">Get JSON</a>
+      </div>
+    </aside>
+  </article>
 {% endblock %}
-
-{% macro commentary(obj, class='') %}
-<div id="commentary-text" class="{{class}}">
-  <h2>Commentary</h2>
-  {% filter markdown %}{{ obj['comm'] }}{% endfilter %}
-  {{ get_people(obj) }}
-</div>
-<div id="commentary-bibliography" class="{{class}}">
-  <h2>Bibliography</h2>
-  {% filter markdown %}{{ obj['bibl'] }}{% endfilter %}
-  {{ get_people(obj) }}
-</div>
-{% endmacro %}

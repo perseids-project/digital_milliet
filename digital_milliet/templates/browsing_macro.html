@@ -1,47 +1,46 @@
 {% macro display_auth_list(list_of_authors) -%}
-	<ul>
-		{% for auth in list_of_authors %}
-			<li>{{ auth['name'] }}</li>	
-				<ul>
-				{% for work in auth['works'] %}					
-					<li>{{ work['title'] }}</li>
-						<ul>
-							{% for millnum in work['millnums']%}
-							<li> <a href="commentary/{{ millnum[0] }}">{{ millnum[1] }} (Milliet {{ millnum[0] }})</a> </li>
-							{% endfor %}
-						</ul>
-				{% endfor %}
-				</ul>				
-		{% endfor %}
-	</ul>
-
+	{% for auth in list_of_authors %}
+		<div class="author-card">
+			{% for work in auth['works'] %}	
+			<div class="row">
+				<div class="col-xs-7">
+					<div class="work-name">
+						<h3>{{ auth['name'] }}</h3>
+						<h4>{{ work['title'] }}</h4>
+					</div>
+				</div>	
+				<div class="col-xs-5 ">
+					<ul class="ref-list">
+						{% for millnum in work['millnums']%}
+						<li><a href="commentary/{{ millnum[0] }}">{{ millnum[1]|clean_ref }} (Commentary {{ millnum[0] }})</a></li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+			{% endfor %}
+		</div>		
+	{% endfor %}
 {%- endmacro %}
 
 {% macro get_people(obj) -%}
     {% if obj['creator'] or obj['contributor']  %}
-        <div class="provenance">
+        <footer class="provenance">
             <h5>Annotation Authors and Editors</h5>
-            <ul class="list-unstyled">
             {% if obj['creator'] and 'name' in obj['creator'] %}
-                <li class="creator">Created by:
-                    <ul>
-                        <li>{{ obj['creator']['name'] }}</li>
-                    </ul>
-                </li>
+                <section>Created by <span property="dc:creator">{{ obj['creator']['name'] }}</span></section>
             {% endif %}
-            {% if obj['contributor'] %}
-                <li class="contributors">Contributors:
-                    <ul>
+            {% if obj['contributor'] and obj['contributor']|length > 0 %}
+                <section>Contributors: 
+                    <ul class="contributors">
                         {% for c in obj['contributor'] %}
                             {% if 'name' in c %}
-                                <li>{{ c['name'] }}</li>
+                                <li property="dc:creator">{{ c['name'] }}</li>
                             {% endif %}
                         {% endfor %}
                     </ul>
-                </li>
+                </section>
             {% endif %}
-            </ul>
-        </div>
+        </footer>
     {% endif %}
 {%- endmacro %}
 

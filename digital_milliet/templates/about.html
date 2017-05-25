@@ -1,55 +1,49 @@
 {% extends "base.html" %}
-{% block container_class %}container-fluid{% endblock%}
+{% block title %}| What is the Digital Milliet?{% endblock %}
 {% block content %}
-	{{ super() }}
-		<div class="row">
-			<h2>What is the Digital Milliet?</h2>
-			<p>
-				The Recueil des textes grecs et latins relatifs à la peinture ancienne (“Collection of Greek and Latin Texts Concerning Ancient Painting”) was the initiative of a French academic painter, <a target="_blank" href="https://fr.wikipedia.org/wiki/Paul_Milliet_(peintre)">Paul Milliet</a>, who had a passion for ancient Greek culture. Milliet wished to make ancient texts about painting accessible to non-specialists such as himself. At the time, the only sourcebook available about ancient painting was Overbeck’s Die Antiken Schriftquellen zur Geschichte der Bildenden Künste bei dem Griechen (“Ancient Written Sources Concerning the History of the Figurative Arts in Greece”), published in 1868. The texts were untranslated and therefore inaccessible to the general public. So, Paul Milliet took it upon himself to sponsor a book that would include all the surviving texts about ancient painting. Each text would come with a translation and commentaries that took current knowledge about ancient painting into account, such as archaeology, epigraphy, and philology.
-			</p>
-			<p>
-				The composition of the first draft of the “Recueil Milliet” was assigned to the archaeologist <a target="_blank" href"https://fr.wikipedia.org/wiki/Gustave_Mendel">Gustave Mendel</a> in 1906. In 1911, it was reassigned to <a target="_blank" href="https://en.wikipedia.org/wiki/Adolphe_Reinach">Adolphe Reinach</a>, who was the son of <a target="_blank" href="https://en.wikipedia.org/wiki/Joseph_Reinach">Joseph Reinach</a>, a famous journalist and politician best known for his involvement in the Dreyfus case. Joseph’s brothers and Adolphe’s uncles were <a target="_blank" href="https://en.wikipedia.org/wiki/Salomon_Reinach">Salomon Reinach</a> and <a target="_blank" href="https://en.wikipedia.org/wiki/Th%C3%A9odore_Reinach">Theodore Reinach</a>, the former a famous archaeologist and the latter a famous historian. The composition of the Receuil Milliet proceeded well until the tragic death of Adolphe Reinach in 1914 during the battle of the Ardennes. The Recueil Milliet was left unfinished but it was nonetheless published by Salomon Reinach in 1921, after the end of WWI. The initial plan was to publish three volumes which  would follow the organization of Overbeck’s Antiken Schriftquellen: the first volume was to be about painting, the second about architecture and the third about sculpture. As fate would have it, only the first volume ever got published. However, that volume had an important posterity and became the preferred reference work concerning ancient painting. Its most recent iteration was published in 1985 when Agnès Rouveret proposed an <a target="_blank" href="http://www.editionsmacula.com/livre/75.html">enhanced version</a> with updated bibliography.
-			</p>
-			<p>
-				Our work on ancient textual sources concerning Greek and Roman painting takes a similar approach to that of the original Recueil Milliet. We offer an interactive collection of the ancient Greek and Latin texts about painting. Every single text is to be accompanied by a bilingual translation (English and French) and a commentary produced in the light of current knowledge about ancient Greek and Roman painting. Each passage has a persistent identifier and the passages are digitally tagged, on the level of the passage and within the text, indicating the major subjects demonstrated in the texts and images. These tags make up a bilingual index to the collection. The texts and enhancements are saved in the <a target="_blank" href="http://www.openannotation.org/spec/core/">Open Annotation</a> data model, a standardized framework for creating annotations on resources in the world wide web. Leveraging this growing standard makes our data easily readable and reusable, and therefore potentially interoperable with other projects. Finally, the collection includes textual and iconographical comments that explain technical points about ancient painting such as shadowing, perspective, symmetry, and outline drawing. Although the works of art described in ancient texts are lost, archaeological materials nonetheless renew and increase our knowledge about ancient painting and allow us to offer concrete examples of classical painting to illustrate or accompany the descriptions found in ancient texts.
-			</p>
-		</div>
-		<hr />
-		<h2>Who is the Digital Milliet?</h2>
-		<div class="row voffset2">
-			<div class="col-md-4 text-center">
-				<img style="max-height:150px" src="{{ url_for('static', filename='img/MCB.jpg') }}"/>			
-				<h4><b>Marie-Claire Beaulieu</b>, Project Director</h4>
-			</div>
-			<div class="col-md-4 text-center">
-				<img style="max-height:150px" src="{{ url_for('static', filename='img/VT.jpg') }}"/>
-				<h4><b>Valérie Toillon</b>, Scientific Editor</h4>
-			</div>
-			<div class="col-md-4 text-center">
-				<img style="max-height:150px" src="{{ url_for('static', filename='img/AK.png') }}"/>
-				<h4><b>Anna Krohn</b>, Software Developer</h4>
-			</div>
-		</div>
-		<div class="row voffset2">
-			<div class="col-md-4">
-				<p>
-					Marie-Claire Beaulieu's interests are concentrated in two main areas: Greek religion and Digital Humanities. In Greek religion, she has published articles and given professional talks on various aspects of Greek cults and myths, especially centering on myths of the sea. She has a particular interest in the role of animals in Greek mythology, and has investigated dolphins and ducks in detail, among others. She is currently finishing a book, titled "Bridging Horizons. The Sea in Greek Mythology and Cosmology", in which she proposes that the sea marks the boundary between mortals, immortals, and the dead. 
-				</p>
-				<p>
-					In Digital Humanities, Marie-Claire Beaulieu is working on making the creation and dissemination of knowledge about the ancient world more accessible. She is the co-director of the <a target="_blank" href="http://perseids.org/">Perseids Project</a>, a collaborative online environment in which users can edit, translate, and produce commentaries on a variety of ancient source documents, including inscriptions, medieval manuscripts, and texts transmitted through the manuscript tradition such as the Homeric <i>Iliad</i>. 
-				</p>
-			</div>
-			<div class="col-md-4">
-				<p>
-					Dr. Valérie Toillon received her PhD in May 2014. She is a specialist of Ancient Greek Painting. Her thesis covered the representation and expression of movement in ancient Greek vase painting and in ancient artistic thought. She is currently a post-doctoral researcher at Perseus Digital Library. Her latest writing project is about the iconography of ancient greek vase painting, which will be published soon. For the present project Dr. V. Toillon received a post-doctoral fellowship from the FQRSC (<a target="_blank" href="http://www.frqsc.gouv.qc.ca/">Fond Québécois de la Recherche en Sciences Humaines</a>).
-				</p>
-			</div>
-			<div class="col-md-4">
-				<p>
-					Anna Krohn splits her time between The Digital Milliet project, staffing the <a target="_blank" href="https://sites.google.com/a/brandeis.edu/dh-lab/">Digital Humanities Lab</a> at Brandeis University, and seeking her Master's at Brandeis in Ancient Greek and Roman Studies. Her interests span many areas: the ancient world, archaeology, library science, data management, 3D modeling, and software development.
-				</p>
-			</div>
+<article id="about">
+	<h1>What is the Digital Milliet?</h1>
+	<section class="text">
+		<p>
+			The Recueil des textes grecs et latins relatifs à la peinture ancienne (“Collection of Greek and Latin Texts Concerning Ancient Painting”) was the initiative of a French academic painter, <a target="_blank" href="https://fr.wikipedia.org/wiki/Paul_Milliet_(peintre)">Paul Milliet</a>, who had a passion for ancient Greek culture. Milliet wished to make ancient texts about painting accessible to non-specialists such as himself. At the time, the only sourcebook available about ancient painting was Overbeck’s Die Antiken Schriftquellen zur Geschichte der Bildenden Künste bei dem Griechen (“Ancient Written Sources Concerning the History of the Figurative Arts in Greece”), published in 1868. The texts were untranslated and therefore inaccessible to the general public. So, Paul Milliet took it upon himself to sponsor a book that would include all the surviving texts about ancient painting. Each text would come with a translation and commentaries that took current knowledge about ancient painting into account, such as archaeology, epigraphy, and philology.
+		</p>
+		<p>
+			The composition of the first draft of the “Recueil Milliet” was assigned to the archaeologist <a target="_blank" href"https://fr.wikipedia.org/wiki/Gustave_Mendel">Gustave Mendel</a> in 1906. In 1911, it was reassigned to <a target="_blank" href="https://en.wikipedia.org/wiki/Adolphe_Reinach">Adolphe Reinach</a>, who was the son of <a target="_blank" href="https://en.wikipedia.org/wiki/Joseph_Reinach">Joseph Reinach</a>, a famous journalist and politician best known for his involvement in the Dreyfus case. Joseph’s brothers and Adolphe’s uncles were <a target="_blank" href="https://en.wikipedia.org/wiki/Salomon_Reinach">Salomon Reinach</a> and <a target="_blank" href="https://en.wikipedia.org/wiki/Th%C3%A9odore_Reinach">Theodore Reinach</a>, the former a famous archaeologist and the latter a famous historian. The composition of the Receuil Milliet proceeded well until the tragic death of Adolphe Reinach in 1914 during the battle of the Ardennes. The Recueil Milliet was left unfinished but it was nonetheless published by Salomon Reinach in 1921, after the end of WWI. The initial plan was to publish three volumes which  would follow the organization of Overbeck’s Antiken Schriftquellen: the first volume was to be about painting, the second about architecture and the third about sculpture. As fate would have it, only the first volume ever got published. However, that volume had an important posterity and became the preferred reference work concerning ancient painting. Its most recent iteration was published in 1985 when Agnès Rouveret proposed an <a target="_blank" href="http://www.editionsmacula.com/livre/75.html">enhanced version</a> with updated bibliography.
+		</p>
+		<p>
+			Our work on ancient textual sources concerning Greek and Roman painting takes a similar approach to that of the original Recueil Milliet. We offer an interactive collection of the ancient Greek and Latin texts about painting. Every single text is to be accompanied by a bilingual translation (English and French) and a commentary produced in the light of current knowledge about ancient Greek and Roman painting. Each passage has a persistent identifier and the passages are digitally tagged, on the level of the passage and within the text, indicating the major subjects demonstrated in the texts and images. These tags make up a bilingual index to the collection. The texts and enhancements are saved in the <a target="_blank" href="http://www.openannotation.org/spec/core/">Open Annotation</a> data model, a standardized framework for creating annotations on resources in the world wide web. Leveraging this growing standard makes our data easily readable and reusable, and therefore potentially interoperable with other projects. Finally, the collection includes textual and iconographical comments that explain technical points about ancient painting such as shadowing, perspective, symmetry, and outline drawing. Although the works of art described in ancient texts are lost, archaeological materials nonetheless renew and increase our knowledge about ancient painting and allow us to offer concrete examples of classical painting to illustrate or accompany the descriptions found in ancient texts.
+		</p>
+	</section>
 
-		</div>
+<hr />
+
+<h2>Who is the Digital Milliet?</h2>
+
+<section class="row row-eq-height-md contributors">
+	<div class="col-md-4">
+		<img src="{{ url_for('static', filename='img/MCB.jpg') }}"/>			
+		<h4><b>Marie-Claire Beaulieu</b>, Project Director</h4>
+		<p>
+			Marie-Claire Beaulieu's interests are concentrated in two main areas: Greek religion and Digital Humanities. In Greek religion, she has published articles and given professional talks on various aspects of Greek cults and myths, especially centering on myths of the sea. She has a particular interest in the role of animals in Greek mythology, and has investigated dolphins and ducks in detail, among others. She is currently finishing a book, titled "Bridging Horizons. The Sea in Greek Mythology and Cosmology", in which she proposes that the sea marks the boundary between mortals, immortals, and the dead. 
+		</p>
+		<p>
+			In Digital Humanities, Marie-Claire Beaulieu is working on making the creation and dissemination of knowledge about the ancient world more accessible. She is the co-director of the <a target="_blank" href="http://perseids.org/">Perseids Project</a>, a collaborative online environment in which users can edit, translate, and produce commentaries on a variety of ancient source documents, including inscriptions, medieval manuscripts, and texts transmitted through the manuscript tradition such as the Homeric <i>Iliad</i>. 
+		</p>
 	</div>
+	<div class="col-md-4">
+		<img src="{{ url_for('static', filename='img/VT.jpg') }}"/>
+		<h4><b>Valérie Toillon</b>, Scientific Editor</h4>
+		<p>
+			Dr. Valérie Toillon received her PhD in May 2014. She is a specialist of Ancient Greek Painting. Her thesis covered the representation and expression of movement in ancient Greek vase painting and in ancient artistic thought. She is currently a post-doctoral researcher at Perseus Digital Library. Her latest writing project is about the iconography of ancient greek vase painting, which will be published soon. For the present project Dr. V. Toillon received a post-doctoral fellowship from the FQRSC (<a target="_blank" href="http://www.frqsc.gouv.qc.ca/">Fond Québécois de la Recherche en Sciences Humaines</a>).
+		</p>
+	</div>
+	<div class="col-md-4">
+		<img src="{{ url_for('static', filename='img/AK.png') }}"/>
+		<h4><b>Anna Krohn</b>, Software Developer</h4>
+		<p>
+			Anna Krohn splits her time between The Digital Milliet project, staffing the <a target="_blank" href="https://sites.google.com/a/brandeis.edu/dh-lab/">Digital Humanities Lab</a> at Brandeis University, and seeking her Master's at Brandeis in Ancient Greek and Roman Studies. Her interests span many areas: the ancient world, archaeology, library science, data management, 3D modeling, and software development.
+		</p>
+	</div>
+</section>
+</article>
 {% endblock %}

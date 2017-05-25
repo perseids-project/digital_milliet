@@ -1,0 +1,22 @@
+#browse {
+	h1, h2 {
+		margin:						0 $default-margin $default-margin $default-margin;
+
+    	@media (max-width: $screen-sm-max) {
+			margin-top:	$default-margin;
+		}
+
+	}
+	#milliet-list {
+
+		list-style-type: 			none;
+		margin:						0;
+		padding: 					$default-margin;
+		background-color : 			$card-bg;
+
+		.right {
+			float:					right;
+		}
+	}
+	margin-bottom:					3 * $default-margin;
+}

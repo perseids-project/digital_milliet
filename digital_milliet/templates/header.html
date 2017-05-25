@@ -19,8 +19,8 @@
         <li><a href="{{url_for('commentary')}}">Browse</a></li>
         <li><a href="{{url_for('about')}}">About</a></li>
         {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
-          <li class="logout"><a href="{{url_for('r_oauth_logout')}}?next={{ request.url }}">Logout</a></li>
           <li><a href="{{url_for('new')}}">Add Record</a></li>
+          <li class="logout"><a href="{{url_for('r_oauth_logout')}}?next={{ request.url }}" title="{{ session.oauth_user_name or session.oauth_user_uri }}">Logout</a></li>
         {% else %}
           <li><a href="{{url_for('r_oauth_login')}}?next={{ request.url }}">Login</a></li>
         {% endif %}
@@ -28,9 +28,6 @@
         <!-- <li><a href="http://digmill.perseus.org/annotation">Add Record</a></li> -->
       </ul>
     </div><!-- /.navbar-collapse -->
-    {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
-      <div class="navbar-right">Hello, {{ session.oauth_user_name or session.oauth_user_uri }}</div>
-    {% endif %}
 
   </div><!-- /.container-fluid -->
 </nav>

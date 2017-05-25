@@ -4,19 +4,34 @@
 
 {% block title%}| Browse{% endblock %}
 {% block content %}
-<div class='row'>
-	<div class="col-md-6">
-		<h2>Author and Work</h2>
-		{{ display_auth_list(auth_list) }}
-	</div>
+<article id="browse">
+    <h1>Browse by</h1>
+    <nav class='row' id="browse">
+        <div class="col-md-9">
+            <h2>Author and Work</h2>
+            {{ display_auth_list(auth_list) }}
+        </div>
 
-	<div class="col-md-6">
-		<h2>Digital Milliet Entries and Commentary</h2>
-		<ul>
-			{% for num in millnum_list %}
-				<li>{{ num }} <a href="{{url_for("commentary", millnum=num)}}">View</a> <a href="{{url_for("edit", millnum=num)}}">Edit</a></li>
-			{% endfor %}
-		</ul>
-	</div>
-</div>
+        <div class="col-md-3">
+            <h2>Milliet Commentary</h2>
+            <ul id="milliet-list">
+                {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
+                    {% for num in millnum_list %}
+                        <li>
+                            <a href="{{url_for("commentary", millnum=num)}}">{{ num }}</a>
+                            <a class="right" href="{{url_for("edit", millnum=num)}}">Edit</a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    {% for num in millnum_list %}
+                        <li>
+                            <a href="{{url_for("commentary", millnum=num)}}">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+            </ul>
+        </div>
+    </nav>
+</article>
 {% endblock %}

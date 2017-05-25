@@ -1,0 +1,53 @@
+.author-card {
+	margin:					0 $default-margin $default-margin $default-margin;
+
+    @media (max-width: $screen-sm-max) {
+		margin:
+						0;
+		
+    }
+
+    &:last-child {
+		margin-bottom:		0;
+	}
+	h3 {
+		font-size:			16px;
+		margin: 			0;
+	}
+	h4 {
+		font-size:			14px;
+		font-weight: 		normal;
+		margin:				$default-margin / 2 0 0 0;
+	}
+	ul {
+		list-style-type:	none;
+		margin:0;
+		padding:0
+	}
+	.row {
+		margin-top:			$default-margin;
+
+		display: 			-webkit-box;
+		display: 			-webkit-flex;
+		display: 			-ms-flexbox;
+		display:			flex;
+
+		justify-content:	center;
+		
+		.refl-list {
+			padding: 		$default-margin/2 0;
+		}
+		.work-name {
+			padding:			$default-margin/2 $default-margin;
+		}
+		> div {
+			flex-grow: 1;
+		}
+	}
+	.row:nth-of-type(odd) {
+		> div:first-child {
+			background-color:	$card-bg;
+		}
+		
+	}
+}

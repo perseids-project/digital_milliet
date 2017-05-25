@@ -91,13 +91,12 @@ class AuthorBuilder(object):
             target = data_dict['commentary'][0]['hasTarget'][0]
             cite_urn = data_dict['commentary'][0]['hasBody']['@id']
 
-            URN(target)
+            urn = URN(urn=target)
             millnum = cite_urn.split('.')[2]
-            t_parts = target.split(':')
-            urn_parts = t_parts[3].split('.')
-            pasg = t_parts[4]
-            auth_id = urn_parts[0]
-            work_id = ':'.join(t_parts[0:3]) + ':' + '.'.join(urn_parts[0:2])
+            namespace = str(urn.namespace)
+            auth_id = str(urn.textgroup)
+            work_id = "urn:cts:" + namespace + ":" + auth_id + "." + str(urn.work)
+            pasg = str(urn.reference)
 
             author = self.get_author(auth_id)
             if author is None:

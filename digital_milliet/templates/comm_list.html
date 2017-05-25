@@ -1,9 +1,0 @@
-{% macro comm_list(comm_list) -%}
-    Commentaries
-	<ul>
-		{% for num in comm_list %}
-            <li>{{ num }} <a href="commentary/{{ num }}">View</a> <a href="edit/{{ num }}">Edit</a></li>
-		{% endfor %}
-	</ul>
-
-{%- endmacro %}

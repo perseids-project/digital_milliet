@@ -12,6 +12,8 @@ from digital_milliet.lib.views import Views
 from digital_milliet.lib.catalog import Catalog
 from digital_milliet.lib.mirador import Mirador
 
+import re
+PERSONNA = re.compile("^\w\.\w+$")
 
 class DigitalMilliet(object):
     """ The Digital Milliet Web Application """
@@ -37,6 +39,20 @@ class DigitalMilliet(object):
         self.mirador = Mirador(db=self.mongo, app=self.app, parser=self.commentaries)
         self.babel = Babel(self.app)
         self.views = Views(self.app, self.commentaries, self.mongo, self.authors, self.mirador)
+
+        @self.app.template_filter("clean_ref")
+        def clean_ref(ref):
+            """ Clean up repetition of references
+            """
+
+            spl = ref.split("-")
+            if len(spl) == 2:
+                if spl[0] == spl[1]:
+                    ref = spl[0]
+            spl = ref.split(".")
+            if len(spl) == 2 and ref[0] == ref[2] and PERSONNA.match(ref) is not None:
+                ref = spl[1].title()
+            return ref
 
     def get_db(self):
         return self.mongo

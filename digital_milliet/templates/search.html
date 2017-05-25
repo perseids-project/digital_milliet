@@ -1,21 +1,21 @@
 {% extends "base.html" %}
-{% import "auth_list.html" as a_list %}
-{% import "comm_list.html" as c_list %}
+{% from "browsing_macro.html" import display_auth_list, display_comm_list %}
+
+{% block title %}| Search Results{% endblock %}
 {% block content %}
 	{{ super() }}
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				{% if res %}
-                    {% if type == 'Tags' %}
-                        {{ c_list.comm_list(res) }}
-                    {% else %}
-					    {{ a_list.auth_list(res) }}
-                    {% endif %}
-				{% else %}
-					No Results. <a href="index"> Search again? </a>
-				{% endif %}
-			</div>
+	<div class="row" id="browse">
+		<h1>Results</h1>
+		<div class="col-md-12">
+			{% if res %}
+                {% if type == 'Tags' %}
+                    {{ display_comm_list(res) }}
+                {% else %}
+				    {{ display_auth_list(res) }}
+                {% endif %}
+			{% else %}
+				No Results. <a href="index"> Search again? </a>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

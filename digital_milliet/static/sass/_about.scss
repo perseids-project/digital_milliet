@@ -1,0 +1,16 @@
+#about {
+	margin-bottom:		$default-margin * 3;
+	p {
+		text-align:		justify;
+	}
+	.contributors {
+		h4 {
+			text-align:center;
+		}
+		img {
+			max-height:	150px;
+			margin:0 auto;
+			display:block;
+		}
+	}
+}

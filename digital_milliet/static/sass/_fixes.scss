@@ -1,0 +1,4 @@
+// Fixes for mirador viewer that would span over the gutter otherwise
+.col-md-6 .mirador-container .mirador-viewer {
+	margin: 0 $grid-gutter-width/2;
+}

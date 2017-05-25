@@ -1,0 +1,154 @@
+{% extends "base.html"%}
+
+{% from "commentary/edit_macro.html" import markdown_menu, translation, lang_choice, cts_text_selector, enter_translation, iiif, tags, semantic_tags %}
+
+{% block title %}| Create{% endblock %}
+
+{% block morecss %}
+    <link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/font-awesome.min.css')}}" />
+    <link rel="stylesheet" media="screen" type="text/css" href="{{ url_for('static', filename='css/commentary.enter.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ bower_url_for('capitains-sparrow.typeahead', 'src/css/jquery.cts.typeahead.css') }}" />
+    <link href='https://fonts.googleapis.com/css?family=Cinzel:400,700' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href="{{ bower_url_for('codemirror','lib/codemirror.css') }}" />
+    <link rel="stylesheet" href="{{ bower_url_for('jquery.markdownify','lib/jquery.markdownify.css') }}" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+    <style type="text/css">
+        #iiif-fieldset .manifest_input:first-of-type .rem-input {
+            display:none;
+        }
+        .subfield {
+            margin:10px 0;
+            border-top:1px dashed grey;
+            padding:10px 10px 0 10px;
+        }
+        .subfield:first-child {
+            border-top:none;
+        }
+
+    </style>
+{% endblock %}
+
+{% block morejavascript %}
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="{{ bower_url_for('handlebars', 'handlebars.min.js') }}"></script>
+    <script src="{{ bower_url_for('typeahead.js', 'dist/typeahead.bundle.min.js') }}"></script>
+    <script src="{{ bower_url_for('capitains-sparrow', 'dist/cts.min.js') }}"></script>
+    <script src="{{ bower_url_for('capitains-sparrow.xslt', 'dist/jquery.cts.xslt.min.js') }}"></script>
+    <script src="{{ bower_url_for('capitains-sparrow.service', 'dist/jquery.cts.service.min.js') }}"></script>
+    <script src="{{ bower_url_for('capitains-sparrow.typeahead', 'dist/jquery.cts.typeahead.min.js') }}"></script>
+
+    <script src="{{ bower_url_for('codemirror','lib/codemirror.js') }}"></script>
+    <script src="{{ bower_url_for('codemirror','addon/edit/continuelist.js') }}"></script>
+    <script src="{{ bower_url_for('codemirror','mode/xml/xml.js') }}"></script>
+    <script src="{{ bower_url_for('codemirror','mode/markdown/markdown.js') }}"></script>
+    <script src="{{ bower_url_for('jquery.markdownify', 'lib/jquery.markdownify.js') }}"></script>
+
+    <script language="javascript" type="text/javascript" src="{{ url_for('static', filename="js/commentary.common.enter-edit.js")}}"></script>
+    <script language="javascript" type="text/javascript" src="{{ url_for('static', filename="js/commentary.enter.js")}}"></script>
+    <script type="text/javascript">
+        $(function () {
+          $('.markdown').markdownify();
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+{% include 'flashes.html' %}
+<form id='input_form' action="{{ url_for('.create') }}" method="POST" class="form">
+  <input type="hidden" name="l1"/>
+  <input type="hidden" name="c1"/>
+  <input type="hidden" name="b1"/>
+  <input type="hidden" name="t1"/>
+  <input type="hidden" name="t2"/>
+  <input type="hidden" id="config" data-verify-millnum-url="api/commentary/" data-cts-api="{{ cts_api }}" data-cts-version="{{ cts_version }}" />
+
+  <fieldset class="row">
+      <legend>Identifiers</legend>
+      <div class="col-md-12">
+          <div class="form-group">
+              <label for="milnum">{{ _('Milliet Number:') }}</label>
+              <input class="form-control" placeholder="{{ _('Enter the Milliet number for this passage and associated commentary') }}"
+                     type="text" id="milnum" name="milnum" pattern="[-_\.\w\d]+" maxlength="100" size="100"
+              />
+          </div>
+      </div>
+  </fieldset>
+
+  <!-- Select inital text -->
+  <fieldset class="row" id="text1">
+      <legend>{{ _('Primary Source Passage:') }}</legend>
+      <div class="col-md-6">
+        <em>{{ _('Search for a primary source text:') }}</em>
+        <div class="textdriver" id="l1textdriver" data-lnum="l1"></div>
+        {{ cts_text_selector("l1") }}
+        <div id="lang_choicel1" class="subfield">{{ lang_choice('l1') }}</div>
+      </div>
+      <div class="col-md-6">
+        <div id="l1-dir-buttons">
+            <label>{{ _('Text Direction:') }}</label>
+            <label for="l1-dir-ltr">
+                <input type="radio" id="l1-dir-ltr" name="l1-direction" value="ltr" checked="checked"/>
+                {{ _('Left to Right') }}
+            </label>
+            <label for="l1-dir-rtl">
+                <input type="radio" id="l1-dir-rtl" name="l1-direction" value="rtl"/>
+                {{ _('Right to Left') }}
+            </label>
+        </div>
+        <div>
+            <textarea id="l1text" name="l1text" rows="10" cols="80" data-lnum="l1"></textarea>
+            <div class="alert alert-error" id="l1texterror" style="display:none;">{{ _('Invalid entry') }}</div>
+        </div>
+      </div>
+  </fieldset>
+
+  <!-- Commentary -->
+  <fieldset class="row">
+      <legend>{{ _('Enter Commentary:') }}</legend>
+      <div class="textdriver" id="comtextdriver" data-lnum="c1"></div>
+      <div class="col-md-4">
+          <div id="lang_choice{{id}}">{{ lang_choice(id) }}</div>
+      </div>
+      <div class="col-md-8">
+          {{ markdown_menu("c1text") }}
+          <textarea class='markdown' id="c1text" name="c1text" rows="10" cols="80" data-lnum="c1"></textarea>
+          <small class="error" id="c1texterror" style="display:none;">{{ _('Invalid entry') }}</small>
+      </div>
+  </fieldset>
+
+  <!-- Tags -->
+  <fieldset class="row" id="tags-fieldset">
+    <legend>Tags</legend>
+    {{ tags(row_id="original-tags-input") }}
+  </fieldset>
+
+  <fieldset class="row" id="semantic-tags-fieldset">
+    <legend>Semantic Tags</legend>
+    {{ semantic_tags(row_id="original-semantic_tags-input") }}
+  </fieldset>
+
+
+  <!-- Bibliography information -->
+  <fieldset class="row">
+    <legend>{{ _('Enter Bibliography:') }}</legend>
+    <textarea class="form-control" id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1"></textarea>
+    <input type="hidden" name="select_b1" value="eng"/>
+    <input type="hidden" id="b1-dir-ltr" name="b1-direction" value="ltr"/>
+    <input id="cts-service-1-xml" type="checkbox" name="b1isxml" style="display:none"/>
+  </fieldset>
+
+  <!-- Translation 1 -->
+  {{ enter_translation("t1", "eng", 'Enter English Translation:', 'Search for an English translation:') }}
+
+  <!-- Translation 2 -->
+  {{ enter_translation("t2", "fra", 'Enter French Translation:', 'Search for an French translation:') }}
+
+  <!-- IIIF Manifests -->
+  <fieldset class="row" id="iiif-fieldset">
+      <legend>IIIF Manifests</legend>
+      {{ iiif(row_id="original-iiif-input") }}
+  </fieldset>
+  <button type="submit" id="submit_button" style="float: right; width:200px;">{{ _('Save Annotation') }}"</button>
+</form>
+{% endblock %}

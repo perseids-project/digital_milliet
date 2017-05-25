@@ -1,0 +1,132 @@
+#search {
+    background-image: 		url('../img/background_search.jpg');
+    background-repeat: 		no-repeat;
+    background-position: 	center center;
+    height:					485px;
+    text-align:				center;
+    margin-bottom:			2 * $default-margin;
+	font-size:				16px;
+
+	display: 				flex;
+	align-items: 			center;
+	justify-content:		center;
+
+    .container {
+    	//padding-top:		100px;
+    	//padding-bottom:	100px;
+    }
+    .logo {
+    	height:				100px;
+    }
+    h2 {
+    	color:				#fff;
+    	font-size:			25px;
+    	font-weight:		300!important;
+    }
+
+    .line {
+	    margin:				0 0 $default-margin*1.5 0;
+	    &:last-child {
+	    	margin-bottom:	0;
+	    }
+    }
+
+	@media (max-width: $grid-float-breakpoint) {
+	    height:				385px;
+	    h2 {
+	    	font-size:		15px;
+	    }
+	    .line {
+		    margin:				0 0 $default-margin 0;
+		}
+
+	}
+	#search_box {
+		display: 			flex;
+
+		> * {
+			border:			0;
+			box-shadow:		0;
+			flex-grow:		1;
+			height:			$btn-milliet-height;
+			border-radius:	0;
+		}
+
+		select {
+			text-align:		center;
+			background-color:	$btn-milliet-bg-color;
+			color:				#fff;
+		}
+
+		> input[type="text"] {
+			width:			70%;
+
+			@media (max-width: $grid-float-breakpoint) {
+				width:		50%;
+			}
+		}
+
+		> button {
+			background-color:	$btn-milliet-bg-color;
+			color:				#fff;
+		}
+	}
+	.btn-milliet {
+		font-size:			16px;
+	}
+}
+#explanation-text {
+	margin-bottom:			3 * $default-margin;
+	text-align:				center;
+	font-size:				16px;
+}
+
+.select-container {
+
+	display:							inline-block;
+	cursor:								pointer;
+	position:							relative;
+	border:								0;
+	background-color:					$btn-milliet-bg-color;
+
+	select { 
+		padding-right:					$btn-milliet-height;
+		height:							$btn-milliet-height;
+		background-color:				transparent;
+		border:							none;
+		border-right:					none;
+		overflow:						hidden;
+	    appearance:						none;
+	    -moz-appearance:				none; /* Firefox */
+	    -webkit-appearance:				none; /* Safari and Chrome */
+	    cursor:							pointer;
+		overflow:						hidden;
+		z-index:						99;
+		width:							100%;
+		> option {
+			padding:					$btn-milliet-height / 6 0;
+		}
+	}
+
+	.carret {
+		display:						none;
+	}
+	&:after{
+		pointer-events:					none;
+		z-index:						1;
+		position:						absolute;
+		right:							0;
+		background-color:				$btn-milliet-bg-color;
+		top:							0;
+		display:						block;
+		width:							$btn-milliet-height;
+		height:							$btn-milliet-height;
+		line-height:					$btn-milliet-height;
+		content:						"";
+		color:							white;
+		text-align:						center;
+	    font-size: 						30px;
+	    vertical-align: 				baseline;
+	    @extend 						.fa;
+	}
+}

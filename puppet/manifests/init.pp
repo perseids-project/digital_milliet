@@ -1,32 +1,44 @@
 # Puppet configuration for Digital Milliet
-class digmill($app_root,
+class digital_milliet($app_root,
               $app_path,
               $app_version,
               $repo_url, 
+              $config_file,
               $vhost,
               $ssl_cert,
               $ssl_chain,
-              $ssl_private_key) {
-  include digmill::python3
-  include digmill::node 
+              $ssl_private_key,
+              $backup_dir,
+              $python_version,
+              $python_apache_package,
+              $user) {
 
   ensure_packages('mongodb')
-
-  file { "/etc/ssl/certs/${ssl_cert}":
-    source => "puppet:///modules/site/ssl/${ssl_cert}",
+  class { 'apache':
+    default_vhost => false,
   }
 
-  file { "/etc/ssl/certs/${ssl_chain}":
-    source => "puppet:///modules/site/ssl/${ssl_chain}",
+  class { 'python':
+    version    => "python${python_version}",
+    pip        => 'present',
+    dev        => 'present',
+    virtualenv => 'present',
   }
 
-  file { "/etc/ssl/private/${ssl_private_key}":
-    source => "puppet:///modules/site/ssl/${ssl_private_key}",
-    mode   => '0640',
+  ensure_packages($python_apache_package)
+
+  class { 'apache::mod::wsgi':
+    mod_path     => "mod_wsgi.so-${python_version}",
+    package_name => $python_apache_package,
+  }
+ 
+  user { $user:
+    ensure => present,
   }
 
   file { $app_root:
     ensure  => directory,
+    owner   => $user,
   }
 
   vcsrepo { $app_root:
@@ -34,11 +46,12 @@ class digmill($app_root,
     revision => $app_version,
     provider => git,
     source   => $repo_url,
+    user     => $user,
     require  => File[$app_root],
   }
 
   file { "${app_root}/app.wsgi":
-    content => epp('digmill/app.wsgi.epp', {
+    content => epp('digital_milliet/app.wsgi.epp', {
       'app_root' => $app_root,
     }),
     require => Vcsrepo[$app_root],
@@ -46,25 +59,11 @@ class digmill($app_root,
   }
 
   file { "${app_root}/digital_milliet/config.cfg":
-    source  => 'puppet:///modules/digmill/config.cfg',
+    owner   => $user,
+    source  => $config_file,
     mode    => '0644',
     require => Vcsrepo[$app_root],
   }
-
-  file { '/usr/local/bin/build-dm-js':
-    content => epp('digmill/build-dm-js.sh.epp',
-    {
-      'node_version' => '0.10.46'
-    mode    => '0775',
-  }
-
-  exec { 'dm-bower':
-    cwd     => "${app_root}/digital_milliet",
-    command => 'bash --login "/usr/local/bin/build-dm-js"',
-    require => [File['/usr/local/bin/build-dm-js'],Vcsrepo[$app_root]],
-    creates => "${app_root}/digital_milliet/bower_components"
-  }
-
 
   python::virtualenv { $app_root:
     ensure       => present,
@@ -74,13 +73,13 @@ class digmill($app_root,
     cwd          => $app_root,
   }
 
-  apache::vhost { 'digmill':
+  apache::vhost { 'digital_milliet':
     servername                  => $vhost,
     port                        => '80',
     docroot                     => $app_root,
     wsgi_daemon_process         => 'dm',
     wsgi_daemon_process_options => {
-      'python-path' => "${app_root}/venv/lib/python3.4/site-packages"
+      'python-path' => "${app_root}/venv/lib/python${python_version}/site-packages"
     },
     wsgi_process_group          => 'dm',
     wsgi_script_aliases         => { $app_path => "${app_root}/app.wsgi" },
@@ -95,14 +94,14 @@ class digmill($app_root,
     ]
   }
 
-  apache::vhost { 'digmill-ssl':
+  apache::vhost { 'digital_milliet-ssl':
     servername                  => $vhost, 
     port                        => '443',
     docroot                     => $app_root,
     ssl                         => true,
-    ssl_cert                    => "/etc/ssl/certs/${ssl_cert}",
-    ssl_key                     => "/etc/ssl/private/${ssl_private_key}",
-    ssl_chain                   => "/etc/ssl/certs/${ssl_chain}",
+    ssl_cert                    => $ssl_cert,
+    ssl_key                     => $ssl_private_key,
+    ssl_chain                   => $ssl_chain,
     wsgi_daemon_process         => 'dm-ssl',
     wsgi_daemon_process_options => {
       'python-path' => "${app_root}/venv/lib/python3.4/site-packages"
@@ -119,24 +118,21 @@ class digmill($app_root,
       "set Access-Control-Allow-Headers 'Origin, X-Requested-With, Content-Type, Accept'"
     ]
   }
-  firewall { '100 Allow web traffic for digmill':
+
+  firewall { '100 Allow web traffic for digital_milliet':
     proto  => 'tcp',
     dport  => '80',
     action => 'accept',
   }
-  firewall { '100 Allow ssltraffic for digmill':
+
+  firewall { '100 Allow ssltraffic for digital_milliet':
     proto  => 'tcp',
     dport  => '443',
     action => 'accept',
   }
-  firewall { '100 Allow py for digmill':
-    proto  => 'tcp',
-    dport  => '5000',
-    action => 'accept',
-  }
 
   cron { 'dump-mongo':
-    command => '/usr/bin/mongodump -o /usr/local/mongo_backup >/var/log/mongodump.log 2>&1',
+    command => "/usr/bin/mongodump -o ${backup_dir} >/var/log/mongodump.log 2>&1",
     minute  => '45',
     hour    => '*/6',
   }

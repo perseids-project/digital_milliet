@@ -5,6 +5,8 @@
 .. image:: https://readthedocs.org/projects/pip/badge/?version=latest
    :target: http://digital-milliet.readthedocs.io/en/latest
 
+Full Documentation at http://digital-milliet.readthedocs.io/en/latest/
+
 Overview
 ========
 
@@ -49,19 +51,19 @@ Create a virtual environment
     source venv/bin/activate
     python setup.py install
 
-Run the code
+Run the code, installing test fixtures and with a fixed user:
 
 .. code-block:: shell
 
-    python run.py
-
+    python runtest.py --install --loggedin
 
 Or deploy in Docker container
 
 .. code-block:: shell
 
     git clone https://github.com/perseids-project/digital_milliet
-    docker build digital_milliet_image
+    cd digital_milliet 
+    docker build -t digital_milliet_image .
     docker run -p 5000:5000 -t -i digital_milliet_image
 
 For production deployment, see Puppet manifests in the puppet subdirectory of this repository.
@@ -78,7 +80,7 @@ Throughout the code and interface, this is referred to as the "Milliet Number".
 
 Additional annotations in each graph include a Bibliography, French and English translations of the primary source text,
 as well as images representing the described artwork or related material and semantic tag annotations on the images,
-the primry source texts, the translations and the commentary.
+the primary source texts, the translations and the commentary.
 
 Entries are indexed for browsing both by Milliet Number and Author/Work/Passage of the target primary source text passage.
 
@@ -112,10 +114,13 @@ A design for semantic tagging of textual content has not yet been decided upon.
 Workflow
 ********
 
-The primary workflow for entering a new entry in the Digital Milliet is described in the diagram below. Individual
-components of an entry can also be edited or added separately after the initial data entry, via the Edit interface.
+The primary workflow for entering a new entry in the Digital Milliet is described in the diagram below. 
 
-.. image:: digitalmillietnewcommentaryworkflow.png
+.. image:: https://github.com/perseids-project/digital_milliet/blob/master/doc/digitalmillietnewcommentaryworkflow.png?raw=true
+
+Individual components of an entry can also be edited or added separately after the initial data entry, via the Edit interface.  
+
+Image annotations can be added, edited and deleted directly using the Mirador viewer. 
 
 Authentication and Authorization
 ********************************
@@ -146,8 +151,7 @@ the Digital Milliet application. Once a record is created, if it's edited by a u
 added as an additional editor in the updated annotations.
 
 Although not recommended for production use, it is possible to disable the OAuth2 protection by setting the name and URI
-to associate with all records as a configuration setting.  This could be used in combination with a simpler authentication
-method such as HTTP Basic Authorization.
+to associate with all records via the `OAUTH_USER_OVERRIDE` configuration setting.  This could be used in combination with a simpler authentication method such as HTTP Basic Authorization.
 
 OAuth2 provides Authentication but not Authorization support. (By Authorization we mean restricting create/update/delete
 access of Digital Milliet entries to only specific authenticated users.) Implementing a full user model and role-based
@@ -162,3 +166,54 @@ must be a member of the Perseids Community with that id in order to be able to c
 Digital Milliet. If the `ENFORCE_COMMUNITY_ID` setting is left empty, this functionality is disabled and all
 authenticated users can create, edit or delete entries.
 
+Configuration
+*************
+All deployment specific variables and dependencies are specified in an external configuration file. By default the application looks for a configuration file named `config.cfg` in the digital_milliet base directory.  An alternate
+path can be supplied in an argument to the DigitalMilliet Flask Application:
+
+.. code-block:: python
+
+    DigitalMilliet(app, config_file="path/to/your/config.cfg")
+
+
+The default contents of this configuration file, with explanation of each setting, is provided below:
+
+.. code-block:: shell
+
+      # Name of the Mongo database
+      MONGO_DBNAME = 'app'
+
+      # Secret key for Flask session
+      SECRET_KEY = 'development is fun'
+
+      # Perseids OAUTH Setup
+      # OAUTH_CONSUMER_KEY and OAUTH_CONSUMER_SECRET must be supplied by Perseids Administrator for Production use
+      OAUTH_NAME = "digitalmilliet"
+      OAUTH_CONSUMER_KEY = 'dummy'
+      OAUTH_CONSUMER_SECRET = 'dummy'
+      OAUTH_REQUEST_TOKEN_PARAMS = {'scope': 'read'}
+      OAUTH_BASE_URL = 'https://sosol.perseids.org/sosol/api/v1/'
+      OAUTH_ACCESS_TOKEN_URL = 'https://sosol.perseids.org/sosol/oauth/token'
+      OAUTH_ACCESS_TOKEN_METHOD = "POST"
+      OAUTH_REQUEST_TOKEN_URL = None
+      OAUTH_AUTHORIZE_URL = 'https://sosol.perseids.org/sosol/oauth/authorize'
+      OAUTH_CALLBACK_URL = 'https://digmill.perseids.org/digmil/oauth/authorized'
+
+      # Name of the collection for author records (future proofing to enable move to a separate collection)
+      AUTHORS_COLLECTION = "annotation"
+
+      # Set this to the ID for the Perseids community id in which membership enables Digital Milliet editorial permissions
+      ENFORCE_COMMUNITY_ID = None
+
+      # Not to be used in Production: eases development without OAuth Setup
+      OAUTH_USER_OVERRIDE = { 'oauth_user_uri' : 'http://sampleuseruri', 'oauth_user_name': 'Sample User' }
+
+      # Perseus Catalog API - Used for Lookup of Author and Work Metadata
+      CATALOG_API_URL = 'http://catalog.perseus.org/cite-collections/api'
+      CITE_URI_PREFIX = 'http://perseids.org/collections/'
+      CITE_COLLECTION = 'urn:cite:perseus:digmil'
+
+      # CTS API Endpoint for Retrieval of Primary Source Texts and Translations
+      CTS_BROWSE_URL = 'https://cts.perseids.org'
+      CTS_API_URL = 'https://cts.perseids.org/api/cts/'
+      CTS_API_VERSION = 5

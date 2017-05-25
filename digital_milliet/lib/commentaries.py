@@ -123,7 +123,8 @@ class CommentaryHandler(object):
                 elif manifestUri not in duets:
                     to_delete.append(manifestUri)
             for manifestUri, publisher in duets.items():
-                images[manifestUri] = self.format_manifests_from_form(manifestUri, publisher, modtime, millnum)
+                if manifestUri != '':
+                    images[manifestUri] = self.format_manifests_from_form(manifestUri, publisher, modtime, millnum)
 
             record["images"] = [anno for key, anno in images.items() if key not in to_delete]
         else:
@@ -236,7 +237,7 @@ class CommentaryHandler(object):
         if "iiif" in form:
             annotation["images"] = [
                 self.format_manifests_from_form(manifest_uri, publisher, date, milnum)
-                for manifest_uri, publisher in zip(form["iiif"], form["iiif_publisher"])
+                for manifest_uri, publisher in zip(form["iiif"], form["iiif_publisher"]) if manifest_uri != ''
             ]
 
         if "tags" in form:

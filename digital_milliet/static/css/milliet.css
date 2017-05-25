@@ -7002,7 +7002,8 @@ article#milliet .provenance {
   align-items: center;
   justify-content: center; }
   #search .logo {
-    height: 100px; }
+    max-height: 100px;
+    max-width: 100%; }
   #search h2 {
     color: #fff;
     font-size: 25px;
@@ -7018,6 +7019,11 @@ article#milliet .provenance {
         font-size: 15px; }
       #search .line {
         margin: 0 0 20px 0; } }
+  @media (max-width: 767px) {
+    #search .logo {
+      max-height: 75px; }
+    #search .line {
+      margin: 0 0 15px 0; } }
   #search #search_box {
     display: flex; }
     #search #search_box > * {
@@ -7035,11 +7041,23 @@ article#milliet .provenance {
       @media (max-width: 768px) {
         #search #search_box > input[type="text"] {
           width: 50%; } }
+      @media (max-width: 767px) {
+        #search #search_box > input[type="text"] {
+          width: 100%; } }
     #search #search_box > button {
       background-color: #455a64;
       color: #fff; }
+    @media (max-width: 767px) {
+      #search #search_box {
+        flex-direction: column; }
+        #search #search_box > * {
+          height: 45px; } }
   #search .btn-milliet {
     font-size: 16px; }
+    @media (max-width: 767px) {
+      #search .btn-milliet {
+        height: 45px;
+        line-height: 45px; } }
 
 #explanation-text {
   margin-bottom: 60px;
@@ -7088,6 +7106,14 @@ article#milliet .provenance {
     text-align: center;
     font-size: 30px;
     vertical-align: baseline; }
+  @media (max-width: 767px) {
+    .select-container select {
+      height: 45px;
+      padding-right: 45px; }
+    .select-container:after {
+      width: 45px;
+      height: 45px;
+      line-height: 45px; } }
 
 .tag {
   height: 30px;

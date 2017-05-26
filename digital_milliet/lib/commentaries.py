@@ -614,7 +614,7 @@ class CommentaryHandler(object):
         """ List all existing tag body values
 
         :return: tags and semantic tags
-        :rtype tuple
+        :rtype: tuple
         """
         tag_list = self.mongo.db.annotation.find({"tags": {'$exists': 1}, '$where': "this.tags.length>0"})
         tags = {}

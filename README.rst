@@ -4,6 +4,8 @@
    :target: https://coveralls.io/r/perseids-project/digital_milliet?branch=master
 .. image:: https://readthedocs.org/projects/pip/badge/?version=latest
    :target: http://digital-milliet.readthedocs.io/en/latest
+.. image:: https://zenodo.org/badge/40543211.svg
+   :target: https://zenodo.org/badge/latestdoi/40543211
 
 Full Documentation at http://digital-milliet.readthedocs.io/en/latest/
 

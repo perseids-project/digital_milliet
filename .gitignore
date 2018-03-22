@@ -39,3 +39,5 @@ Ahab
 .idea
 .eggs
 .cache
+#Mongo
+data

@@ -643,4 +643,17 @@ class CommentaryHandler(object):
             comm_list = self.mongo.db.annotation.find({"tags.hasBody.chars": query}).sort([("commentary.hasBody.@id",1)])
         return self.retrieve_millietId_in_commentaries(comm_list)
 
+    def get_surrounding_identifier(self, cid):
+        """ Given a Milliet number, return the previous and next numbers available
 
+        :param cid: Milliet number
+        :type cid: string
+        :return: pair of Milliet numbers
+        :rtype: (string, string)
+        """
+
+        identifiers = self.get_milliet_identifier_list()
+        index = identifiers.index(cid)
+        previous_id = identifiers[index - 1] if index - 1 >= 0 else None
+        next_id = identifiers[index + 1] if index + 1 < len(identifiers) else None
+        return (previous_id, next_id)

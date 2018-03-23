@@ -150,10 +150,21 @@
         </section>
     </div>
 
-
     <aside class='row' id="export">
       <div class="col-xs-12 align-right">
         <a class="btn-milliet sm" href="{{url_for('api_data_get', millnum=millnum)}}">Get JSON</a>
+      </div>
+    </aside>
+    <aside class='row' id="prev-next-links">
+      <div class="col-xs-6 text-left">
+        {% if previous_millnum %}
+          <a class="btn-milliet sm" href="/commentary/{{ previous_millnum }}">Previous</a>
+        {% endif %}
+      </div>
+      <div class="col-xs-6 text-right">
+        {% if next_millnum %}
+          <a class="btn-milliet sm" href="/commentary/{{ next_millnum }}">Next</a>
+        {% endif %}
       </div>
     </aside>
   </article>

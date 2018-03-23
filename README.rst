@@ -67,14 +67,16 @@ Run the code, installing test fixtures and with a fixed user:
 
     python runtest.py --install --loggedin
 
-Or deploy in Docker container
+Or with Docker and Docker Compose
 
 .. code-block:: shell
 
     git clone https://github.com/perseids-project/digital_milliet
     cd digital_milliet 
-    docker build -t digital_milliet_image .
-    docker run -p 5000:5000 -t -i digital_milliet_image
+    docker-compose build
+    docker-compose run web scripts/docker-setup.sh
+    docker-compose up
+    docker-compose run web scripts/docker-teardown.sh
 
 For production deployment, see Puppet manifests in the puppet subdirectory of this repository.
 

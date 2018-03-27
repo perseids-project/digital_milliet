@@ -78,8 +78,10 @@ class Views(object):
         parsed_obj, auth_info = self.commentaries.get_milliet(millnum)
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
+        (previous_millnum, next_millnum) = self.commentaries.get_surrounding_identifier(millnum)
 
-        return render_template('commentary/read.html', obj=parsed_obj, info=auth_info, millnum=millnum)
+        return render_template('commentary/read.html', obj=parsed_obj, info=auth_info, millnum=millnum,
+            previous_millnum=previous_millnum, next_millnum=next_millnum)
 
     @OAuthHelper.oauth_required
     def delete(self):

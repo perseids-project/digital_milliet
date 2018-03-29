@@ -2,7 +2,7 @@
 
 {% from "commentary/edit_macro.html" import markdown_menu, translation, lang_choice, cts_text_selector, enter_translation, iiif, tags, semantic_tags %}
 
-{% block title %}| Create{% endblock %}
+{% block title %}| {{ _('Create') }}{% endblock %}
 
 {% block morecss %}
     <link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/font-awesome.min.css')}}" />
@@ -64,7 +64,7 @@
   <input type="hidden" id="config" data-verify-millnum-url="api/commentary/" data-cts-api="{{ cts_api }}" data-cts-version="{{ cts_version }}" />
 
   <fieldset class="row">
-      <legend>Identifiers</legend>
+      <legend>{{ _('Identifiers') }}</legend>
       <div class="col-md-12">
           <div class="form-group">
               <label for="milnum">{{ _('Milliet Number:') }}</label>
@@ -119,12 +119,12 @@
 
   <!-- Tags -->
   <fieldset class="row" id="tags-fieldset">
-    <legend>Tags</legend>
+    <legend>{{ _('Tags') }}</legend>
     {{ tags(row_id="original-tags-input") }}
   </fieldset>
 
   <fieldset class="row" id="semantic-tags-fieldset">
-    <legend>Semantic Tags</legend>
+    <legend>{{ _('Semantic Tags') }}</legend>
     {{ semantic_tags(row_id="original-semantic_tags-input") }}
   </fieldset>
 
@@ -146,7 +146,7 @@
 
   <!-- IIIF Manifests -->
   <fieldset class="row" id="iiif-fieldset">
-      <legend>IIIF Manifests</legend>
+      <legend>{{ _('IIIF Manifests') }}</legend>
       {{ iiif(row_id="original-iiif-input") }}
   </fieldset>
   <button type="submit" id="submit_button" style="float: right; width:200px;">{{ _('Save Annotation') }}"</button>

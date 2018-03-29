@@ -1,6 +1,7 @@
 from digital_milliet.lib.oauth import OAuthHelper
 from flask import render_template, request, redirect, session, flash, Response
 from bson.json_util import dumps
+from flask_babel import gettext
 
 
 class Views(object):
@@ -88,9 +89,9 @@ class Views(object):
         millnum = request.form['millnum']
         removed = self.commentaries.remove_milliet(millnum)
         if removed > 0:
-          flash('Record for ' + millnum + ' removed.','success')
+          flash(gettext('Record for %(millnum)s removed.', millnum=millnum), 'success')
         else:
-          flash('Error removing record for ' + millnum + '.','danger')
+          flash(gettext('Error removing record for %(millnum)s.', millnum=millnum), 'danger')
         return redirect('commentary')
 
     @OAuthHelper.oauth_required
@@ -119,9 +120,9 @@ class Views(object):
             form["semantic_tags"] = []
         saved = self.commentaries.update_commentary(form)
         if saved:
-            flash('Edit successfully saved', 'success')
+            flash(gettext('Edit successfully saved'), 'success')
         else:
-            flash('Error!', 'danger')
+            flash(gettext('Error!'), 'danger')
 
         return redirect('commentary')
 
@@ -143,10 +144,10 @@ class Views(object):
             data["semantic_tags"] = []
         millnum = self.commentaries.create_commentary(data)
         if millnum is not None:
-            flash('Annotation successfully created!','success')
+            flash(gettext('Annotation successfully created!'),'success')
             return redirect('commentary/' + str(millnum))
         else:
-            flash('Error saving!','danger')
+            flash(gettext('Error saving!'),'danger')
             return redirect('new')
 
     def api_data_get(self, millnum):

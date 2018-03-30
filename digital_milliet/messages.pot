@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-30 14:14+0000\n"
+"POT-Creation-Date: 2018-03-30 17:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,29 +17,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 
-#: digital_milliet/lib/views.py:92
+#: digital_milliet/lib/views.py:104
 #, python-format
 msgid "Record for %(millnum)s removed."
 msgstr ""
 
-#: digital_milliet/lib/views.py:94
+#: digital_milliet/lib/views.py:106
 #, python-format
 msgid "Error removing record for %(millnum)s."
 msgstr ""
 
-#: digital_milliet/lib/views.py:123
+#: digital_milliet/lib/views.py:135
 msgid "Edit successfully saved"
 msgstr ""
 
-#: digital_milliet/lib/views.py:125
+#: digital_milliet/lib/views.py:137
 msgid "Error!"
 msgstr ""
 
-#: digital_milliet/lib/views.py:147
+#: digital_milliet/lib/views.py:159
 msgid "Annotation successfully created!"
 msgstr ""
 
-#: digital_milliet/lib/views.py:150
+#: digital_milliet/lib/views.py:162
 msgid "Error saving!"
 msgstr ""
 

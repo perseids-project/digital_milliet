@@ -7,6 +7,11 @@ from datetime import date
 
 class TestRoutes(DigitalMillietTestCase, TestCase):
 
+    def test_favicon(self):
+        favicon = open('digital_milliet/static/favicon/favicon.ico', 'rb').read()
+        rv = self.client.get('/favicon.ico').data
+        self.assertEqual(favicon,rv,"Doesn't appear to serve match favicon")
+
     def test_index(self):
         rv = self.client.get('/').data.decode()
         self.assertIn('Welcome to the home of the Digital Milliet!',rv,"Doesn't appear to be the index.html")

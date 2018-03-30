@@ -12,17 +12,17 @@
 
 {% macro translation(tid, obj) -%}
     <fieldset class="row">
-      <legend>{{ 'Translation : ' + tid }}</legend>
+      <legend>{{ _('Translation : ') + tid }}</legend>
 
       {% if 't'+tid+'_uri' in obj %}
           <div class="col-md-12">
-              <input class="form-control" name="t{{ tid }}_uri" type='text' value="{{obj['t'+tid+'_uri']}}" size="60" pattern="urn:cts:.+?:.+\..+\.(.+):[^\-]+(-[^-]+)?" title="Must be a valid CTS URN" />
+              <input class="form-control" name="t{{ tid }}_uri" type='text' value="{{obj['t'+tid+'_uri']}}" size="60" pattern="urn:cts:.+?:.+\..+\.(.+):[^\-]+(-[^-]+)?" title="{{ _('Must be a valid CTS URN') }}" />
           </div>
       {% else %}
       <div class="col-md-4">
           <select name="lang{{ tid }}" id="lang{{ tid }}" class="form-control">
-            <option value="eng" {% if obj['t'+tid+'_lang'] == 'eng' %} selected='selected' {% endif %}>{{ ('English') }}</option>
-            <option value="fra" {% if obj['t'+tid+'_lang'] == 'fra' %} selected='selected' {% endif %}>{{ ('French') }}</option>
+            <option value="eng" {% if obj['t'+tid+'_lang'] == 'eng' %} selected='selected' {% endif %}>{{ _('English') }}</option>
+            <option value="fra" {% if obj['t'+tid+'_lang'] == 'fra' %} selected='selected' {% endif %}>{{ _('French') }}</option>
           </select>
       </div>
       <div class="col-md-8">

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-03-01 09:52-0500\n"
+"POT-Creation-Date: 2018-03-30 14:14+0000\n"
 "PO-Revision-Date: 2017-03-01 09:52-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -16,637 +16,1000 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.5.3\n"
 
-#: digital_milliet/templates/commentary/enter.html:55
-msgid "Enter Metadata:"
+#: digital_milliet/lib/views.py:92
+#, python-format
+msgid "Record for %(millnum)s removed."
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:56
+#: digital_milliet/lib/views.py:94
+#, python-format
+msgid "Error removing record for %(millnum)s."
+msgstr ""
+
+#: digital_milliet/lib/views.py:123
+msgid "Edit successfully saved"
+msgstr ""
+
+#: digital_milliet/lib/views.py:125
+msgid "Error!"
+msgstr ""
+
+#: digital_milliet/lib/views.py:147
+msgid "Annotation successfully created!"
+msgstr ""
+
+#: digital_milliet/lib/views.py:150
+msgid "Error saving!"
+msgstr ""
+
+#: digital_milliet/templates/about.html:2
+#: digital_milliet/templates/about.html:5
+msgid "What is the Digital Milliet?"
+msgstr ""
+
+#: digital_milliet/templates/about.html:8
+msgid ""
+"The Recueil des textes grecs et latins relatifs à la peinture ancienne "
+"(“Collection of Greek and Latin Texts Concerning Ancient Painting”) was "
+"the initiative of a French academic painter, <a target=\"_blank\" "
+"href=\"https://fr.wikipedia.org/wiki/Paul_Milliet_(peintre)\">Paul "
+"Milliet</a>, who had a passion for ancient Greek culture. Milliet wished "
+"to make ancient texts about painting accessible to non-specialists such "
+"as himself. At the time, the only sourcebook available about ancient "
+"painting was Overbeck’s Die Antiken Schriftquellen zur Geschichte der "
+"Bildenden Künste bei dem Griechen (“Ancient Written Sources Concerning "
+"the History of the Figurative Arts in Greece”), published in 1868. The "
+"texts were untranslated and therefore inaccessible to the general public."
+" So, Paul Milliet took it upon himself to sponsor a book that would "
+"include all the surviving texts about ancient painting. Each text would "
+"come with a translation and commentaries that took current knowledge "
+"about ancient painting into account, such as archaeology, epigraphy, and "
+"philology."
+msgstr ""
+
+#: digital_milliet/templates/about.html:11
+#, python-format
+msgid ""
+"The composition of the first draft of the “Recueil Milliet” was assigned "
+"to the archaeologist <a target=\"_blank\" "
+"href=\"https://fr.wikipedia.org/wiki/Gustave_Mendel\">Gustave Mendel</a> "
+"in 1906. In 1911, it was reassigned to <a target=\"_blank\" "
+"href=\"https://en.wikipedia.org/wiki/Adolphe_Reinach\">Adolphe "
+"Reinach</a>, who was the son of <a target=\"_blank\" "
+"href=\"https://en.wikipedia.org/wiki/Joseph_Reinach\">Joseph Reinach</a>,"
+" a famous journalist and politician best known for his involvement in the"
+" Dreyfus case. Joseph’s brothers and Adolphe’s uncles were <a "
+"target=\"_blank\" "
+"href=\"https://en.wikipedia.org/wiki/Salomon_Reinach\">Salomon "
+"Reinach</a> and <a target=\"_blank\" "
+"href=\"https://en.wikipedia.org/wiki/Th%%C3%%A9odore_Reinach\">Theodore "
+"Reinach</a>, the former a famous archaeologist and the latter a famous "
+"historian. The composition of the Receuil Milliet proceeded well until "
+"the tragic death of Adolphe Reinach in 1914 during the battle of the "
+"Ardennes. The Recueil Milliet was left unfinished but it was nonetheless "
+"published by Salomon Reinach in 1921, after the end of WWI. The initial "
+"plan was to publish three volumes which  would follow the organization of"
+" Overbeck’s Antiken Schriftquellen: the first volume was to be about "
+"painting, the second about architecture and the third about sculpture. As"
+" fate would have it, only the first volume ever got published. However, "
+"that volume had an important posterity and became the preferred reference"
+" work concerning ancient painting. Its most recent iteration was "
+"published in 1985 when Agnès Rouveret proposed an <a target=\"_blank\" "
+"href=\"http://www.editionsmacula.com/livre/75.html\">enhanced version</a>"
+" with updated bibliography."
+msgstr ""
+
+#: digital_milliet/templates/about.html:14
+msgid ""
+"Our work on ancient textual sources concerning Greek and Roman painting "
+"takes a similar approach to that of the original Recueil Milliet. We "
+"offer an interactive collection of the ancient Greek and Latin texts "
+"about painting. Every single text is to be accompanied by a bilingual "
+"translation (English and French) and a commentary produced in the light "
+"of current knowledge about ancient Greek and Roman painting. Each passage"
+" has a persistent identifier and the passages are digitally tagged, on "
+"the level of the passage and within the text, indicating the major "
+"subjects demonstrated in the texts and images. These tags make up a "
+"bilingual index to the collection. The texts and enhancements are saved "
+"in the <a target=\"_blank\" "
+"href=\"http://www.openannotation.org/spec/core/\">Open Annotation</a> "
+"data model, a standardized framework for creating annotations on "
+"resources in the world wide web. Leveraging this growing standard makes "
+"our data easily readable and reusable, and therefore potentially "
+"interoperable with other projects. Finally, the collection includes "
+"textual and iconographical comments that explain technical points about "
+"ancient painting such as shadowing, perspective, symmetry, and outline "
+"drawing. Although the works of art described in ancient texts are lost, "
+"archaeological materials nonetheless renew and increase our knowledge "
+"about ancient painting and allow us to offer concrete examples of "
+"classical painting to illustrate or accompany the descriptions found in "
+"ancient texts."
+msgstr ""
+
+#: digital_milliet/templates/about.html:20
+msgid "Who is the Digital Milliet?"
+msgstr ""
+
+#: digital_milliet/templates/about.html:25
+msgid "Project Director"
+msgstr ""
+
+#: digital_milliet/templates/about.html:27
+msgid ""
+"Marie-Claire Beaulieu's interests are concentrated in two main areas: "
+"Greek religion and Digital Humanities. In Greek religion, she has "
+"published articles and given professional talks on various aspects of "
+"Greek cults and myths, especially centering on myths of the sea. She has "
+"a particular interest in the role of animals in Greek mythology, and has "
+"investigated dolphins and ducks in detail, among others. She is currently"
+" finishing a book, titled \"Bridging Horizons. The Sea in Greek Mythology"
+" and Cosmology\", in which she proposes that the sea marks the boundary "
+"between mortals, immortals, and the dead."
+msgstr ""
+
+#: digital_milliet/templates/about.html:30
+msgid ""
+"In Digital Humanities, Marie-Claire Beaulieu is working on making the "
+"creation and dissemination of knowledge about the ancient world more "
+"accessible. She is the co-director of the <a target=\"_blank\" "
+"href=\"http://perseids.org/\">Perseids Project</a>, a collaborative "
+"online environment in which users can edit, translate, and produce "
+"commentaries on a variety of ancient source documents, including "
+"inscriptions, medieval manuscripts, and texts transmitted through the "
+"manuscript tradition such as the Homeric <i>Iliad</i>."
+msgstr ""
+
+#: digital_milliet/templates/about.html:35
+msgid "Scientific Editor"
+msgstr ""
+
+#: digital_milliet/templates/about.html:37
+msgid ""
+"Dr. Valérie Toillon received her PhD in May 2014. She is a specialist of "
+"Ancient Greek Painting. Her thesis covered the representation and "
+"expression of movement in ancient Greek vase painting and in ancient "
+"artistic thought. She is currently a post-doctoral researcher at Perseus "
+"Digital Library. Her latest writing project is about the iconography of "
+"ancient greek vase painting, which will be published soon. For the "
+"present project Dr. V. Toillon received a post-doctoral fellowship from "
+"the FQRSC (<a target=\"_blank\" "
+"href=\"http://www.frqsc.gouv.qc.ca/\">Fond Québécois de la Recherche en "
+"Sciences Humaines</a>)."
+msgstr ""
+
+#: digital_milliet/templates/about.html:42
+msgid "Software Developer"
+msgstr ""
+
+#: digital_milliet/templates/about.html:44
+msgid ""
+"Anna Krohn splits her time between The Digital Milliet project, staffing "
+"the <a target=\"_blank\" href=\"https://sites.google.com/a/brandeis.edu"
+"/dh-lab/\">Digital Humanities Lab</a> at Brandeis University, and seeking"
+" her Master's at Brandeis in Ancient Greek and Roman Studies. Her "
+"interests span many areas: the ancient world, archaeology, library "
+"science, data management, 3D modeling, and software development."
+msgstr ""
+
+#: digital_milliet/templates/about.html:51
+msgid "Editor"
+msgstr ""
+
+#: digital_milliet/templates/about.html:53
+msgid ""
+"Spyridon Loumakis holds an M.A. in Archaeology from the University of "
+"Athens, Greece, and an M.A. in History and Philosophy of Religion from "
+"Concordia University, Montreal, Canada, funded by the \"Alexander S. "
+"Onassis Public Benefit Foundation\" and the \"A.G. Leventis Foundation\"."
+" He has worked for three years in the Hellenic Ministry of Culture in "
+"Athens as archaeologist and participated in field work and survey "
+"excavations on the island of Cos, Dodecanese, Greece. He is currently "
+"enrolled in the PhD program in Religion and works as part-time lecturer "
+"at Concordia University, Montreal. His interests are divided between the "
+"modern world (genocide studies, colonial and post-colonial Central and "
+"East African Christianity) and the ancient world (ritual studies, healing"
+" cults, river deities, late Antique Egypt, the Underworld). In the "
+"Digital Milliet project Loumakis is editing all texts written in the "
+"English language, is adding commentaries on entries with inscriptions, "
+"and is revising the - already available - translations of the ancient "
+"Greek and Latin texts, especially when they are very different from the "
+"original ones, or providing the project with new translations, whenever "
+"necessary."
+msgstr ""
+
+#: digital_milliet/templates/about.html:57
+msgid "Sr. Software Developer"
+msgstr ""
+
+#: digital_milliet/templates/about.html:59
+msgid ""
+"Bridget Almas is the lead software developer for <a target=\"_blank\" "
+"href=\"http://perseids.org\">The Perseids Project</a> at Tufts "
+"University. She served as architect and code-reviewer on the Digital "
+"Milliet project."
+msgstr ""
+
+#: digital_milliet/templates/authorized.html:6
+msgid "You are logged in"
+msgstr ""
+
+#: digital_milliet/templates/authorized.html:9
+msgid "Hello"
+msgstr ""
+
+#: digital_milliet/templates/browsing_macro.html:28
+#: digital_milliet/templates/commentary/list.html:16
+msgid "Milliet Commentary"
+msgstr ""
+
+#: digital_milliet/templates/browsing_macro.html:34
+msgid "Edit"
+msgstr ""
+
+#: digital_milliet/templates/browsing_macro.html:53
+msgid "Annotation Authors and Editors"
+msgstr ""
+
+#: digital_milliet/templates/browsing_macro.html:55
+msgid "Created by"
+msgstr ""
+
+#: digital_milliet/templates/browsing_macro.html:58
+msgid "Contributors:"
+msgstr ""
+
+#: digital_milliet/templates/footer.html:2
+msgid "The Digital Milliet would not be possible without the support of:"
+msgstr ""
+
+#: digital_milliet/templates/header.html:7
+msgid "Toggle navigation"
+msgstr ""
+
+#: digital_milliet/templates/commentary/list.html:5
+#: digital_milliet/templates/header.html:19
+#: digital_milliet/templates/index.html:27
+msgid "Browse"
+msgstr ""
+
+#: digital_milliet/templates/header.html:20
+msgid "About"
+msgstr ""
+
+#: digital_milliet/templates/header.html:22
+msgid "Add Record"
+msgstr ""
+
+#: digital_milliet/templates/header.html:23
+msgid "Logout"
+msgstr ""
+
+#: digital_milliet/templates/header.html:25
+msgid "Login"
+msgstr ""
+
+#: digital_milliet/templates/index.html:10
+msgid "Combining Ancient Text And Image"
+msgstr ""
+
+#: digital_milliet/templates/index.html:15
+msgid "Author"
+msgstr ""
+
+#: digital_milliet/templates/index.html:16
+msgid "Title"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:122
+#: digital_milliet/templates/commentary/edit.html:77
+#: digital_milliet/templates/commentary/read.html:124
+#: digital_milliet/templates/index.html:17
+msgid "Tags"
+msgstr ""
+
+#: digital_milliet/templates/index.html:22
+msgid "Search for..."
+msgstr ""
+
+#: digital_milliet/templates/index.html:23
+msgid "Search"
+msgstr ""
+
+#: digital_milliet/templates/index.html:33
+msgid ""
+"Welcome to the home of the Digital Milliet! This project collects "
+"together digitized passages of Greek and Latin that are related to "
+"painting in the ancient world, creating a cross-referenced database that "
+"a user can search by author, title, or topic. For more information, "
+"please see our <a href=\"about\">about page</a>."
+msgstr ""
+
+#: digital_milliet/templates/search.html:4
+msgid "Search Results"
+msgstr ""
+
+#: digital_milliet/templates/search.html:8
+msgid "Results"
+msgstr ""
+
+#: digital_milliet/templates/search.html:17
+msgid "No Results."
+msgstr ""
+
+#: digital_milliet/templates/search.html:17
+msgid "Search again?"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:5
+msgid "Create"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:67
+msgid "Identifiers"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:70
 msgid "Milliet Number:"
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:57
+#: digital_milliet/templates/commentary/create.html:71
 msgid "Enter the Milliet number for this passage and associated commentary"
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:64
-msgid "Select primary source text:"
+#: digital_milliet/templates/commentary/create.html:80
+msgid "Primary Source Passage:"
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:67
+#: digital_milliet/templates/commentary/create.html:82
 msgid "Search for a primary source text:"
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:70
-#: digital_milliet/templates/commentary/enter.html:140
-#: digital_milliet/templates/commentary/enter.html:178
+#: digital_milliet/templates/commentary/create.html:89
+msgid "Text Direction:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:92
+msgid "Left to Right"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:96
+msgid "Right to Left"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:101
+#: digital_milliet/templates/commentary/create.html:116
+#: digital_milliet/templates/commentary/edit_macro.html:49
+#: digital_milliet/templates/commentary/edit_macro.html:212
+msgid "Invalid entry"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:108
+msgid "Enter Commentary:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:127
+#: digital_milliet/templates/commentary/edit.html:83
+#: digital_milliet/templates/commentary/read.html:136
+msgid "Semantic Tags"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:134
+msgid "Enter Bibliography:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:149
+#: digital_milliet/templates/commentary/edit.html:103
+msgid "IIIF Manifests"
+msgstr ""
+
+#: digital_milliet/templates/commentary/create.html:152
+msgid "Save Annotation"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:47
+msgid "Edit Commentary :  "
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:51
+msgid "Text:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:57
+msgid "Ancient Greek"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:58
+#: digital_milliet/templates/commentary/edit_macro.html:61
+msgid "Latin"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:68
+msgid "Commentary:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:89
+msgid "Bibliography:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:118
+msgid "Save Changes"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:123
+msgid "Are you sure?"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit.html:127
+msgid "Delete Record"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit_macro.html:15
+msgid "Translation : "
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit_macro.html:19
+msgid "Must be a valid CTS URN"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit_macro.html:24
+#: digital_milliet/templates/commentary/edit_macro.html:59
+#: digital_milliet/templates/commentary/read.html:79
+msgid "English"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit_macro.html:25
+#: digital_milliet/templates/commentary/edit_macro.html:60
+#: digital_milliet/templates/commentary/read.html:80
+msgid "French"
+msgstr ""
+
+#: digital_milliet/templates/commentary/edit_macro.html:37
 msgid ""
 "URI Identifer for this text. If a URL, text will be loaded from there. "
 "Plain text only supported."
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:72
-#: digital_milliet/templates/commentary/enter.html:142
-#: digital_milliet/templates/commentary/enter.html:180
+#: digital_milliet/templates/commentary/edit_macro.html:39
 msgid "All available works"
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:75
-#: digital_milliet/templates/commentary/enter.html:145
-#: digital_milliet/templates/commentary/enter.html:183
+#: digital_milliet/templates/commentary/edit_macro.html:42
+#: digital_milliet/templates/commentary/edit_macro.html:44
 msgid "Or enter your own text URI:"
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:81
-#: digital_milliet/templates/commentary/enter.html:151
-#: digital_milliet/templates/commentary/enter.html:189
+#: digital_milliet/templates/commentary/edit_macro.html:46
 msgid "Select"
 msgstr ""
 
-#: digital_milliet/templates/commentary/enter.html:84
-#: digital_milliet/templates/commentary/enter.html:100
-#: digital_milliet/templates/commentary/enter.html:117
-#: digital_milliet/templates/commentary/enter.html:154
-#: digital_milliet/templates/commentary/enter.html:161
-#: digital_milliet/templates/commentary/enter.html:192
-#: digital_milliet/templates/commentary/enter.html:199
-msgid "Invalid entry"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:89
-msgid "Primary Source Passage:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:91
-msgid "Text Direction:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:93
-msgid "Left to Right"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:95
-msgid "Right to Left"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:110
-msgid "Enter Commentary:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:123
-msgid "Enter Bibliography:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:134
-msgid "English translation:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:137
-msgid "Search for an English translation:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:158
-msgid "Enter English Translation:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:169
-msgid "French translation:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:175
-msgid "Search for a French translation:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:196
-msgid "Enter French Translation:"
-msgstr ""
-
-#: digital_milliet/templates/commentary/enter.html:207
-msgid "Save Annotation"
-msgstr ""
-
-#: digital_milliet/templates/commentary/lang_choice.html:3
+#: digital_milliet/templates/commentary/edit_macro.html:56
 msgid "Language:"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:5
-msgid "English"
-msgstr ""
-
-#: digital_milliet/templates/commentary/lang_choice.html:6
-msgid "French"
-msgstr ""
-
-#: digital_milliet/templates/commentary/lang_choice.html:7
-msgid "Latin"
-msgstr ""
-
-#: digital_milliet/templates/commentary/lang_choice.html:8
+#: digital_milliet/templates/commentary/edit_macro.html:62
 msgid "Greek (Ancient -1453)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:9
+#: digital_milliet/templates/commentary/edit_macro.html:63
 msgid "Arabic"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:10
+#: digital_milliet/templates/commentary/edit_macro.html:64
 msgid "Chinese"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:11
+#: digital_milliet/templates/commentary/edit_macro.html:65
 msgid "Afrikaans"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:12
+#: digital_milliet/templates/commentary/edit_macro.html:66
 msgid "Akkadian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:13
+#: digital_milliet/templates/commentary/edit_macro.html:67
 msgid "Albanian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:14
+#: digital_milliet/templates/commentary/edit_macro.html:68
 msgid "Amharic"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:15
+#: digital_milliet/templates/commentary/edit_macro.html:69
 msgid "Aragonese"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:16
+#: digital_milliet/templates/commentary/edit_macro.html:70
 msgid "Aramaic (Imperial- 700 BC-300 BC)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:17
+#: digital_milliet/templates/commentary/edit_macro.html:71
 msgid "Aramaic (Samaritan)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:18
+#: digital_milliet/templates/commentary/edit_macro.html:72
 msgid "Armenian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:19
+#: digital_milliet/templates/commentary/edit_macro.html:73
 msgid "Asturian (Bable, Leonese)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:20
+#: digital_milliet/templates/commentary/edit_macro.html:74
 msgid "Avestan"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:21
+#: digital_milliet/templates/commentary/edit_macro.html:75
 msgid "Azerbaijani"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:22
+#: digital_milliet/templates/commentary/edit_macro.html:76
 msgid "Basque"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:23
+#: digital_milliet/templates/commentary/edit_macro.html:77
 msgid "Bengali"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:24
+#: digital_milliet/templates/commentary/edit_macro.html:78
 msgid "Berber"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:25
+#: digital_milliet/templates/commentary/edit_macro.html:79
 msgid "Bosnian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:26
+#: digital_milliet/templates/commentary/edit_macro.html:80
 msgid "Breton"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:27
+#: digital_milliet/templates/commentary/edit_macro.html:81
 msgid "Bulgarian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:28
+#: digital_milliet/templates/commentary/edit_macro.html:82
 msgid "Bulgarian (Old, Old Church Slavonic)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:29
+#: digital_milliet/templates/commentary/edit_macro.html:83
 msgid "Burmese"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:30
+#: digital_milliet/templates/commentary/edit_macro.html:84
 msgid "Catalan"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:31
+#: digital_milliet/templates/commentary/edit_macro.html:85
 msgid "Chagatai"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:32
+#: digital_milliet/templates/commentary/edit_macro.html:86
 msgid "Coptic"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:33
+#: digital_milliet/templates/commentary/edit_macro.html:87
 msgid "Cornish"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:34
+#: digital_milliet/templates/commentary/edit_macro.html:88
 msgid "Croatian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:35
+#: digital_milliet/templates/commentary/edit_macro.html:89
 msgid "Czech"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:36
+#: digital_milliet/templates/commentary/edit_macro.html:90
 msgid "Danish"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:37
+#: digital_milliet/templates/commentary/edit_macro.html:91
 msgid "Dutch (Flemish)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:38
+#: digital_milliet/templates/commentary/edit_macro.html:92
 msgid "Dutch (Middle, 1050-1350)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:39
+#: digital_milliet/templates/commentary/edit_macro.html:93
 msgid "Egyptian (Ancient)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:40
+#: digital_milliet/templates/commentary/edit_macro.html:94
 msgid "Elamite"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:41
+#: digital_milliet/templates/commentary/edit_macro.html:95
 msgid "English (Middle, 1100-1500)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:42
+#: digital_milliet/templates/commentary/edit_macro.html:96
 msgid "English (Old, 450-1100)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:43
+#: digital_milliet/templates/commentary/edit_macro.html:97
 msgid "Estonian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:44
+#: digital_milliet/templates/commentary/edit_macro.html:98
 msgid "Finnish"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:45
+#: digital_milliet/templates/commentary/edit_macro.html:99
 msgid "French (Middle, 1400-1600)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:46
+#: digital_milliet/templates/commentary/edit_macro.html:100
 msgid "French (Old, 842c. 1400)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:47
+#: digital_milliet/templates/commentary/edit_macro.html:101
 msgid "Ge'ez"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:48
+#: digital_milliet/templates/commentary/edit_macro.html:102
 msgid "Georgian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:49
+#: digital_milliet/templates/commentary/edit_macro.html:103
 msgid "German (Low, Low Saxon)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:50
+#: digital_milliet/templates/commentary/edit_macro.html:104
 msgid "German (Middle-High, 1050-1500)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:51
+#: digital_milliet/templates/commentary/edit_macro.html:105
 msgid "German (Old-High, 750-1050)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:52
+#: digital_milliet/templates/commentary/edit_macro.html:106
 msgid "German"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:53
+#: digital_milliet/templates/commentary/edit_macro.html:107
 msgid "Gothic"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:54
+#: digital_milliet/templates/commentary/edit_macro.html:108
 msgid "Greek (Modern, 1453-)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:55
+#: digital_milliet/templates/commentary/edit_macro.html:109
 msgid "Gujarati"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:56
+#: digital_milliet/templates/commentary/edit_macro.html:110
 msgid "Hebrew"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:57
+#: digital_milliet/templates/commentary/edit_macro.html:111
 msgid "Hindi"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:58
+#: digital_milliet/templates/commentary/edit_macro.html:112
 msgid "Hittite"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:59
+#: digital_milliet/templates/commentary/edit_macro.html:113
 msgid "Hungarian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:60
+#: digital_milliet/templates/commentary/edit_macro.html:114
 msgid "Icelandic"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:61
+#: digital_milliet/templates/commentary/edit_macro.html:115
 msgid "Indonesian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:62
+#: digital_milliet/templates/commentary/edit_macro.html:116
 msgid "Irish (Modern)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:63
+#: digital_milliet/templates/commentary/edit_macro.html:117
 msgid "Irish (Middle 900-1200)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:64
+#: digital_milliet/templates/commentary/edit_macro.html:118
 msgid "Irish (Old, to 900)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:65
+#: digital_milliet/templates/commentary/edit_macro.html:119
 msgid "Italian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:66
+#: digital_milliet/templates/commentary/edit_macro.html:120
 msgid "Japanese"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:67
+#: digital_milliet/templates/commentary/edit_macro.html:121
 msgid "Javanese"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:68
+#: digital_milliet/templates/commentary/edit_macro.html:122
 msgid "Kannada"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:69
+#: digital_milliet/templates/commentary/edit_macro.html:123
 msgid "Khmer (Central)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:70
+#: digital_milliet/templates/commentary/edit_macro.html:124
 msgid "Korean"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:71
+#: digital_milliet/templates/commentary/edit_macro.html:125
 msgid "Kurdish"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:72
+#: digital_milliet/templates/commentary/edit_macro.html:126
 msgid "Ladino"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:73
+#: digital_milliet/templates/commentary/edit_macro.html:127
 msgid "Lithuanian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:74
+#: digital_milliet/templates/commentary/edit_macro.html:128
 msgid "Malay"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:75
+#: digital_milliet/templates/commentary/edit_macro.html:129
 msgid "Marathi"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:76
+#: digital_milliet/templates/commentary/edit_macro.html:130
 msgid "Nepal Bhasa (Newari)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:77
+#: digital_milliet/templates/commentary/edit_macro.html:131
 msgid "Nepali"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:78
+#: digital_milliet/templates/commentary/edit_macro.html:132
 msgid "Newari (Classical)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:79
+#: digital_milliet/templates/commentary/edit_macro.html:133
 msgid "Norse (Old)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:80
+#: digital_milliet/templates/commentary/edit_macro.html:134
 msgid "Norwegian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:81
+#: digital_milliet/templates/commentary/edit_macro.html:135
 msgid "Norwegian (Bokmål)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:82
+#: digital_milliet/templates/commentary/edit_macro.html:136
 msgid "Norwegian (Nynorsk)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:83
+#: digital_milliet/templates/commentary/edit_macro.html:137
 msgid "Ossetian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:84
+#: digital_milliet/templates/commentary/edit_macro.html:138
 msgid "Pahlavi (Middle Persian)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:85
+#: digital_milliet/templates/commentary/edit_macro.html:139
 msgid "Pali"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:86
+#: digital_milliet/templates/commentary/edit_macro.html:140
 msgid "Pashto"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:87
+#: digital_milliet/templates/commentary/edit_macro.html:141
 msgid "Persian (Farsi)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:88
+#: digital_milliet/templates/commentary/edit_macro.html:142
 msgid "Persian (Old, 600-400 BC)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:89
+#: digital_milliet/templates/commentary/edit_macro.html:143
 msgid "Phoenician"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:90
+#: digital_milliet/templates/commentary/edit_macro.html:144
 msgid "Polish"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:91
+#: digital_milliet/templates/commentary/edit_macro.html:145
 msgid "Portuguese"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:92
+#: digital_milliet/templates/commentary/edit_macro.html:146
 msgid "Prakrit"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:93
+#: digital_milliet/templates/commentary/edit_macro.html:147
 msgid "Provençal (Occitan, -1500)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:94
+#: digital_milliet/templates/commentary/edit_macro.html:148
 msgid "Punjabi (Panjabi)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:95
+#: digital_milliet/templates/commentary/edit_macro.html:149
 msgid "Rajasthani"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:96
+#: digital_milliet/templates/commentary/edit_macro.html:150
 msgid "Romanian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:97
+#: digital_milliet/templates/commentary/edit_macro.html:151
 msgid "Romany"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:98
+#: digital_milliet/templates/commentary/edit_macro.html:152
 msgid "Russian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:99
+#: digital_milliet/templates/commentary/edit_macro.html:153
 msgid "Sanskrit"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:100
+#: digital_milliet/templates/commentary/edit_macro.html:154
 msgid "Scots"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:101
+#: digital_milliet/templates/commentary/edit_macro.html:155
 msgid "Scottish (Gaelic)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:102
+#: digital_milliet/templates/commentary/edit_macro.html:156
 msgid "Serbian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:103
+#: digital_milliet/templates/commentary/edit_macro.html:157
 msgid "Sicilian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:104
+#: digital_milliet/templates/commentary/edit_macro.html:158
 msgid "Sindhi"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:105
+#: digital_milliet/templates/commentary/edit_macro.html:159
 msgid "Sinhalese (Sinhala)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:106
+#: digital_milliet/templates/commentary/edit_macro.html:160
 msgid "Slovak"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:107
+#: digital_milliet/templates/commentary/edit_macro.html:161
 msgid "Slovenian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:108
+#: digital_milliet/templates/commentary/edit_macro.html:162
 msgid "Sogdian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:109
+#: digital_milliet/templates/commentary/edit_macro.html:163
 msgid "Spanish (Castilian)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:110
+#: digital_milliet/templates/commentary/edit_macro.html:164
 msgid "Sumerian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:111
+#: digital_milliet/templates/commentary/edit_macro.html:165
 msgid "Swahili"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:112
+#: digital_milliet/templates/commentary/edit_macro.html:166
 msgid "Swedish"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:113
+#: digital_milliet/templates/commentary/edit_macro.html:167
 msgid "Swiss German (Alsatian)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:114
+#: digital_milliet/templates/commentary/edit_macro.html:168
 msgid "Syriac (Classical)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:115
+#: digital_milliet/templates/commentary/edit_macro.html:169
 msgid "Syriac (Northeastern, Neo-Aramaic)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:116
+#: digital_milliet/templates/commentary/edit_macro.html:170
 msgid "Tagalog"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:117
+#: digital_milliet/templates/commentary/edit_macro.html:171
 msgid "Tajik"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:118
+#: digital_milliet/templates/commentary/edit_macro.html:172
 msgid "Tamil"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:119
+#: digital_milliet/templates/commentary/edit_macro.html:173
 msgid "Tatar"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:120
+#: digital_milliet/templates/commentary/edit_macro.html:174
 msgid "Telugu"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:121
+#: digital_milliet/templates/commentary/edit_macro.html:175
 msgid "Thai"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:122
+#: digital_milliet/templates/commentary/edit_macro.html:176
 msgid "Tibetan"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:123
+#: digital_milliet/templates/commentary/edit_macro.html:177
 msgid "Turkish (Modern)"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:124
+#: digital_milliet/templates/commentary/edit_macro.html:178
 msgid "Turkish (Ottoman, 1500-1928 )"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:125
+#: digital_milliet/templates/commentary/edit_macro.html:179
 msgid "Turkmen"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:126
+#: digital_milliet/templates/commentary/edit_macro.html:180
 msgid "Ugaritic"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:127
+#: digital_milliet/templates/commentary/edit_macro.html:181
 msgid "Ukainian"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:128
+#: digital_milliet/templates/commentary/edit_macro.html:182
 msgid "Urdu"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:129
+#: digital_milliet/templates/commentary/edit_macro.html:183
 msgid "Uzbek"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:130
+#: digital_milliet/templates/commentary/edit_macro.html:184
 msgid "Vietnamese"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:131
+#: digital_milliet/templates/commentary/edit_macro.html:185
 msgid "Walloon"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:132
+#: digital_milliet/templates/commentary/edit_macro.html:186
 msgid "Welsh"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:133
+#: digital_milliet/templates/commentary/edit_macro.html:187
 msgid "Yiddish"
 msgstr ""
 
-#: digital_milliet/templates/commentary/lang_choice.html:137
+#: digital_milliet/templates/commentary/edit_macro.html:192
 msgid "Other*:"
+msgstr ""
+
+#: digital_milliet/templates/commentary/list.html:8
+msgid "Browse by"
+msgstr ""
+
+#: digital_milliet/templates/commentary/list.html:11
+msgid "Author and Work"
+msgstr ""
+
+#: digital_milliet/templates/commentary/read.html:109
+#: digital_milliet/templates/commentary/read.html:115
+msgid "Commentary"
+msgstr ""
+
+#: digital_milliet/templates/commentary/read.html:147
+msgid "Bibliography"
 msgstr ""
 

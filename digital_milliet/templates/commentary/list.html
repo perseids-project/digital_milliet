@@ -2,18 +2,18 @@
 {% from "browsing_macro.html" import display_auth_list %}
 
 
-{% block title%}| Browse{% endblock %}
+{% block title%}| {{ _('Browse') }}{% endblock %}
 {% block content %}
 <article id="browse">
-    <h1>Browse by</h1>
+    <h1>{{ _('Browse by') }}</h1>
     <nav class='row' id="browse">
         <div class="col-md-9">
-            <h2>Author and Work</h2>
+            <h2>{{ _('Author and Work') }}</h2>
             {{ display_auth_list(auth_list) }}
         </div>
 
         <div class="col-md-3">
-            <h2>Milliet Commentary</h2>
+            <h2>{{ _('Milliet Commentary') }}</h2>
             <ul id="milliet-list">
                 {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
                     {% for num in millnum_list %}

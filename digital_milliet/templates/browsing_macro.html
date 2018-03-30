@@ -25,13 +25,13 @@
 {%  macro display_comm_list(list_of_commentaries) -%}
         <div class="row">
             <div class="col-xs-12">
-                <h2>Milliet Commentary</h2>
+                <h2>{{ _('Milliet Commentary') }}</h2>
                   <ul id="milliet-list">
                       {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
                           {% for num in list_of_commentaries %}
                               <li>
                                   <a href="commentary/{{ num }}">{{ num }}</a>
-                                  <a class="right" href="{{url_for("edit", millnum=num)}}">Edit</a>
+                                  <a class="right" href="{{url_for("edit", millnum=num)}}">{{ _('Edit') }}</a>
                               </li>
                           {% endfor %}
                       {% else %}
@@ -50,12 +50,12 @@
 {% macro get_people(obj) -%}
     {% if obj['creator'] or obj['contributor']  %}
         <footer class="provenance">
-            <h5>Annotation Authors and Editors</h5>
+            <h5>{{ _('Annotation Authors and Editors') }}</h5>
             {% if obj['creator'] and 'name' in obj['creator'] %}
-                <section>Created by <span property="dc:creator">{{ obj['creator']['name'] }}</span></section>
+                <section>{{ _('Created by') }} <span property="dc:creator">{{ obj['creator']['name'] }}</span></section>
             {% endif %}
             {% if obj['contributor'] and obj['contributor']|length > 0 %}
-                <section>Contributors: 
+                <section>{{ _('Contributors:') }}
                     <ul class="contributors">
                         {% for c in obj['contributor'] %}
                             {% if 'name' in c %}

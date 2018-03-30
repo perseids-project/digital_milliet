@@ -76,8 +76,8 @@
       <section id="translation" class='col-md-6 text'>
         <!-- translations -->
         <ul id='lang_tabs' role="tablist" class="lang-selector">
-          <li role='presentation' class="active"><a href='#eng' aria-controls='eng' role='tab' data-toggle='tab'>English</a></li>
-          <li role='presentation'><a href='#fra' aria-controls='fra' role='tab' data-toggle='tab'>French</a></li>
+          <li role='presentation' class="active"><a href='#eng' aria-controls='eng' role='tab' data-toggle='tab'>{{ _('English') }}</a></li>
+          <li role='presentation'><a href='#fra' aria-controls='fra' role='tab' data-toggle='tab'>{{ _('French') }}</a></li>
         </ul>
         <div class='tab-content'>
           <div role='tabpanel' class='tab-pane active' id={{ obj['t1_lang']}}>
@@ -106,13 +106,13 @@
           <div id="mirador-container" style="height:100%;"></div>
         </div>
         <section class='col-md-6 text'>
-          <h2>Commentary</h2>
+          <h2>{{ _('Commentary') }}</h2>
           {% filter markdown %}{{ obj['comm'] }}{% endfilter %}
           {{ get_people(obj) }}
         </section>
       {% else %}
         <section id="commentary-text" class="col-xs-12">
-          <h2>Commentary</h2>
+          <h2>{{ _('Commentary') }}</h2>
           {% filter markdown %}{{ obj['comm'] }}{% endfilter %}
           {{ get_people(obj) }}
         </section>
@@ -121,7 +121,7 @@
     {%  if obj['tags'] %}
       <div class="row">
         <section id="commentary-tag" class="col-xs-12">
-          <h2>Tags</h2>
+          <h2>{{ _('Tags') }}</h2>
           <ul class="list-inline">
             {% for t in obj['tags'] %}
                <li><span class="tag">{{ t }}</span></li>
@@ -133,7 +133,7 @@
     {%  if obj['semantic_tags'] %}
       <div class="row">
         <section id="commentary-semantictag" class="col-xs-12">
-          <h2>Semantic Tags</h2>
+          <h2>{{ _('Semantic Tags') }}</h2>
           <ul class="list-inline">
             {% for t in obj['semantic_tags'] %}
                <li><span>{{ t }}</span></li>
@@ -144,7 +144,7 @@
     {% endif %}
     <div class="row">
         <section id="commentary-bibliography" class="col-xs-12">
-            <h2>Bibliography</h2>
+            <h2>{{ _('Bibliography') }}</h2>
             {% filter markdown %}{{ obj['bibl'] }}{% endfilter %}
             {{ get_people(obj) }}
         </section>

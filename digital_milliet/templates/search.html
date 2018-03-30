@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% from "browsing_macro.html" import display_auth_list, display_comm_list %}
 
-{% block title %}| Search Results{% endblock %}
+{% block title %}| {{ _('Search Results') }}{% endblock %}
 {% block content %}
 	{{ super() }}
 	<div class="row" id="browse">
-		<h1>Results</h1>
+		<h1>{{ _('Results') }}</h1>
 		<div class="col-md-12">
 			{% if res %}
                 {% if type == 'Tags' %}
@@ -14,7 +14,7 @@
 				    {{ display_auth_list(res) }}
                 {% endif %}
 			{% else %}
-				No Results. <a href="index"> Search again? </a>
+				{{ _('No Results.') }} <a href="index">{{ _('Search again?') }}</a>
 			{% endif %}
 		</div>
 	</div>

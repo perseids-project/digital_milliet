@@ -44,18 +44,18 @@
  
       <form id='input_form' action="save_edit" method="POST">
         <input type='hidden' name='mongo_id' value={{obj['mid']}}>
-        <h2>{{ 'Edit Commentary :  '+millnum }}</h2>
+        <h2>{{ _('Edit Commentary :  ')+millnum }}</h2>
 
         <!-- inital text -->
         <fieldset class="row">
-          <legend>{{ 'Text:' }}</legend>
+          <legend>{{ _('Text:') }}</legend>
           <div class="col-md-4">
             {% if 'orig_uri' in obj %}
               <input name="orig_uri" type='text' value="{{obj['orig_uri']}}" class="form-control"/><br />
             {% endif %}
               <select class="form-control" name="orig_lang" id="orig_lang">
-                  <option value="grc" {% if obj['orig_lang'] == 'grc' %} selected='selected' {% endif %}>{{ ('Ancient Greek') }}</option>
-                  <option value="lat" {% if obj['orig_lang'] == 'lat' %} selected='selected' {% endif %}>{{ ('Latin') }}</option>
+                  <option value="grc" {% if obj['orig_lang'] == 'grc' %} selected='selected' {% endif %}>{{ _('Ancient Greek') }}</option>
+                  <option value="lat" {% if obj['orig_lang'] == 'lat' %} selected='selected' {% endif %}>{{ _('Latin') }}</option>
               </select>
           </div>
           <div class="col-md-8">
@@ -65,7 +65,7 @@
 
         <!-- Commentary -->
         <fieldset class="row">
-            <legend>{{ 'Commentary:' }}</legend>
+            <legend>{{ _('Commentary:') }}</legend>
             <div class="col-md-12">
                 {{  markdown_menu("c1text") }}
                 <textarea class='markdown' id="c1text" name="c1text" rows="10" cols="80" data-lnum="c1">{{ obj['comm'] }}</textarea>
@@ -74,19 +74,19 @@
 
         <!-- Tags -->
         <fieldset class="row" id="tags-fieldset">
-            <legend>Tags</legend>
+            <legend>{{ _('Tags') }}</legend>
             {{ tags(row_id="original-tags-input", tag=" ".join(obj["tags"])) }}
         </fieldset>
 
           <!-- Semantic Tags -->
           <fieldset class="row" id="semantic-tags-fieldset">
-              <legend>Semantic Tags</legend>
+              <legend>{{ _('Semantic Tags') }}</legend>
               {{ semantic_tags(row_id="original-semantic_tags-input", semantic_tag=" ".join(obj["semantic_tags"])) }}
           </fieldset>
 
         <!-- Bibliography information -->
         <fieldset class="row">
-          <legend>{{ 'Bibliography:' }}</legend>
+          <legend>{{ _('Bibliography:') }}</legend>
           <div class="col-md-12">
             <textarea class="form-control" id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
           </div>
@@ -100,7 +100,7 @@
 
         <!-- IIIF Manifests -->
             <fieldset class="row" id="iiif-fieldset">
-                <legend>IIIF Manifests</legend>
+                <legend>{{ _('IIIF Manifests') }}</legend>
                 {% if obj["images"]|length > 0 %}
                     {% for manifest in obj["images"] %}
                         {% if loop.index == 1 %}
@@ -115,16 +115,16 @@
             </fieldset>
         <div class="row">
             <div class="col-md-12">
-                <input type="submit" class="btn btn-primary" value="Save Changes" style="float:right; width:200px;"/>
+                <input type="submit" class="btn btn-primary" value="{{ _('Save Changes') }}" style="float:right; width:200px;"/>
             </div>
         </div>
       </form>
  
-      <form id='input_form' action="/delete" method="POST" onsubmit="return confirm('Are you sure?');">
+      <form id='input_form' action="/delete" method="POST" onsubmit="return confirm('{{ _("Are you sure?") }}');">
           <div class="row">
               <div class="col-md-12">
                 <input type="hidden" name="millnum" value="{{ millnum }}"/>
-                <input type="submit" class="btn btn-primary" value="Delete Record" style="float:right; width:200px;"/>
+                <input type="submit" class="btn btn-primary" value="{{ _('Delete Record') }}" style="float:right; width:200px;"/>
               </div>
           </div>
       </form>

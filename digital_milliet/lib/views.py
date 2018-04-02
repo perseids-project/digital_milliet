@@ -1,5 +1,5 @@
 from digital_milliet.lib.oauth import OAuthHelper
-from flask import render_template, request, redirect, session, flash, Response, g
+from flask import render_template, request, redirect, session, flash, Response, g 
 from bson.json_util import dumps
 from flask_babel import gettext
 
@@ -38,6 +38,10 @@ class Views(object):
         self.add_lang_url_rule('/api/commentary/<millnum>', view_func=self.api_data_get, methods=['GET'])
         self.add_lang_url_rule('/api/tags/<type>', view_func=self.api_tags_get, methods=['GET'])
         self.add_lang_url_rule('/new', view_func=self.new, methods=['GET', 'POST'], strict_slashes=False)
+
+        @app.route('/favicon.ico')
+        def favicon():
+            return app.send_static_file('favicon/favicon.ico')
 
         @app.before_request
         def before():

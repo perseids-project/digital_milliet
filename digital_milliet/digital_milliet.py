@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_pymongo import PyMongo
 from flask_bower import Bower
 from flaskext.markdown import Markdown
+from flask import g
 
 from digital_milliet.lib.author_builder import AuthorBuilder
 from digital_milliet.lib.oauth import OAuthHelper
@@ -53,6 +54,10 @@ class DigitalMilliet(object):
             if len(spl) == 2 and ref[0] == ref[2] and PERSONNA.match(ref) is not None:
                 ref = spl[1].title()
             return ref
+
+        @self.babel.localeselector
+        def get_locale():
+            return g.get('lang', self.babel.default_locale)
 
     def get_db(self):
         return self.mongo

@@ -1,5 +1,5 @@
 from digital_milliet.lib.oauth import OAuthHelper
-from flask import render_template, request, redirect, session, flash, Response
+from flask import render_template, request, redirect, session, flash, Response, g
 from bson.json_util import dumps
 from flask_babel import gettext
 
@@ -24,19 +24,30 @@ class Views(object):
         self.mongo = db
         self.authors = authors
         self.mirador = mirador
-        app.add_url_rule('/', view_func=self.index)
-        app.add_url_rule('/index', view_func=self.index)
-        app.add_url_rule('/about', view_func=self.about)
-        app.add_url_rule('/search', view_func=self.search, methods=['GET'])
-        app.add_url_rule('/commentary', view_func=self.commentary)
-        app.add_url_rule('/commentary/<millnum>', view_func=self.millnum)
-        app.add_url_rule('/edit/<millnum>', view_func=self.edit)
-        app.add_url_rule('/edit/save_edit', view_func=self.save_edit, methods=['POST'])
-        app.add_url_rule('/delete', view_func=self.delete, methods=['POST'])
-        app.add_url_rule('/create', view_func=self.create, methods=['POST'])
-        app.add_url_rule('/api/commentary/<millnum>', view_func=self.api_data_get, methods=['GET'])
-        app.add_url_rule('/api/tags/<type>', view_func=self.api_tags_get, methods=['GET'])
-        app.add_url_rule('/new', view_func=self.new, methods=['GET', 'POST'], strict_slashes=False)
+
+        self.add_lang_url_rule('/', view_func=self.index)
+        self.add_lang_url_rule('/index', view_func=self.index)
+        self.add_lang_url_rule('/about', view_func=self.about)
+        self.add_lang_url_rule('/search', view_func=self.search, methods=['GET'])
+        self.add_lang_url_rule('/commentary', view_func=self.commentary)
+        self.add_lang_url_rule('/commentary/<millnum>', view_func=self.millnum)
+        self.add_lang_url_rule('/edit/<millnum>', view_func=self.edit)
+        self.add_lang_url_rule('/edit/save_edit', view_func=self.save_edit, methods=['POST'])
+        self.add_lang_url_rule('/delete', view_func=self.delete, methods=['POST'])
+        self.add_lang_url_rule('/create', view_func=self.create, methods=['POST'])
+        self.add_lang_url_rule('/api/commentary/<millnum>', view_func=self.api_data_get, methods=['GET'])
+        self.add_lang_url_rule('/api/tags/<type>', view_func=self.api_tags_get, methods=['GET'])
+        self.add_lang_url_rule('/new', view_func=self.new, methods=['GET', 'POST'], strict_slashes=False)
+
+        @app.before_request
+        def before():
+            if request.view_args and 'lang' in request.view_args:
+                g.lang = request.view_args['lang']
+                request.view_args.pop('lang')
+
+    def add_lang_url_rule(self, rule, **options):
+        self.app.add_url_rule(rule, **options)
+        self.app.add_url_rule('/<lang>' + rule, **options)
 
     def index(self):
         return render_template('index.html')

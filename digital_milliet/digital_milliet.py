@@ -59,6 +59,14 @@ class DigitalMilliet(object):
         def get_locale():
             return g.get('lang', self.babel.default_locale)
 
+        @self.app.url_defaults
+        def set_language_code(endpoint, values):
+            lang = get_locale()
+            if 'lang' in values or lang == self.babel.default_locale:
+                return
+            if self.app.url_map.is_endpoint_expecting(endpoint, 'lang'):
+                values['lang'] = lang
+
     def get_db(self):
         return self.mongo
 

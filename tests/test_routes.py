@@ -23,10 +23,12 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
     def test_about(self):
         rv = self.client.get('/about').data.decode()
         self.assertIn('What is the Digital Milliet?',rv,"Doesn't appear to be the aobut.html")
+        self.assertIn('<a href="/commentary">Browse</a>',rv,"Doesn't appear to be the aobut.html")
 
     def test_fr_about(self):
         rv = self.client.get('/fr/about').data.decode()
         self.assertIn("Qu'est-ce que le Digital Milliet ?",rv,"Doesn't appear to be the aobut.html")
+        self.assertIn('<a href="/fr/commentary">Browse</a>',rv,"Doesn't appear to be the aobut.html")
 
     def test_search(self):
         rv = self.client.get('/search?in=Author&query=Xenophon').data.decode()

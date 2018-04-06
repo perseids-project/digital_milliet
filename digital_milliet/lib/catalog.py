@@ -1,4 +1,4 @@
-#coding utf-8
+# coding utf-8
 import requests
 
 
@@ -7,7 +7,7 @@ class Catalog(object):
     which can lookup author and work records by CTS URN
     """
 
-    def __init__(self,app=None):
+    def __init__(self, app=None):
         """ Constructor
 
         :param app:  The Flask App
@@ -25,7 +25,11 @@ class Catalog(object):
         :return: response from the API (this should be abstracted)
         :rtype: dict
         """
-        url = str(self.api_endpoint + '/authors/search?canonical_id=' + urn + '&format=json')
+        url = str(
+            self.api_endpoint +
+            '/authors/search?canonical_id=' +
+            urn +
+            '&format=json')
         return requests.get(url).json()
 
     def lookup_work(self, urn=None):
@@ -37,7 +41,9 @@ class Catalog(object):
         :return: response from the API (we should abstract this)
         :rtype: dict
         """
-        url = str(self.api_endpoint + '/works/search?work=' + urn + "&format=json")
+        url = str(
+            self.api_endpoint +
+            '/works/search?work=' +
+            urn +
+            "&format=json")
         return requests.get(url).json()
-
-

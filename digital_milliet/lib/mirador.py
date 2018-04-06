@@ -10,6 +10,7 @@ from bson.json_util import dumps
 class Mirador(object):
     """ Parses data for retrieval/storage to/from the database
     """
+
     def __init__(self, db, app, parser):
         """ Mirador object
 
@@ -25,13 +26,25 @@ class Mirador(object):
         self.parser = parser
 
         self.app.add_url_rule(
-            '/api/mirador', view_func=self.search, methods=["GET"], endpoint="mirador_search")
+            '/api/mirador',
+            view_func=self.search,
+            methods=["GET"],
+            endpoint="mirador_search")
         self.app.add_url_rule(
-            '/api/mirador', view_func=self.create, methods=["PUT"], endpoint="mirador_create")
+            '/api/mirador',
+            view_func=self.create,
+            methods=["PUT"],
+            endpoint="mirador_create")
         self.app.add_url_rule(
-            '/api/mirador', view_func=self.update, methods=["POST"], endpoint="mirador_update")
+            '/api/mirador',
+            view_func=self.update,
+            methods=["POST"],
+            endpoint="mirador_update")
         self.app.add_url_rule(
-            '/api/mirador', view_func=self.delete, methods=['DELETE'], endpoint="mirador_delete")
+            '/api/mirador',
+            view_func=self.delete,
+            methods=['DELETE'],
+            endpoint="mirador_delete")
 
     @staticmethod
     def dump(content, code=200):
@@ -86,7 +99,8 @@ class Mirador(object):
         # the dctypes:Collection resource was added to link the IIIF annotation back to the original DM commentary
         # this is an extension to the IIIF annotation format that breaks the mirador viewer so we take it out before
         # displaying
-        oAnnotation["resource"] = [res for res in oAnnotation["resource"] if res["@type"] != "dctypes:Collection"]
+        oAnnotation["resource"] = [
+            res for res in oAnnotation["resource"] if res["@type"] != "dctypes:Collection"]
         return oAnnotation
 
     def from_collection(self, digitial_milliet_id):
@@ -109,9 +123,8 @@ class Mirador(object):
         :return: Result of search
         """
         if request.args.get("noCollection") is not None:
-            return self.dump([
-                    self.simpleFormat(oAnnotation) for oAnnotation in self.get(image_uri=request.args.get("uri"))
-                 ])
+            return self.dump([self.simpleFormat(oAnnotation) for oAnnotation in self.get(
+                image_uri=request.args.get("uri"))])
         else:
             return self.dump([
                 {k: v for k, v in oAnnotation.items() if v not in ["_id"]}
@@ -129,7 +142,8 @@ class Mirador(object):
         data["annotatedAt"] = datetime.now().isoformat()
         data["serializedAt"] = data["annotatedAt"]
         data["annotatedBy"] = self.parser.format_person_from_authentificated_user()
-        data["@id"] = self.parser.format_uri(milliet_number, "anno-{}".format(uuid4()))
+        data["@id"] = self.parser.format_uri(
+            milliet_number, "anno-{}".format(uuid4()))
 
         if milliet_number is not None:
             data["resource"].append({
@@ -137,7 +151,12 @@ class Mirador(object):
                 "@id": self.parser.format_uri(milliet_number)
             })
         m_obj = self.mongo.db.mirador.insert(data)
-        return self.dump(self.simpleFormat(self.get(_id=m_obj, single=True)), code=200)
+        return self.dump(
+            self.simpleFormat(
+                self.get(
+                    _id=m_obj,
+                    single=True)),
+            code=200)
 
     @OAuthHelper.oauth_required
     def update(self):
@@ -150,7 +169,11 @@ class Mirador(object):
         record.update(data)
         record["serializedAt"] = datetime.now().isoformat()
         self.mongo.db.mirador.save(record)
-        return self.dump(self.get(anno_id=record["@id"], single=True), code=200)
+        return self.dump(
+            self.get(
+                anno_id=record["@id"],
+                single=True),
+            code=200)
 
     @OAuthHelper.oauth_required
     def delete(self):

@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 from flask import request, jsonify, url_for, session
-import os, requests
+import os
+import requests
 import re
 from MyCapytain.common.reference import URN
 from bson.objectid import ObjectId
@@ -11,7 +12,12 @@ class AuthorBuilder(object):
     """ Provides methods for building new Author records in the database
     """
 
-    def __init__(self, db=None, catalog=None, collection_name="annotation", app=None):
+    def __init__(
+            self,
+            db=None,
+            catalog=None,
+            collection_name="annotation",
+            app=None):
         """ Constructor
 
         :param db: Mongo Db Handle
@@ -57,7 +63,7 @@ class AuthorBuilder(object):
         """
         return self.collection.update({'cts_id': cts_id}, author_record)
 
-    def remove_milliet_id_from_author(self,millnum):
+    def remove_milliet_id_from_author(self, millnum):
         """ Remove  milliet number mapping from an author record
 
         :param millnum: the milliet number to remove
@@ -72,9 +78,8 @@ class AuthorBuilder(object):
                     if millnum in tup:
                         work['millnums'].pop(work['millnums'].index(tup))
                         removed = removed + 1
-            self.collection.update({'_id' : author['_id']}, author)
+            self.collection.update({'_id': author['_id']}, author)
         return removed
-
 
     def author_db_build(self, data_dict):
         """ Adds or Updates Author Records in the Annotation Database
@@ -95,7 +100,8 @@ class AuthorBuilder(object):
             millnum = cite_urn.split('.')[2]
             namespace = str(urn.namespace)
             auth_id = str(urn.textgroup)
-            work_id = "urn:cts:" + namespace + ":" + auth_id + "." + str(urn.work)
+            work_id = "urn:cts:" + namespace + \
+                ":" + auth_id + "." + str(urn.work)
             pasg = str(urn.reference)
 
             author = self.get_author(auth_id)
@@ -105,17 +111,21 @@ class AuthorBuilder(object):
                     if resp['urn_status'] is not 'invalid':
                         author = self.make_author(resp)
 
-            # We may still not have an author here, if the catalog lookup didn't succeed
+            # We may still not have an author here, if the catalog lookup
+            # didn't succeed
             if author is not None:
                 works = author['works']
                 if not works:
                     works.append(self.make_work(work_id, millnum, pasg))
                 else:
-                    work = next((ent for ent in works if 'cts_id' in ent and ent['cts_id'] == work_id), None)
+                    work = next(
+                        (ent for ent in works if 'cts_id' in ent and ent['cts_id'] == work_id), None)
                     if work is None:
                         works.append(self.make_work(work_id, millnum, pasg))
                     else:
-                        exists = [duet for duet in work["millnums"] if duet == [millnum, pasg]]
+                        exists = [
+                            duet for duet in work["millnums"] if duet == [
+                                millnum, pasg]]
                         if len(exists) == 0:
                             work['millnums'].append([millnum, pasg])
 
@@ -131,7 +141,7 @@ class AuthorBuilder(object):
         except ValueError as err:
             print("Invalid data for author build", err)
             pass
-        except:
+        except BaseException:
             print("Invalid data for author build")
             pass
 
@@ -185,8 +195,14 @@ class AuthorBuilder(object):
         :rtype: list
         """
         millnum_list = []
-        convert = lambda text: int(text) if text.isdigit() else text
-        alphanum_key = lambda key: [convert(re.split('([A-Za-z]+)', key)[0])]
+
+        def convert(text): return int(text) if text.isdigit() else text
+
+        def alphanum_key(key): return [
+            convert(
+                re.split(
+                    '([A-Za-z]+)',
+                    key)[0])]
         for row in comm_list:
             try:
                 cite_urn = str(row['commentary'][0]['hasBody']['@id'])
@@ -195,7 +211,7 @@ class AuthorBuilder(object):
                     millnum_list.append(millnum)
                 else:
                     pass
-            except:
+            except BaseException:
                 pass
         return sorted(millnum_list, key=alphanum_key)
 
@@ -204,7 +220,8 @@ class AuthorBuilder(object):
 
         :return: List of authors record
         """
-        return self.collection.find({"cts_id": {'$exists': 1}}).sort([("name", 1)])
+        return self.collection.find(
+            {"cts_id": {'$exists': 1}}).sort([("name", 1)])
 
     def search(self, query, name=None, works=None, milliet_id=None):
         """ Search authors record (Filters are exclusive)

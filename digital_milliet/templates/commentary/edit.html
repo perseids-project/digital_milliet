@@ -21,46 +21,46 @@
     {% if "orig_uri" in obj %}{{ get_text(obj['orig_uri'], '#orig_text') }}{% endif %}
     <script type="text/javascript">
         $(function () {
-          $('.markdown').markdownify();
+            $('.markdown').markdownify();
 
-          var counter = {{ obj["images"]|length }};
-          $(".manifest_input a.add-input").on("click", function(e) {
-             e.preventDefault();
-             add_input($(this).parents(".manifest_input"), $("#iiif-fieldset"));
-          });
-          $(".manifest_input a.rem-input").on("click", function(e) {
-             e.preventDefault();
-             remove_input($(this).parents(".manifest_input"));
-          });
-          initialize_tag_typeahead();
-          initialize_semantic_tag_typeahead();
+            var counter = {{ obj["images"]|length }};
+            $(".manifest_input a.add-input").on("click", function(e) {
+                e.preventDefault();
+                add_input($(this).parents(".manifest_input"), $("#iiif-fieldset"));
+            });
+            $(".manifest_input a.rem-input").on("click", function(e) {
+                e.preventDefault();
+                remove_input($(this).parents(".manifest_input"));
+            });
+            initialize_tag_typeahead();
+            initialize_semantic_tag_typeahead();
 
         });
     </script>
 {% endblock %}
 {% block content %}
- {{ super() }}
-	<div class="container">
- 
-      <form id='input_form' action="save_edit" method="POST">
+    {{ super() }}
+    <div class="container">
+
+    <form id='input_form' action="save_edit" method="POST">
         <input type='hidden' name='mongo_id' value={{obj['mid']}}>
         <h2>{{ _('Edit Commentary :  ')+millnum }}</h2>
 
         <!-- inital text -->
         <fieldset class="row">
-          <legend>{{ _('Text:') }}</legend>
-          <div class="col-md-4">
+            <legend>{{ _('Text:') }}</legend>
+            <div class="col-md-4">
             {% if 'orig_uri' in obj %}
-              <input name="orig_uri" type='text' value="{{obj['orig_uri']}}" class="form-control"/><br />
+                <input name="orig_uri" type='text' value="{{obj['orig_uri']}}" class="form-control"/><br />
             {% endif %}
-              <select class="form-control" name="orig_lang" id="orig_lang">
-                  <option value="grc" {% if obj['orig_lang'] == 'grc' %} selected='selected' {% endif %}>{{ _('Ancient Greek') }}</option>
-                  <option value="lat" {% if obj['orig_lang'] == 'lat' %} selected='selected' {% endif %}>{{ _('Latin') }}</option>
-              </select>
-          </div>
-          <div class="col-md-8">
-              <textarea id="orig_text" name='orig_text' rows="10" cols="80" class="form-control">{{ obj['orig_text'] }}</textarea>
-          </div>
+                <select class="form-control" name="orig_lang" id="orig_lang">
+                    <option value="grc" {% if obj['orig_lang'] == 'grc' %} selected='selected' {% endif %}>{{ _('Ancient Greek') }}</option>
+                    <option value="lat" {% if obj['orig_lang'] == 'lat' %} selected='selected' {% endif %}>{{ _('Latin') }}</option>
+                </select>
+            </div>
+            <div class="col-md-8">
+                <textarea id="orig_text" name='orig_text' rows="10" cols="80" class="form-control">{{ obj['orig_text'] }}</textarea>
+            </div>
         </fieldset>
 
         <!-- Commentary -->
@@ -78,18 +78,18 @@
             {{ tags(row_id="original-tags-input", tag=" ".join(obj["tags"])) }}
         </fieldset>
 
-          <!-- Semantic Tags -->
-          <fieldset class="row" id="semantic-tags-fieldset">
-              <legend>{{ _('Semantic Tags') }}</legend>
-              {{ semantic_tags(row_id="original-semantic_tags-input", semantic_tag=" ".join(obj["semantic_tags"])) }}
-          </fieldset>
+            <!-- Semantic Tags -->
+            <fieldset class="row" id="semantic-tags-fieldset">
+                <legend>{{ _('Semantic Tags') }}</legend>
+                {{ semantic_tags(row_id="original-semantic_tags-input", semantic_tag=" ".join(obj["semantic_tags"])) }}
+            </fieldset>
 
         <!-- Bibliography information -->
         <fieldset class="row">
-          <legend>{{ _('Bibliography:') }}</legend>
-          <div class="col-md-12">
-            <textarea class="form-control" id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
-          </div>
+            <legend>{{ _('Bibliography:') }}</legend>
+            <div class="col-md-12">
+                <textarea class="form-control" id="b1text" name="b1text" rows="10" cols="80" data-lnum="b1">{{ obj['bibl'] }}</textarea>
+            </div>
         </fieldset>
 
         <!-- Translation 1 -->
@@ -99,35 +99,35 @@
         {{ translation("2", obj) }}
 
         <!-- IIIF Manifests -->
-            <fieldset class="row" id="iiif-fieldset">
-                <legend>{{ _('IIIF Manifests') }}</legend>
-                {% if obj["images"]|length > 0 %}
-                    {% for manifest in obj["images"] %}
-                        {% if loop.index == 1 %}
-                            {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"], row_id="original-iiif-input") }}
-                        {% else %}
-                            {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"]) }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    {{ iiif(row_id="original-iiif-input") }}
-                {% endif %}
-            </fieldset>
+        <fieldset class="row" id="iiif-fieldset">
+            <legend>{{ _('IIIF Manifests') }}</legend>
+            {% if obj["images"]|length > 0 %}
+                {% for manifest in obj["images"] %}
+                    {% if loop.index == 1 %}
+                        {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"], row_id="original-iiif-input") }}
+                    {% else %}
+                        {{ iiif(locationUri=manifest["manifestUri"], publisher=manifest["location"]) }}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {{ iiif(row_id="original-iiif-input") }}
+            {% endif %}
+        </fieldset>
         <div class="row">
             <div class="col-md-12">
                 <input type="submit" class="btn btn-primary" value="{{ _('Save Changes') }}" style="float:right; width:200px;"/>
             </div>
         </div>
-      </form>
- 
-      <form id='input_form' action="/delete" method="POST" onsubmit="return confirm('{{ _("Are you sure?") }}');">
-          <div class="row">
-              <div class="col-md-12">
+    </form>
+
+    <form id='input_form' action="/delete" method="POST" onsubmit="return confirm('{{ _("Are you sure?") }}');">
+        <div class="row">
+            <div class="col-md-12">
                 <input type="hidden" name="millnum" value="{{ millnum }}"/>
                 <input type="submit" class="btn btn-primary" value="{{ _('Delete Record') }}" style="float:right; width:200px;"/>
-              </div>
-          </div>
-      </form>
+            </div>
+        </div>
+    </form>
 
-  </div>
+    </div>
 {% endblock %}

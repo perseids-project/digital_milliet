@@ -16,10 +16,11 @@ from digital_milliet.lib.mirador import Mirador
 import re
 PERSONNA = re.compile("^\w\.\w+$")
 
+
 class DigitalMilliet(object):
     """ The Digital Milliet Web Application """
 
-    def __init__(self,app=None, config_file="config.cfg"):
+    def __init__(self, app=None, config_file="config.cfg"):
         self.app = None
 
         if app is not None:
@@ -35,11 +36,25 @@ class DigitalMilliet(object):
         self.cors = CORS(self.app)
         self.mongo = PyMongo(self.app)
         self.oauth = OAuthHelper(self.app)
-        self.authors = AuthorBuilder(self.mongo, Catalog(self.app), app=self.app)
-        self.commentaries = CommentaryHandler(db=self.mongo, authors=self.authors, config=self.app.config, auth=self.oauth)
-        self.mirador = Mirador(db=self.mongo, app=self.app, parser=self.commentaries)
+        self.authors = AuthorBuilder(
+            self.mongo, Catalog(
+                self.app), app=self.app)
+        self.commentaries = CommentaryHandler(
+            db=self.mongo,
+            authors=self.authors,
+            config=self.app.config,
+            auth=self.oauth)
+        self.mirador = Mirador(
+            db=self.mongo,
+            app=self.app,
+            parser=self.commentaries)
         self.babel = Babel(self.app)
-        self.views = Views(self.app, self.commentaries, self.mongo, self.authors, self.mirador)
+        self.views = Views(
+            self.app,
+            self.commentaries,
+            self.mongo,
+            self.authors,
+            self.mirador)
 
         @self.app.template_filter("clean_ref")
         def clean_ref(ref):
@@ -51,7 +66,8 @@ class DigitalMilliet(object):
                 if spl[0] == spl[1]:
                     ref = spl[0]
             spl = ref.split(".")
-            if len(spl) == 2 and ref[0] == ref[2] and PERSONNA.match(ref) is not None:
+            if len(spl) == 2 and ref[0] == ref[2] and PERSONNA.match(
+                    ref) is not None:
                 ref = spl[1].title()
             return ref
 
@@ -69,6 +85,3 @@ class DigitalMilliet(object):
 
     def get_db(self):
         return self.mongo
-
-
-

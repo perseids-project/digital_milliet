@@ -1,33 +1,33 @@
 <nav class="navbar navbar-default" role="navigation">
-  <div class="container">
-   
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-dropdown">
-        <span class="sr-only">{{ _('Toggle navigation') }}</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" rel="home" href="{{url_for('index')}}"> <img src="{{ url_for('static', filename='img/digmilbanner.png')}}"/> </a>
-    </div>
-    
+    <div class="container">
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="navbar-dropdown">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{url_for('commentary')}}">{{ _('Browse') }}</a></li>
-        <li><a href="{{url_for('about')}}">{{ _('About') }}</a></li>
-        {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
-          <li><a href="{{url_for('new')}}">{{ _('Add Record') }}</a></li>
-          <li class="logout"><a href="{{url_for('r_oauth_logout')}}?next={{ request.url }}" title="{{ session.oauth_user_name or session.oauth_user_uri }}">{{ _('Logout') }}</a></li>
-        {% else %}
-          <li><a href="{{url_for('r_oauth_login')}}?next={{ request.url }}">{{ _('Login') }}</a></li>
-        {% endif %}
-         <!-- Should set this elsewhere... -->
-        <!-- <li><a href="http://digmill.perseus.org/annotation">Add Record</a></li> -->
-      </ul>
-    </div><!-- /.navbar-collapse -->
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-dropdown">
+                <span class="sr-only">{{ _('Toggle navigation') }}</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" rel="home" href="{{url_for('index')}}"> <img src="{{ url_for('static', filename='img/digmilbanner.png')}}"/> </a>
+        </div>
 
-  </div><!-- /.container-fluid -->
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-dropdown">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{{url_for('commentary')}}">{{ _('Browse') }}</a></li>
+                <li><a href="{{url_for('about')}}">{{ _('About') }}</a></li>
+                {% if 'oauth_user_uri' in session and session.oauth_user_uri != None %}
+                    <li><a href="{{url_for('new')}}">{{ _('Add Record') }}</a></li>
+                    <li class="logout"><a href="{{url_for('r_oauth_logout')}}?next={{ request.url }}" title="{{ session.oauth_user_name or session.oauth_user_uri }}">{{ _('Logout') }}</a></li>
+                {% else %}
+                    <li><a href="{{url_for('r_oauth_login')}}?next={{ request.url }}">{{ _('Login') }}</a></li>
+                {% endif %}
+                <!-- Should set this elsewhere... -->
+                <!-- <li><a href="http://digmill.perseus.org/annotation">Add Record</a></li> -->
+            </ul>
+        </div><!-- /.navbar-collapse -->
+
+    </div><!-- /.container-fluid -->
 </nav>

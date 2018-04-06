@@ -1,5 +1,5 @@
 # puppet-digital_milliet
-Puppet Module for Digital Milliet production deployment. 
+Puppet Module for Digital Milliet production deployment.
 
 The recommended production deployment for the Digital Milliet is to run under Apache using mod_wsgi.  SSL is required if
 OAuth is enabled.
@@ -30,7 +30,7 @@ The following settings must be provided in your Hiera file to configure the depl
   digital_milliet::ssl_private_key: 'full_path_to_ssl_private_key.key'
   # user to own the Digital Milliet code on your system
   digital_milliet::user: 'user_to_own_the_files'
-  # backup directory for the mongo database 
+  # backup directory for the mongo database
   digital_milliet::backup_dir: 'backup_directory_for_mongo_db'
   # the version of python to use
   digital_milliet::python_version: '3.5'

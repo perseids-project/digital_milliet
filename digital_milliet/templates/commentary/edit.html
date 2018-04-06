@@ -41,7 +41,7 @@
 {% block content %}
     {{ super() }}
     <div class="container">
- 
+
     <form id='input_form' action="save_edit" method="POST">
         <input type='hidden' name='mongo_id' value={{obj['mid']}}>
         <h2>{{ _('Edit Commentary :  ')+millnum }}</h2>
@@ -119,7 +119,7 @@
             </div>
         </div>
     </form>
- 
+
     <form id='input_form' action="/delete" method="POST" onsubmit="return confirm('{{ _("Are you sure?") }}');">
         <div class="row">
             <div class="col-md-12">

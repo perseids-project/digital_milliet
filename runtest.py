@@ -33,12 +33,33 @@ def run(loggedin=False):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Run a mongo example application')
-    parser.add_argument('--fixture', help='Path to fixtures', default="./tests/dbfixtureiiif.yml")
-    parser.add_argument('--clear', action='store_true', default=False, help='Clear fixtures')
-    parser.add_argument('--norun', dest="norun", action='store_true', default=False, help='Do not run the app')
-    parser.add_argument('--install', action='store_true', default=False, help='Install fixtures')
-    parser.add_argument('--loggedin', action='store_true', default=False, help='Mocks login')
+    parser = argparse.ArgumentParser(
+        description='Run a mongo example application')
+    parser.add_argument(
+        '--fixture',
+        help='Path to fixtures',
+        default="./tests/dbfixtureiiif.yml")
+    parser.add_argument(
+        '--clear',
+        action='store_true',
+        default=False,
+        help='Clear fixtures')
+    parser.add_argument(
+        '--norun',
+        dest="norun",
+        action='store_true',
+        default=False,
+        help='Do not run the app')
+    parser.add_argument(
+        '--install',
+        action='store_true',
+        default=False,
+        help='Install fixtures')
+    parser.add_argument(
+        '--loggedin',
+        action='store_true',
+        default=False,
+        help='Mocks login')
 
     args = parser.parse_args()
     if args.install is True:

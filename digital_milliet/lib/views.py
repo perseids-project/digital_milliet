@@ -1,11 +1,17 @@
 from digital_milliet.lib.oauth import OAuthHelper
-from flask import render_template, request, redirect, session, flash, Response, g 
+from flask import render_template, request, redirect, session, flash, Response, g
 from bson.json_util import dumps
 from flask_babel import gettext
 
 
 class Views(object):
-    def __init__(self, app=None, commentaries=None, db=None, authors=None, mirador=None):
+    def __init__(
+            self,
+            app=None,
+            commentaries=None,
+            db=None,
+            authors=None,
+            mirador=None):
         """ Main view system
 
         :param app: Flask APP
@@ -28,16 +34,40 @@ class Views(object):
         self.add_lang_url_rule('/', view_func=self.index)
         self.add_lang_url_rule('/index', view_func=self.index)
         self.add_lang_url_rule('/about', view_func=self.about)
-        self.add_lang_url_rule('/search', view_func=self.search, methods=['GET'])
+        self.add_lang_url_rule(
+            '/search',
+            view_func=self.search,
+            methods=['GET'])
         self.add_lang_url_rule('/commentary', view_func=self.commentary)
         self.add_lang_url_rule('/commentary/<millnum>', view_func=self.millnum)
         self.add_lang_url_rule('/edit/<millnum>', view_func=self.edit)
-        self.add_lang_url_rule('/edit/save_edit', view_func=self.save_edit, methods=['POST'])
-        self.add_lang_url_rule('/delete', view_func=self.delete, methods=['POST'])
-        self.add_lang_url_rule('/create', view_func=self.create, methods=['POST'])
-        self.add_lang_url_rule('/api/commentary/<millnum>', view_func=self.api_data_get, methods=['GET'])
-        self.add_lang_url_rule('/api/tags/<type>', view_func=self.api_tags_get, methods=['GET'])
-        self.add_lang_url_rule('/new', view_func=self.new, methods=['GET', 'POST'], strict_slashes=False)
+        self.add_lang_url_rule(
+            '/edit/save_edit',
+            view_func=self.save_edit,
+            methods=['POST'])
+        self.add_lang_url_rule(
+            '/delete',
+            view_func=self.delete,
+            methods=['POST'])
+        self.add_lang_url_rule(
+            '/create',
+            view_func=self.create,
+            methods=['POST'])
+        self.add_lang_url_rule(
+            '/api/commentary/<millnum>',
+            view_func=self.api_data_get,
+            methods=['GET'])
+        self.add_lang_url_rule(
+            '/api/tags/<type>',
+            view_func=self.api_tags_get,
+            methods=['GET'])
+        self.add_lang_url_rule(
+            '/new',
+            view_func=self.new,
+            methods=[
+                'GET',
+                'POST'],
+            strict_slashes=False)
 
         @app.route('/favicon.ico')
         def favicon():
@@ -75,7 +105,7 @@ class Views(object):
             try:
                 if res.count() == 0:
                     res = None
-            except:
+            except BaseException:
                 if len(res) == 0:
                     res = None
 
@@ -86,7 +116,10 @@ class Views(object):
         """
         millnum_list = self.commentaries.get_milliet_identifier_list()
         auth_list = self.authors.author_list()
-        return render_template('commentary/list.html', millnum_list=millnum_list, auth_list=auth_list)
+        return render_template(
+            'commentary/list.html',
+            millnum_list=millnum_list,
+            auth_list=auth_list)
 
     def millnum(self, millnum):
         """ Read a Milliet entry
@@ -94,19 +127,33 @@ class Views(object):
         parsed_obj, auth_info = self.commentaries.get_milliet(millnum)
         if 'orig_uri' in parsed_obj:
             session['cts_uri'] = parsed_obj['orig_uri']
-        (previous_millnum, next_millnum) = self.commentaries.get_surrounding_identifier(millnum)
+        (previous_millnum,
+         next_millnum) = self.commentaries.get_surrounding_identifier(millnum)
 
-        return render_template('commentary/read.html', obj=parsed_obj, info=auth_info, millnum=millnum,
-            previous_millnum=previous_millnum, next_millnum=next_millnum)
+        return render_template(
+            'commentary/read.html',
+            obj=parsed_obj,
+            info=auth_info,
+            millnum=millnum,
+            previous_millnum=previous_millnum,
+            next_millnum=next_millnum)
 
     @OAuthHelper.oauth_required
     def delete(self):
         millnum = request.form['millnum']
         removed = self.commentaries.remove_milliet(millnum)
         if removed > 0:
-          flash(gettext('Record for %(millnum)s removed.', millnum=millnum), 'success')
+            flash(
+                gettext(
+                    'Record for %(millnum)s removed.',
+                    millnum=millnum),
+                'success')
         else:
-          flash(gettext('Error removing record for %(millnum)s.', millnum=millnum), 'danger')
+            flash(
+                gettext(
+                    'Error removing record for %(millnum)s.',
+                    millnum=millnum),
+                'danger')
         return redirect('commentary')
 
     @OAuthHelper.oauth_required
@@ -115,7 +162,10 @@ class Views(object):
         """
         parsed_obj, auth_info = self.commentaries.get_milliet(millnum)
 
-        return render_template('commentary/edit.html', millnum=millnum, obj=parsed_obj)
+        return render_template(
+            'commentary/edit.html',
+            millnum=millnum,
+            obj=parsed_obj)
 
     @OAuthHelper.oauth_required
     def save_edit(self):
@@ -159,10 +209,10 @@ class Views(object):
             data["semantic_tags"] = []
         millnum = self.commentaries.create_commentary(data)
         if millnum is not None:
-            flash(gettext('Annotation successfully created!'),'success')
+            flash(gettext('Annotation successfully created!'), 'success')
             return redirect('commentary/' + str(millnum))
         else:
-            flash(gettext('Error saving!'),'danger')
+            flash(gettext('Error saving!'), 'danger')
             return redirect('new')
 
     def api_data_get(self, millnum):
@@ -185,12 +235,11 @@ class Views(object):
         """ Get the existing tags """
         tags, semantic_tags = self.commentaries.get_existing_tags()
         if type == 'semantic':
-            json = [ { 'value': tag } for tag in semantic_tags ]
+            json = [{'value': tag} for tag in semantic_tags]
         else:
-            json = [ { 'value': tag } for tag in tags ]
+            json = [{'value': tag} for tag in tags]
         return Response(
             dumps(json),
             mimetype='application/json',
             status=200
         )
-

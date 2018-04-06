@@ -8,52 +8,64 @@ from datetime import date
 class TestRoutes(DigitalMillietTestCase, TestCase):
 
     def test_favicon(self):
-        favicon = open('digital_milliet/static/favicon/favicon.ico', 'rb').read()
+        favicon = open(
+            'digital_milliet/static/favicon/favicon.ico',
+            'rb').read()
         rv = self.client.get('/favicon.ico').data
-        self.assertEqual(favicon,rv,"Doesn't appear to serve match favicon")
+        self.assertEqual(favicon, rv, "Doesn't appear to serve match favicon")
 
     def test_index(self):
         rv = self.client.get('/').data.decode()
-        self.assertIn('Welcome to the home of the Digital Milliet!',rv,"Doesn't appear to be the index.html")
+        self.assertIn('Welcome to the home of the Digital Milliet!',
+                      rv, "Doesn't appear to be the index.html")
 
     def test_index_with_index(self):
         rv = self.client.get('/index').data.decode()
-        self.assertIn('Welcome to the home of the Digital Milliet!',rv,"Doesn't appear to be the index.html")
+        self.assertIn('Welcome to the home of the Digital Milliet!',
+                      rv, "Doesn't appear to be the index.html")
 
     def test_about(self):
         rv = self.client.get('/about').data.decode()
-        self.assertIn('What is the Digital Milliet?',rv,"Doesn't appear to be the aobut.html")
-        self.assertIn('<a href="/commentary">Browse</a>',rv,"Doesn't appear to be the aobut.html")
+        self.assertIn('What is the Digital Milliet?', rv,
+                      "Doesn't appear to be the aobut.html")
+        self.assertIn('<a href="/commentary">Browse</a>', rv,
+                      "Doesn't appear to be the aobut.html")
 
     def test_fr_about(self):
         rv = self.client.get('/fr/about').data.decode()
-        self.assertIn("Qu'est-ce que le Digital Milliet ?",rv,"Doesn't appear to be the aobut.html")
-        self.assertIn('<a href="/fr/commentary">Browse</a>',rv,"Doesn't appear to be the aobut.html")
+        self.assertIn("Qu'est-ce que le Digital Milliet ?", rv,
+                      "Doesn't appear to be the aobut.html")
+        self.assertIn('<a href="/fr/commentary">Browse</a>',
+                      rv, "Doesn't appear to be the aobut.html")
 
     def test_search(self):
         rv = self.client.get('/search?in=Author&query=Xenophon').data.decode()
-        self.assertIn('Memorabilia',rv,"Search result missing")
+        self.assertIn('Memorabilia', rv, "Search result missing")
 
     def test_search_tags(self):
         rv = self.client.get('/search?in=Tags&query=dolphin').data.decode()
-        self.assertIn('261',rv,"Search result missing")
+        self.assertIn('261', rv, "Search result missing")
 
     def test_search_semantic_tags(self):
-        rv = self.client.get('/search?in=Tags&query=http%3A%2F%2Fw3id.org%2Fmyorg%2Fmysemantictag').data.decode()
-        self.assertIn('261',rv,"Search result missing")
+        rv = self.client.get(
+            '/search?in=Tags&query=http%3A%2F%2Fw3id.org%2Fmyorg%2Fmysemantictag').data.decode()
+        self.assertIn('261', rv, "Search result missing")
 
     def test_search_tags_not_found(self):
         rv = self.client.get('/search?in=Tags&query=junk').data.decode()
-        self.assertIn('No Results',rv,"Search result missing")
+        self.assertIn('No Results', rv, "Search result missing")
 
     def test_commentary(self):
         rv = self.client.get('/commentary').data.decode()
-        self.assertIn('261',rv,"Missing Commentary List Item")
+        self.assertIn('261', rv, "Missing Commentary List Item")
 
     def test_commentary_by_millnum(self):
         rv = self.client.get('/commentary/261').data.decode()
-        self.assertIn('Xenophon',rv,'Header Info Missing')
-        self.assertNotIn("id=\"mirador-container", rv, "Mirador container should not show for text without images")
+        self.assertIn('Xenophon', rv, 'Header Info Missing')
+        self.assertNotIn(
+            "id=\"mirador-container",
+            rv,
+            "Mirador container should not show for text without images")
 
     def test_api(self):
         rv = json.loads(self.client.get('/api/commentary/261').data.decode())
@@ -61,43 +73,68 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
 
     def test_api_tags_text(self):
         rv = json.loads(self.client.get('/api/tags/text').data.decode())
-        self.assertEqual([{ "value":"dolphin"}], rv, 'API Response Invalid')
+        self.assertEqual([{"value": "dolphin"}], rv, 'API Response Invalid')
 
     def test_api_tags_semantic(self):
         rv = json.loads(self.client.get('/api/tags/semantic').data.decode())
-        self.assertEqual([{ "value":"http://w3id.org/myorg/mysemantictag"}], rv, 'API Response Invalid')
+        self.assertEqual(
+            [{"value": "http://w3id.org/myorg/mysemantictag"}], rv, 'API Response Invalid')
 
     def test_new_no_session(self):
         rv = self.client.get('/new')
-        self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2Fnew',rv.location, "Doesn't redirect to login")
+        self.assertEqual(
+            'http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2Fnew',
+            rv.location,
+            "Doesn't redirect to login")
 
     def test_new_with_session(self):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv = self.client.get('/new').data.decode()
-        self.assertIn('Enter Commentary',rv,"Not the new record page")
+        self.assertIn('Enter Commentary', rv, "Not the new record page")
 
     def test_edit_no_session(self):
         rv = self.client.get('/edit/261')
-        self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2Fedit%2F261',rv.location, "Doesn't redirect to login")
+        self.assertEqual(
+            'http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2Fedit%2F261',
+            rv.location,
+            "Doesn't redirect to login")
 
     def test_edit_with_session(self):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv = self.client.get('/edit/261').data.decode()
-        self.assertIn('<h2>Edit Commentary :  261</h2>', rv, "Not the commentary page")
+        self.assertIn('<h2>Edit Commentary :  261</h2>',
+                      rv, "Not the commentary page")
 
     def test_delete_with_session(self):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
-        rv = self.client.post('/delete', data = dict(millnum='261'), follow_redirects=True)
-        self.assertIn('Record for 261 removed.',rv.data.decode(),"Missing success message")
-        rv = self.client.post('/delete', data = dict(millnum='261'), follow_redirects=True)
-        self.assertIn('Error removing record for 261.',rv.data.decode(),"Missing failure message")
+        rv = self.client.post(
+            '/delete',
+            data=dict(
+                millnum='261'),
+            follow_redirects=True)
+        self.assertIn(
+            'Record for 261 removed.',
+            rv.data.decode(),
+            "Missing success message")
+        rv = self.client.post(
+            '/delete',
+            data=dict(
+                millnum='261'),
+            follow_redirects=True)
+        self.assertIn(
+            'Error removing record for 261.',
+            rv.data.decode(),
+            "Missing failure message")
 
     def test_create_no_session(self):
-        rv = self.client.post('/create', data = dict(l1text='New text'))
-        self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2F',rv.location, "Doesn't redirect to index")
+        rv = self.client.post('/create', data=dict(l1text='New text'))
+        self.assertEqual(
+            'http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2F',
+            rv.location,
+            "Doesn't redirect to index")
 
     def test_create_with_session(self):
         with self.client.session_transaction() as sess:
@@ -124,8 +161,7 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         )
         submit_data["iiif[]"] = [
             "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json",
-            "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"
-        ]
+            "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"]
         submit_data["iiif_publisher[]"] = [
             "Unknown",
             "Biblissima"
@@ -136,7 +172,8 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
 
         with self.app.app_context():
             rec, auth = self.dm.commentaries.get_milliet("123")
-        self.assertEqual(rec['creator']['@id'], "http://sosol.perseids.org/sosol/User/MyTestUser")
+        self.assertEqual(rec['creator']['@id'],
+                         "http://sosol.perseids.org/sosol/User/MyTestUser")
         self.assertEqual(rec['creator']['name'], "Test User")
         self.assertCountEqual(
             rec["images"],
@@ -148,31 +185,43 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
                  'manifestUri': 'http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json'}
             ]
         )
-        self.assertEqual(rec['tags'], ["term1","term2"])
-        self.assertEqual(rec['semantic_tags'], ["http://example.org/vocabterm"])
+        self.assertEqual(rec['tags'], ["term1", "term2"])
+        self.assertEqual(
+            rec['semantic_tags'],
+            ["http://example.org/vocabterm"])
 
         rv = self.client.get('/commentary/123').data.decode()
-        self.assertIn("id=\"mirador-container", rv, "Mirador container should not show for text without images")
+        self.assertIn(
+            "id=\"mirador-container",
+            rv,
+            "Mirador container should not show for text without images")
 
     def test_save_edit_no_session(self):
-        rv = self.client.post('/edit/save_edit', data = dict(c1text='Replacing the text'))
-        self.assertEqual('http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2F',rv.location, "Doesn't redirect to index")
+        rv = self.client.post(
+            '/edit/save_edit',
+            data=dict(
+                c1text='Replacing the text'))
+        self.assertEqual(
+            'http://localhost/oauth/login?next=http%3A%2F%2Flocalhost%2F',
+            rv.location,
+            "Doesn't redirect to index")
 
     def test_save_edit_with_session_add_image(self):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv1 = self.client.get('/edit/261').data.decode()
-        m = re.search("name='mongo_id' value=(.*)>",rv1).group(1)
+        m = re.search("name='mongo_id' value=(.*)>", rv1).group(1)
 
         # First Edit Check : adding images
-        self.update_and_assert(self.make_update_data(
+        self.update_and_assert(
+            self.make_update_data(
                 mongo_id=m,
                 iiif=[
                     "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json",
-                    "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"
-                ],
-                iiif_publisher=["Unknown", "Biblissima"]
-        ))
+                    "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"],
+                iiif_publisher=[
+                    "Unknown",
+                    "Biblissima"]))
         rec = self.get_rec()
         self.assertCountEqual(
             rec["images"],
@@ -189,18 +238,16 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv1 = self.client.get('/edit/261').data.decode()
-        m = re.search("name='mongo_id' value=(.*)>",rv1).group(1)
-        self.update_and_assert(self.make_update_data(
-            mongo_id=m,
-            iiif=[
-                "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json",
-                "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"
-            ],
-            iiif_publisher=[
-                "BNF",
-                "Biblissima"
-            ]
-        ))
+        m = re.search("name='mongo_id' value=(.*)>", rv1).group(1)
+        self.update_and_assert(
+            self.make_update_data(
+                mongo_id=m,
+                iiif=[
+                    "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/info.json",
+                    "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b90068354/manifest.json"],
+                iiif_publisher=[
+                    "BNF",
+                    "Biblissima"]))
         rec = self.get_rec()
         self.assertCountEqual(
             rec["images"],
@@ -251,7 +298,7 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv1 = self.client.get('/edit/261').data.decode()
-        m = re.search("name='mongo_id' value=(.*)>",rv1).group(1)
+        m = re.search("name='mongo_id' value=(.*)>", rv1).group(1)
         self.update_and_assert(self.make_update_data(
             mongo_id=m,
         ))
@@ -271,8 +318,13 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv1 = self.client.get('/edit/261').data.decode()
         m = re.search("name='mongo_id' value=(.*)>", rv1).group(1)
-        self.update_and_assert(self.make_update_data(mongo_id=m, t2_text="Hello there", lang2="fra"))
-        # TODO : This should be changed when author are moved to their own collection
+        self.update_and_assert(
+            self.make_update_data(
+                mongo_id=m,
+                t2_text="Hello there",
+                lang2="fra"))
+        # TODO : This should be changed when author are moved to their own
+        # collection
         with self.app.app_context():
             author = self.dm.authors.get_author("tlg0032")
             self.assertCountEqual(
@@ -284,75 +336,80 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         rv1 = self.client.get('/edit/999').data.decode()
-        m = re.search("name='mongo_id' value=(.*)>",rv1).group(1)
-        t1_text = re.search("t1_text",rv1)
+        m = re.search("name='mongo_id' value=(.*)>", rv1).group(1)
+        t1_text = re.search("t1_text", rv1)
         self.assertIsNotNone(t1_text)
         submit_data = dict(
-            mongo_id = m,
-            orig_uri ="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
-            orig_text= "",
+            mongo_id=m,
+            orig_uri="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
+            orig_text="",
             orig_lang="grc",
-            c1text ="",
-            b1text = "",
-            t1_text = "some new translation text",
-            lang1 = "eng",
-            t2_text = "nouveau!",
-            lang2 = "fra"
-        )
-        rv = self.client.post('/edit/save_edit', data=submit_data, follow_redirects=True)
-        self.assertIn('Edit successfully saved',rv.data.decode(),"Missing success message")
+            c1text="",
+            b1text="",
+            t1_text="some new translation text",
+            lang1="eng",
+            t2_text="nouveau!",
+            lang2="fra")
+        rv = self.client.post(
+            '/edit/save_edit',
+            data=submit_data,
+            follow_redirects=True)
+        self.assertIn(
+            'Edit successfully saved',
+            rv.data.decode(),
+            "Missing success message")
         with self.app.app_context():
-            rec,auth = self.dm.commentaries.get_milliet("999")
-        self.assertEqual(rec['t1_text'],"some new translation text")
+            rec, auth = self.dm.commentaries.get_milliet("999")
+        self.assertEqual(rec['t1_text'], "some new translation text")
 
     def test_create_annotation(self):
         """ Check that creating annotation works """
         with self.client.session_transaction() as sess:
             sess['oauth_user_uri'] = 'http://sosol.perseids.org/sosol/User/MyTestUser'
         inp = {
-           "@context": "http://iiif.io/api/presentation/2/context.json",
-           "@type": "oa:Annotation",
-           "motivation": ["oa:tagging", "oa:commenting"],
-           "resource": [
+            "@context": "http://iiif.io/api/presentation/2/context.json",
+            "@type": "oa:Annotation",
+            "motivation": ["oa:tagging", "oa:commenting"],
+            "resource": [
               {"@type": "oa:Tag", "chars": "One"},
               {"@type": "oa:Tag", "chars": "tag,"},
               {"@type": "oa:Tag", "chars": "second"},
               {"@type": "oa:Tag", "chars": "tag"},
               {"@type": "dctypes:Text", "format": "text/html", "chars": "<p>Test text</p>"}
-           ],
-           "on": [
-              {
-                 "@type": "oa:SpecificResource",
-                 "full": "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab"
-                         "9b8/sequence/1/canvas/1",
-                 "selector": {
-                    "@type": "oa:Choice",
-                    "default": {"@type": "oa:FragmentSelector", "value": "xywh=459,95,103,86"},
-                    "item": {
-                       "@type": "oa:SvgSelector",
-                       "value": "<svg xmlns='http://www.w3.org/2000/svg'><path xmlns=\"http://www.w3.org/2000/svg\" d"
-                                "=\"M474.50405,107.36748c9.55048,-7.18323 23.02298,-12.53234 36.56076,-12.52595l0,0l0,"
-                                "0c13.53778,0.00639 25.33147,5.01039 36.56076,12.52595c11.22929,7.51555 15.59398,18.96"
-                                "78 15.14396,30.24031c-0.45002,11.27251 -5.71473,22.36528 -15.14396,30.24031c-9.42923,"
-                                "7.87503 -23.02298,12.53234 -36.56076,12.52595c-13.53778,-0.00639 -27.01961,-4.67648 -3"
-                                "6.56076,-12.52595c-9.54115,-7.84947 -15.14163,-18.87833 -15.14396,-30.24031c-0.00233,"
-                                "-11.36198 5.59348,-23.05708 15.14396,-30.24031z\" data-paper-data=\"{&quot;strokeWidt"
-                                "h&quot;:1,&quot;rotation&quot;:0,&quot;deleteIcon&quot;:null,&quot;rotationIcon&quot;"
-                                ":null,&quot;group&quot;:null,&quot;editable&quot;:true,&quot;annotation&quot;:null}\""
-                                " id=\"ellipse_279493b4-3ca9-4c68-ae32-cdf9accd5b9d\" fill-opacity=\"0.43\" fill=\"#2a"
-                                "8bac\" fill-rule=\"nonzero\" stroke=\"#00bfff\" stroke-width=\"1\" stroke-linecap=\"b"
-                                "utt\" stroke-linejoin=\"miter\" stroke-miterlimit=\"10\" stroke-dasharray=\"\" stroke"
-                                "-dashoffset=\"0\" font-family=\"none\" font-weight=\"none\" font-size=\"none\" text-a"
-                                "nchor=\"none\" style=\"mix-blend-mode: normal\"/></svg>"
+            ],
+            "on": [
+                {
+                    "@type": "oa:SpecificResource",
+                    "full": "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab"
+                    "9b8/sequence/1/canvas/1",
+                    "selector": {
+                        "@type": "oa:Choice",
+                        "default": {"@type": "oa:FragmentSelector", "value": "xywh=459,95,103,86"},
+                        "item": {
+                            "@type": "oa:SvgSelector",
+                            "value": "<svg xmlns='http://www.w3.org/2000/svg'><path xmlns=\"http://www.w3.org/2000/svg\" d"
+                            "=\"M474.50405,107.36748c9.55048,-7.18323 23.02298,-12.53234 36.56076,-12.52595l0,0l0,"
+                            "0c13.53778,0.00639 25.33147,5.01039 36.56076,12.52595c11.22929,7.51555 15.59398,18.96"
+                            "78 15.14396,30.24031c-0.45002,11.27251 -5.71473,22.36528 -15.14396,30.24031c-9.42923,"
+                            "7.87503 -23.02298,12.53234 -36.56076,12.52595c-13.53778,-0.00639 -27.01961,-4.67648 -3"
+                            "6.56076,-12.52595c-9.54115,-7.84947 -15.14163,-18.87833 -15.14396,-30.24031c-0.00233,"
+                            "-11.36198 5.59348,-23.05708 15.14396,-30.24031z\" data-paper-data=\"{&quot;strokeWidt"
+                            "h&quot;:1,&quot;rotation&quot;:0,&quot;deleteIcon&quot;:null,&quot;rotationIcon&quot;"
+                            ":null,&quot;group&quot;:null,&quot;editable&quot;:true,&quot;annotation&quot;:null}\""
+                            " id=\"ellipse_279493b4-3ca9-4c68-ae32-cdf9accd5b9d\" fill-opacity=\"0.43\" fill=\"#2a"
+                            "8bac\" fill-rule=\"nonzero\" stroke=\"#00bfff\" stroke-width=\"1\" stroke-linecap=\"b"
+                            "utt\" stroke-linejoin=\"miter\" stroke-miterlimit=\"10\" stroke-dasharray=\"\" stroke"
+                            "-dashoffset=\"0\" font-family=\"none\" font-weight=\"none\" font-size=\"none\" text-a"
+                            "nchor=\"none\" style=\"mix-blend-mode: normal\"/></svg>"
+                        }
+                    },
+                    "within": {
+                        "@id": "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440c"
+                        "ab9b8",
+                        "@type": "sc:Manifest"
                     }
-                 },
-                 "within": {
-                    "@id": "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440c"
-                           "ab9b8",
-                    "@type": "sc:Manifest"
-                 }
-              }
-           ]
+                }
+            ]
         }
         req = self.client.put(
             "/api/mirador?milliet_number=261",
@@ -360,7 +417,8 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
             content_type='application/json'
         )
         j = json.loads(req.data.decode())
-        self.assertTrue(j["@id"].startswith("http://perseids.org/collections/urn:cite:perseus:digmil.261.anno-"))
+        self.assertTrue(j["@id"].startswith(
+            "http://perseids.org/collections/urn:cite:perseus:digmil.261.anno-"))
         self.assertTrue(j["serializedAt"].startswith(date.today().isoformat()))
         self.assertEqual(j["serializedAt"], j["annotatedAt"])
 
@@ -372,15 +430,15 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         req = self.client.get(
             "/api/mirador?noCollection&uri={}".format(
                 "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/seque"
-                "nce/1/canvas/1"
-            )
-        )
+                "nce/1/canvas/1"))
         annos = json.loads(req.data.decode())
         self.assertEqual(annos[0], anno)
 
         # Test with wrong Manifest URI
-        req = self.client.get("/api/mirador?uri={}".format("http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd310"
-                                                           "28685c8d29802766axxx44cddd39975440cab9b8"))
+        req = self.client.get(
+            "/api/mirador?uri={}".format(
+                "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd310"
+                "28685c8d29802766axxx44cddd39975440cab9b8"))
         annos = json.loads(req.data.decode())
         self.assertEqual(annos, [])
 
@@ -400,7 +458,10 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
             {"@type": "dctypes:Text", "format": "text/html", "chars": "<p>Test text Hey Hey</p>"}
         ]
 
-        req = self.client.post("/api/mirador", data=json.dumps(upgrade), content_type='application/json')
+        req = self.client.post(
+            "/api/mirador",
+            data=json.dumps(upgrade),
+            content_type='application/json')
         j = json.loads(req.data.decode())
         self.assertEqual(j["@id"], anno["@id"])
         self.assertTrue(j["serializedAt"].startswith(date.today().isoformat()))
@@ -411,9 +472,7 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         req = self.client.get(
             "/api/mirador?noCollection&uri={}".format(
                 "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/seque"
-                "nce/1/canvas/1"
-            )
-        )
+                "nce/1/canvas/1"))
         annos = json.loads(req.data.decode())
         self.assertEqual(annos[0], upgrade)
 
@@ -425,20 +484,18 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
         req = self.client.get(
             "/api/mirador?noCollection&uri={}".format(
                 "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/seque"
-                "nce/1/canvas/1"
-            )
-        )
+                "nce/1/canvas/1"))
         annos = json.loads(req.data.decode())
         self.assertEqual(annos[0], anno)
 
-        self.client.delete("/api/mirador", data=json.dumps({"@id": anno["@id"]}), content_type='application/json')
+        self.client.delete("/api/mirador",
+                           data=json.dumps({"@id": anno["@id"]}),
+                           content_type='application/json')
 
         req = self.client.get(
             "/api/mirador?noCollection&uri={}".format(
                 "http://free.iiifhosting.com/iiif/2ce9baa6bfa77047c690cfd31028685c8d29802766a44cddd39975440cab9b8/seque"
-                "nce/1/canvas/1"
-            )
-        )
+                "nce/1/canvas/1"))
         annos = json.loads(req.data.decode())
         self.assertEqual(annos, [], "No more annotations !")
 
@@ -523,11 +580,17 @@ class TestRoutes(DigitalMillietTestCase, TestCase):
 
     @staticmethod
     def make_update_data(
-            mongo_id,  iiif=None, iiif_publisher=None,
+            mongo_id,
+            iiif=None,
+            iiif_publisher=None,
             orig_uri="urn:cts:greekLit:tlg0032.tlg002.perseus-grc2:3.10.1-3.10.5",
-            orig_text="", orig_lang="grc", c1text="", b1text="",
-            t1_uri="urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:3.10.1-3.10.5", t2_text="", lang2=None
-    ):
+            orig_text="",
+            orig_lang="grc",
+            c1text="",
+            b1text="",
+            t1_uri="urn:cts:greekLit:tlg0032.tlg002.perseus-eng1:3.10.1-3.10.5",
+            t2_text="",
+            lang2=None):
         if iiif is None:
             iiif = []
         if iiif_publisher is None:

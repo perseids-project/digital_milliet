@@ -8,7 +8,7 @@ class OAuthHelper(object):
     Implements flask_oauthlib.client
     """
 
-    def __init__(self,app):
+    def __init__(self, app):
         """ Constructor
 
         :param app: the wrapped flask app
@@ -32,9 +32,11 @@ class OAuthHelper(object):
         self.auth_override = None
         if 'OAUTH_USER_OVERRIDE' in app.config:
             self.auth_override = app.config['OAUTH_USER_OVERRIDE']
-        app.add_url_rule('/oauth/login',view_func = self.r_oauth_login)
-        app.add_url_rule('/oauth/authorized',view_func = self.r_oauth_authorized)
-        app.add_url_rule('/oauth/logout',view_func = self.r_oauth_logout)
+        app.add_url_rule('/oauth/login', view_func=self.r_oauth_login)
+        app.add_url_rule(
+            '/oauth/authorized',
+            view_func=self.r_oauth_authorized)
+        app.add_url_rule('/oauth/logout', view_func=self.r_oauth_logout)
 
     def r_oauth_login(self):
         """ Route for OAuth2 Login
@@ -70,7 +72,8 @@ class OAuthHelper(object):
             )
         session['oauth_token'] = (resp['access_token'], '')
         user = self.authobj.get('user')
-        ## TODO this is too specific to Perseids' api model. We should externalize.
+        # TODO this is too specific to Perseids' api model. We should
+        # externalize.
         if not self.user_in_community(user.data['user']['communities']):
             return 'Access denied: reason=%s error=%s' % (
                 "Not in Community",
@@ -81,7 +84,9 @@ class OAuthHelper(object):
         if 'next' in session and session['next'] is not None and session['next'] != '':
             return redirect(session['next'])
         else:
-            return render_template('authorized.html', username=session['oauth_user_name'])
+            return render_template(
+                'authorized.html',
+                username=session['oauth_user_name'])
 
     @staticmethod
     def r_oauth_logout():
@@ -94,7 +99,7 @@ class OAuthHelper(object):
         """
         session.pop('oauth_user_uri', None)
         session.pop('oauth_user_name', None)
-        next = request.args.get('next','')
+        next = request.args.get('next', '')
         if next is not None and next != '':
             return redirect(next)
         else:
@@ -165,6 +170,10 @@ class OAuthHelper(object):
                     next = url_for('.index', _external=True)
                 else:
                     next = request.url
-                return redirect(url_for('.r_oauth_login', next=next, _external=True))
-            return f(*args,**kwargs)
+                return redirect(
+                    url_for(
+                        '.r_oauth_login',
+                        next=next,
+                        _external=True))
+            return f(*args, **kwargs)
         return decorated_function

@@ -10,6 +10,7 @@ from MyCapytain.common.reference import URN
 class CommentaryHandler(object):
     """ Parses data for retrieval/storage to/from the database
     """
+
     def __init__(self, db=None, authors=None, config=None, auth=None):
         """ CommentaryHandler object
 
@@ -37,7 +38,8 @@ class CommentaryHandler(object):
         """
         data = self.form_to_OpenAnnotation(form)
         cid = data["commentary"][0]["hasBody"]["@id"]
-        exists = self.mongo.db.annotation.find_one({"commentary.hasBody.@id": cid})
+        exists = self.mongo.db.annotation.find_one(
+            {"commentary.hasBody.@id": cid})
 
         if not exists and self.validate_annotation(data):
             self.mongo.db.annotation.insert(data)
@@ -58,7 +60,8 @@ class CommentaryHandler(object):
         """
 
         modtime = datetime.datetime.utcnow().isoformat()
-        record = self.mongo.db.annotation.find_one_or_404({'_id': ObjectId(form['mongo_id'])})
+        record = self.mongo.db.annotation.find_one_or_404(
+            {'_id': ObjectId(form['mongo_id'])})
         record['commentary'][0]['hasBody']['chars'] = form['c1text']
         record['bibliography'][0]['hasBody']['chars'] = form['b1text']
         cite_urn = record['commentary'][0]['hasBody']['@id']
@@ -67,8 +70,10 @@ class CommentaryHandler(object):
         if 't1_text' in form:
             if form['t1_text'] != '':
                 if not isinstance(record['translation'][0]['hasBody'], dict):
-                    # if we have switched from a uri to text then make sure we have the structure in place
-                    record['translation'][0]['hasBody'] = self.format_translation_annotation("t1", millnum, form['t1_text'], None, None, form['lang1'])
+                    # if we have switched from a uri to text then make sure we
+                    # have the structure in place
+                    record['translation'][0]['hasBody'] = self.format_translation_annotation(
+                        "t1", millnum, form['t1_text'], None, None, form['lang1'])
                 else:
                     record['translation'][0]['hasBody']['chars'] = form['t1_text']
                     record['translation'][0]['hasBody']['language'] = form['lang1']
@@ -78,13 +83,15 @@ class CommentaryHandler(object):
         if 't2_text' in form:
             if form['t2_text'] != '':
                 if not isinstance(record['translation'][1]['hasBody'], dict):
-                    # if we have switched from a uri to text then make sure we have the structure in place
-                    record['translation'][1]['hasBody'] = self.format_translation_annotation("t2", millnum, form['t2_text'], None, None, form['lang2'])
+                    # if we have switched from a uri to text then make sure we
+                    # have the structure in place
+                    record['translation'][1]['hasBody'] = self.format_translation_annotation(
+                        "t2", millnum, form['t2_text'], None, None, form['lang2'])
                 else:
                     record['translation'][1]['hasBody']['chars'] = form['t2_text']
                     record['translation'][1]['hasBody']['language'] = form['lang2']
         else:
-              record['translation'][1]['hasBody'] = form['t2_uri']
+            record['translation'][1]['hasBody'] = form['t2_uri']
 
         record['commentary'][0]['modified'] = modtime
         record['bibliography'][0]['modified'] = modtime
@@ -103,9 +110,9 @@ class CommentaryHandler(object):
         if not isinstance(record['commentary'][0]['hasTarget'], list):
             main_text = {
                 "@id": self.format_uri(millnum, 'l1'),
-                 "format": "text",
-                 "chars": "",
-                 "language": ""
+                "format": "text",
+                "chars": "",
+                "language": ""
             }
             record['commentary'][0]['hasTarget'] = ["", main_text]
         record['commentary'][0]['hasTarget'][0] = form['orig_uri']
@@ -118,15 +125,18 @@ class CommentaryHandler(object):
             to_delete = []
             for manifestUri, annotation in images.items():
                 if manifestUri in duets and duets[manifestUri] != annotation["oa:hasBody"]["dc:publisher"]:
-                    images[manifestUri] = self.format_manifests_from_form(manifestUri, duets[manifestUri], modtime, millnum, update_anno=annotation)
+                    images[manifestUri] = self.format_manifests_from_form(
+                        manifestUri, duets[manifestUri], modtime, millnum, update_anno=annotation)
                     del duets[manifestUri]
                 elif manifestUri not in duets:
                     to_delete.append(manifestUri)
             for manifestUri, publisher in duets.items():
                 if manifestUri != '':
-                    images[manifestUri] = self.format_manifests_from_form(manifestUri, publisher, modtime, millnum)
+                    images[manifestUri] = self.format_manifests_from_form(
+                        manifestUri, publisher, modtime, millnum)
 
-            record["images"] = [anno for key, anno in images.items() if key not in to_delete]
+            record["images"] = [anno for key,
+                                anno in images.items() if key not in to_delete]
         else:
             record["images"] = []
         # we're just going to recreate the tags for now
@@ -236,9 +246,9 @@ class CommentaryHandler(object):
         }
         if "iiif" in form:
             annotation["images"] = [
-                self.format_manifests_from_form(manifest_uri, publisher, date, milnum)
-                for manifest_uri, publisher in zip(form["iiif"], form["iiif_publisher"]) if manifest_uri != ''
-            ]
+                self.format_manifests_from_form(
+                    manifest_uri, publisher, date, milnum) for manifest_uri, publisher in zip(
+                    form["iiif"], form["iiif_publisher"]) if manifest_uri != '']
 
         if "tags" in form:
             annotation["tags"] = [
@@ -281,12 +291,17 @@ class CommentaryHandler(object):
                 "@id": self.generate_uuid(),
                 "@type": "oa:Tag",
                 "format": "text",
-                "chars": tag.lower() # normalize tags to lower case
+                "chars": tag.lower()  # normalize tags to lower case
             }
         return annotation
 
-
-    def format_manifests_from_form(self, manifest_uri, publisher, date, milnum, update_anno=None):
+    def format_manifests_from_form(
+            self,
+            manifest_uri,
+            publisher,
+            date,
+            milnum,
+            update_anno=None):
         """ Helper to format IIIF Manifests given a form
 
         :param manifest_uri: Manifest URI
@@ -304,20 +319,20 @@ class CommentaryHandler(object):
             anno["oa:serializedAt"] = str(date)
         else:
             anno = {
-                    "@context": {
-                        "oa": "http://www.w3.org/ns/oa-context-20130208.json",
-                        "dc": "http://purl.org/dc/elements/1.1/"
-                    },
-                    "@id": self.generate_uuid(),
-                    "@type": "oa:Annotation",
-                    "oa:annotatedAt": str(date),
-                    "oa:hasBody": {
-                        "@id": manifest_uri,
-                        "dc:publisher": publisher
-                    },
-                    "oa:hasTarget": self.format_uri(milnum, 'c1'),
-                    "oa:motivatedBy": "oa:linking"
-                }
+                "@context": {
+                    "oa": "http://www.w3.org/ns/oa-context-20130208.json",
+                    "dc": "http://purl.org/dc/elements/1.1/"
+                },
+                "@id": self.generate_uuid(),
+                "@type": "oa:Annotation",
+                "oa:annotatedAt": str(date),
+                "oa:hasBody": {
+                    "@id": manifest_uri,
+                    "dc:publisher": publisher
+                },
+                "oa:hasTarget": self.format_uri(milnum, 'c1'),
+                "oa:motivatedBy": "oa:linking"
+            }
         return anno
 
     def generate_uuid(self):
@@ -329,7 +344,8 @@ class CommentaryHandler(object):
         uuid = 'digmilann.' + str(uuid4())
         return uuid
 
-    def format_translation_annotation(self, num, milnum, text, uri, own_uri, lang):
+    def format_translation_annotation(
+            self, num, milnum, text, uri, own_uri, lang):
         """ Build the body of a translation annotation.
 
         :param num: the translation identifier (t1 or t2)
@@ -350,10 +366,10 @@ class CommentaryHandler(object):
         """
         if not uri and not own_uri:
             body = {
-              "@id": self.format_uri(milnum, num),
-              "format": "text",
-              "chars": text,
-              "language": lang
+                "@id": self.format_uri(milnum, num),
+                "format": "text",
+                "chars": text,
+                "language": lang
             }
         elif not uri and own_uri:
             body = own_uri
@@ -374,7 +390,8 @@ class CommentaryHandler(object):
 
         :raises 404 Not Found Exception: if the annotation is not found
         """
-        obj = self.mongo.db.annotation.find_one_or_404({"commentary.hasBody.@id": self.format_uri(milliet_id, 'c1')})
+        obj = self.mongo.db.annotation.find_one_or_404(
+            {"commentary.hasBody.@id": self.format_uri(milliet_id, 'c1')})
         if simplify is False:
             del obj['_id']
             return obj
@@ -386,7 +403,8 @@ class CommentaryHandler(object):
             "work": "",
             "passage": ""
         }
-        for author in self.author_builder.search(query=milliet_id, milliet_id=True):
+        for author in self.author_builder.search(
+                query=milliet_id, milliet_id=True):
             auth_info['auth'] = author['name']
             for w in author['works']:
                 for tup in w['millnums']:
@@ -413,7 +431,8 @@ class CommentaryHandler(object):
         author_removed = 0
 
         if removed.deleted_count > 0:
-            author_removed = self.author_builder.remove_milliet_id_from_author(milliet_id)
+            author_removed = self.author_builder.remove_milliet_id_from_author(
+                milliet_id)
 
         return removed.deleted_count + author_removed
 
@@ -448,19 +467,19 @@ class CommentaryHandler(object):
                 t_num = transl['hasBody']['@id'].split('.')[-1]
                 text = transl['hasBody']['chars']
                 lang = transl['hasBody']['language']
-                result[t_num+'_text'] = text
-                result[t_num+'_lang'] = lang
+                result[t_num + '_text'] = text
+                result[t_num + '_lang'] = lang
             else:
                 t_num = "t" + str(tnum)
                 text = transl['hasBody']
                 try:
                     lang = re.search('\D+', text.split('-')[1]).group(0)
-                    result[t_num+'_uri'] = text
-                    result[t_num+'_lang'] = lang
-                except:
+                    result[t_num + '_uri'] = text
+                    result[t_num + '_lang'] = lang
+                except BaseException:
                     # invalid URN we need to recover
-                    result[t_num+'_text'] = text
-                    result[t_num+'_lang'] = "eng"
+                    result[t_num + '_text'] = text
+                    result[t_num + '_lang'] = "eng"
                     pass
 
         # List is executed to avoid generators
@@ -471,12 +490,10 @@ class CommentaryHandler(object):
             } for iiif_anno in annotation_set["images"]
         ]
 
-        result["tags"] = [
-           tag['hasBody']['chars'] for tag in annotation_set["tags"] if 'chars' in tag['hasBody']
-        ]
-        result["semantic_tags"] = [
-            tag['hasBody']['@id'] for tag in annotation_set["tags"] if not 'chars' in tag['hasBody']
-        ]
+        result["tags"] = [tag['hasBody']['chars']
+                          for tag in annotation_set["tags"] if 'chars' in tag['hasBody']]
+        result["semantic_tags"] = [tag['hasBody']['@id']
+                                   for tag in annotation_set["tags"] if 'chars' not in tag['hasBody']]
 
         if isinstance(annotation_set['commentary'][0]['hasTarget'], list):
             result['orig_uri'] = annotation_set['commentary'][0]['hasTarget'][0]
@@ -505,17 +522,20 @@ class CommentaryHandler(object):
             if annotation['commentary'][0]['hasTarget'][0] != '':
                 URN(annotation['commentary'][0]['hasTarget'][0])
         except ValueError:
-            raise ValueError("Invalid commentary target - not parseable as URN")
+            raise ValueError(
+                "Invalid commentary target - not parseable as URN")
         try:
             if isinstance(annotation['translation'][0]['hasBody'], str):
                 URN(annotation['translation'][0]['hasBody'])
         except ValueError:
-            raise ValueError("Invalid translation 1 uri - not parseable as URN")
+            raise ValueError(
+                "Invalid translation 1 uri - not parseable as URN")
         try:
             if isinstance(annotation['translation'][1]['hasBody'], str):
                 URN(annotation['translation'][1]['hasBody'])
         except ValueError:
-            raise ValueError("Invalid translation 2 uri - not parseable as URN")
+            raise ValueError(
+                "Invalid translation 2 uri - not parseable as URN")
         return True
 
     def retrieve_millietId_in_commentaries(self, commentaries):
@@ -527,8 +547,14 @@ class CommentaryHandler(object):
         :rtype: list
         """
         millnum_list = []
-        convert = lambda text: int(text) if text.isdigit() else text
-        alphanum_key = lambda key: [convert(re.split('([A-Za-z]+)', key)[0])]
+
+        def convert(text): return int(text) if text.isdigit() else text
+
+        def alphanum_key(key): return [
+            convert(
+                re.split(
+                    '([A-Za-z]+)',
+                    key)[0])]
         for row in commentaries:
             try:
                 cite_urn = str(row['commentary'][0]['hasBody']['@id'])
@@ -537,7 +563,7 @@ class CommentaryHandler(object):
                     millnum_list.append(millnum)
                 else:
                     pass
-            except:
+            except BaseException:
                 pass
         return sorted(millnum_list, key=alphanum_key)
 
@@ -556,9 +582,11 @@ class CommentaryHandler(object):
         :rtype: string
         """
         if subcollection_id is not None:
-            return self.config['CITE_URI_PREFIX'] + self.config['CITE_COLLECTION'] + '.' + milliet_id + '.' + subcollection_id
+            return self.config['CITE_URI_PREFIX'] + self.config['CITE_COLLECTION'] + \
+                '.' + milliet_id + '.' + subcollection_id
         else:
-            return self.config['CITE_URI_PREFIX'] + self.config['CITE_COLLECTION'] + '.' + milliet_id
+            return self.config['CITE_URI_PREFIX'] + \
+                self.config['CITE_COLLECTION'] + '.' + milliet_id
 
     def format_person_from_authentificated_user(self):
         """ Make a Person for an annotation (i.e for contributor or creator)
@@ -598,7 +626,8 @@ class CommentaryHandler(object):
                     found = True
                     break
             if not found:
-                if 'creator' not in annotation_dict or annotation_dict['creator']['@id'] != person['@id']:
+                if 'creator' not in annotation_dict or annotation_dict[
+                        'creator']['@id'] != person['@id']:
                     contributors.append(person)
 
     def get_milliet_identifier_list(self):
@@ -607,7 +636,8 @@ class CommentaryHandler(object):
         :return: List of Milliet Numbers and their commentary ID ?
         :rtype: tuple
         """
-        comm_list = self.mongo.db.annotation.find({"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
+        comm_list = self.mongo.db.annotation.find(
+            {"commentary": {'$exists': 1}}).sort([("commentary.hasBody.@id", 1)])
         return self.retrieve_millietId_in_commentaries(comm_list)
 
     def get_existing_tags(self):
@@ -616,7 +646,8 @@ class CommentaryHandler(object):
         :return: tags and semantic tags
         :rtype: tuple
         """
-        tag_list = self.mongo.db.annotation.find({"tags": {'$exists': 1}, '$where': "this.tags.length>0"})
+        tag_list = self.mongo.db.annotation.find(
+            {"tags": {'$exists': 1}, '$where': "this.tags.length>0"})
         tags = {}
         semantic_tags = {}
         for row in tag_list:
@@ -638,9 +669,11 @@ class CommentaryHandler(object):
         parsed = urlparse(query)
         comm_list = None
         if parsed.scheme == "http" or parsed.scheme == "https":
-            comm_list = self.mongo.db.annotation.find({"tags.hasBody.@id": query}).sort([("commentary.hasBody.@id",1)])
+            comm_list = self.mongo.db.annotation.find({"tags.hasBody.@id": query}).sort([
+                ("commentary.hasBody.@id", 1)])
         else:
-            comm_list = self.mongo.db.annotation.find({"tags.hasBody.chars": query}).sort([("commentary.hasBody.@id",1)])
+            comm_list = self.mongo.db.annotation.find({"tags.hasBody.chars": query}).sort([
+                ("commentary.hasBody.@id", 1)])
         return self.retrieve_millietId_in_commentaries(comm_list)
 
     def get_surrounding_identifier(self, cid):
@@ -655,5 +688,6 @@ class CommentaryHandler(object):
         identifiers = self.get_milliet_identifier_list()
         index = identifiers.index(cid)
         previous_id = identifiers[index - 1] if index - 1 >= 0 else None
-        next_id = identifiers[index + 1] if index + 1 < len(identifiers) else None
+        next_id = identifiers[index + 1] if index + \
+            1 < len(identifiers) else None
         return (previous_id, next_id)

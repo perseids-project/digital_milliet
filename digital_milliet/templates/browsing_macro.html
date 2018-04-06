@@ -1,25 +1,25 @@
 {% macro display_auth_list(list_of_authors) -%}
-	{% for auth in list_of_authors %}
-		<div class="author-card">
-			{% for work in auth['works'] %}	
-			<div class="row">
-				<div class="col-xs-7">
-					<div class="work-name">
-						<h3>{{ auth['name'] }}</h3>
-						<h4>{{ work['title'] }}</h4>
-					</div>
-				</div>	
-				<div class="col-xs-5 ">
-					<ul class="ref-list">
-						{% for millnum in work['millnums']%}
-						<li><a href="commentary/{{ millnum[0] }}">{{ millnum[1]|clean_ref }} (Commentary {{ millnum[0] }})</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-			</div>
-			{% endfor %}
-		</div>		
-	{% endfor %}
+    {% for auth in list_of_authors %}
+        <div class="author-card">
+            {% for work in auth['works'] %}
+            <div class="row">
+                <div class="col-xs-7">
+                    <div class="work-name">
+                        <h3>{{ auth['name'] }}</h3>
+                        <h4>{{ work['title'] }}</h4>
+                    </div>
+                </div>
+                <div class="col-xs-5 ">
+                    <ul class="ref-list">
+                        {% for millnum in work['millnums']%}
+                        <li><a href="commentary/{{ millnum[0] }}">{{ millnum[1]|clean_ref }} (Commentary {{ millnum[0] }})</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 {%- endmacro %}
 
 {%  macro display_comm_list(list_of_commentaries) -%}
@@ -70,11 +70,11 @@
 {%- endmacro %}
 
 {% macro get_text(uri, type) -%}
-	<script type="text/javascript">
-		$(function(){
-			var textURI = "{{uri}}";
-			get_cts(textURI, "{{type}}");
-		});
-	</script>
+    <script type="text/javascript">
+        $(function(){
+            var textURI = "{{uri}}";
+            get_cts(textURI, "{{type}}");
+        });
+    </script>
 {%- endmacro %}
 

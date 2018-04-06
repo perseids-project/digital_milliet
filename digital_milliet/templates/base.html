@@ -1,6 +1,6 @@
 <html>
-	<head>
-		<title>The Digital Milliet Project {% block title %}{% endblock %}
+    <head>
+        <title>The Digital Milliet Project {% block title %}{% endblock %}
 </title>
         <link rel="stylesheet" media="screen" href="{{url_for('static', filename='css/milliet.css')}}" />
         <link rel='stylesheet' href="{{ bower_url_for('codemirror','lib/codemirror.css') }}" />
@@ -25,13 +25,13 @@
         <meta name="theme-color" content="#ffffff">
 
         <meta name="viewport" content = "width=device-width, initial-scale=1.0">
-	</head>
-	<body>
-		<div id="navbar" class="{% block search_bar_class %}{% endblock%}">{% include 'header.html' %}</div>
-		<div id='wrap' class="{% block container_class %}container{% endblock%}">
-        	{% include 'flashes.html' %}
-			<div id="content">{% block content %}{% endblock %}</div>
-    		{% include 'footer.html' %}
-    	</div>
-	</body>
+    </head>
+    <body>
+        <div id="navbar" class="{% block search_bar_class %}{% endblock%}">{% include 'header.html' %}</div>
+        <div id='wrap' class="{% block container_class %}container{% endblock%}">
+            {% include 'flashes.html' %}
+            <div id="content">{% block content %}{% endblock %}</div>
+            {% include 'footer.html' %}
+        </div>
+    </body>
 </html>

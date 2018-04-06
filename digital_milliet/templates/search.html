@@ -3,19 +3,19 @@
 
 {% block title %}| {{ _('Search Results') }}{% endblock %}
 {% block content %}
-	{{ super() }}
-	<div class="row" id="browse">
-		<h1>{{ _('Results') }}</h1>
-		<div class="col-md-12">
-			{% if res %}
+    {{ super() }}
+    <div class="row" id="browse">
+        <h1>{{ _('Results') }}</h1>
+        <div class="col-md-12">
+            {% if res %}
                 {% if type == 'Tags' %}
                     {{ display_comm_list(res) }}
                 {% else %}
-				    {{ display_auth_list(res) }}
+                    {{ display_auth_list(res) }}
                 {% endif %}
-			{% else %}
-				{{ _('No Results.') }} <a href="index">{{ _('Search again?') }}</a>
-			{% endif %}
-		</div>
-	</div>
+            {% else %}
+                {{ _('No Results.') }} <a href="index">{{ _('Search again?') }}</a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

@@ -5,7 +5,7 @@ from digital_milliet.digital_milliet import DigitalMilliet
 from digital_milliet.lib.commentaries import CommentaryHandler
 
 app = Flask('digital_milliet')
-dm = DigitalMilliet(app, config_file="config.cfg")
+dm = DigitalMilliet(app, config_files=["config.cfg"])
 person = {
     "@id": "http://data.perseus.org/sosol/users/Val%C3%A9rie%20Toillon",
     "type": 'Person',

@@ -20,16 +20,18 @@ PERSONNA = re.compile("^\w\.\w+$")
 class DigitalMilliet(object):
     """ The Digital Milliet Web Application """
 
-    def __init__(self, app=None, config_file="config.cfg"):
+    def __init__(self, app=None, config_files=["config.cfg"]):
         self.app = None
 
         if app is not None:
             self.app = app
-            self.init_app(config_file)
+            self.init_app(config_files)
 
-    def init_app(self, config_file=None):
+    def init_app(self, config_files=[]):
 
-        self.app.config.from_pyfile(config_file, silent=False)
+        for config in config_files:
+            self.app.config.from_pyfile(config, silent=False)
+
         self.app.secret_key = self.app.config['SECRET_KEY']
         self.bower = Bower(self.app)
         self.markdown = Markdown(self.app)

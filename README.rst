@@ -74,9 +74,7 @@ Or with Docker and Docker Compose
     git clone https://github.com/perseids-project/digital_milliet
     cd digital_milliet 
     docker-compose build
-    docker-compose run web scripts/docker-setup.sh
     docker-compose up
-    docker-compose run web scripts/docker-teardown.sh
 
 For production deployment, see Puppet manifests in the puppet subdirectory of this repository.
 
@@ -87,7 +85,7 @@ path can be supplied in an argument to the DigitalMilliet Flask Application:
 
 .. code-block:: python
 
-    DigitalMilliet(app, config_file="path/to/your/config.cfg")
+    DigitalMilliet(app, config_files=["path/to/your/config.cfg"])
 
 
 The default contents of this configuration file, with explanation of each setting, is provided below:

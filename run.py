@@ -3,21 +3,19 @@ from flask import Flask
 from digital_milliet.digital_milliet import DigitalMilliet
 from digital_milliet.lib.configuration import Configuration
 import sys
+import argparse
 
-config_files = ["config.cfg"]
-if len(sys.argv) > 1:
-    config_files = sys.argv[1:]
+parser = argparse.ArgumentParser()
+parser.add_argument('--config', nargs='+', default=['config.cfg'],
+                    help='list config files (default config.cfg)')
+parser.add_argument("--env", action='store_true',
+                    help="include configuration from environment")
+args = parser.parse_args()
 
-config_files = []
+config_files = args.config
 config_objects = []
-for arg in sys.argv[1:]:
-    if arg == "ENV":
-        config_objects.append(Configuration)
-    else:
-        config_files.append(arg)
-
-if len(config_files) == 0:
-    config_files = ["config.cfg"]
+if args.env:
+    config_objects = [Configuration]
 
 app = Flask('digital_milliet')
 dm = DigitalMilliet(app, config_files, config_objects)

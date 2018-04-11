@@ -12,3 +12,4 @@ MyCapytain==2.0.0b8
 PyYaml
 setuptools==36.5.0
 Flask-Env==1.0.1
+gunicorn==19.7.1

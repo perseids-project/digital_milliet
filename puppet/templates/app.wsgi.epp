@@ -9,4 +9,4 @@ from flask import Flask
 from digital_milliet.digital_milliet import DigitalMilliet
 
 application = Flask("digital_milliet")
-dm = DigitalMilliet(application,config_file="config.cfg")
+dm = DigitalMilliet(application,config_files=["config.cfg"])

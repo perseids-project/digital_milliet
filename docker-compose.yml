@@ -4,7 +4,7 @@ services:
     build: .
     ports:
       - "5000:5000"
-    command: scripts/wait-for-mongo.sh python3 run.py
+    command: scripts/wait-for-mongo.sh python3 run.py config.cfg docker-config.cfg
     volumes:
       - .:/app
     depends_on:

@@ -13,7 +13,7 @@ class TestDifferentAuthorCollection(TestRoutes):
         self.app = Flask('digital_milliet')
         self.dm = self.make_dm(
             app=self.app,
-            config_file="../tests/testconfig_collection_authors.cfg")
+            config_files=["../tests/testconfig_collection_authors.cfg"])
         self.client = self.app.test_client()
         self.fixture = os.path.join(os.path.dirname(__file__), 'dbfixture.yml')
         self.mongo = self.dm.get_db()

@@ -5,7 +5,7 @@ import yaml
 import argparse
 
 app = Flask('digital_milliet')
-dm = DigitalMilliet(app, config_file="../tests/testconfig.cfg")
+dm = DigitalMilliet(app, config_files=["../tests/testconfig.cfg"])
 mongo = dm.get_db()
 
 

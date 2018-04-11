@@ -12,6 +12,7 @@ from digital_milliet.lib.commentaries import CommentaryHandler
 from digital_milliet.lib.views import Views
 from digital_milliet.lib.catalog import Catalog
 from digital_milliet.lib.mirador import Mirador
+from digital_milliet.lib.configuration import Configuration
 
 import re
 PERSONNA = re.compile("^\w\.\w+$")
@@ -20,17 +21,20 @@ PERSONNA = re.compile("^\w\.\w+$")
 class DigitalMilliet(object):
     """ The Digital Milliet Web Application """
 
-    def __init__(self, app=None, config_files=["config.cfg"]):
+    def __init__(self, app=None, config_files=["config.cfg"], config_objects=[]):
         self.app = None
 
         if app is not None:
             self.app = app
-            self.init_app(config_files)
+            self.init_app(config_files, config_objects)
 
-    def init_app(self, config_files=[]):
+    def init_app(self, config_files=[], config_objects=[]):
 
         for config in config_files:
             self.app.config.from_pyfile(config, silent=False)
+
+        for config in config_objects:
+            self.app.config.from_object(config)
 
         self.app.secret_key = self.app.config['SECRET_KEY']
         self.bower = Bower(self.app)

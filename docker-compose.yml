@@ -4,11 +4,13 @@ services:
     build: .
     ports:
       - "5000:5000"
-    command: scripts/wait-for-mongo.sh python3 run.py config.cfg docker-config.cfg
+    command: scripts/wait-for-mongo.sh python3 run.py config.cfg ENV
     volumes:
       - .:/app
     depends_on:
       - mongo
+    environment:
+      - DIGMILL_MONGO_HOST=mongo
   mongo:
     image: mongo
     volumes:

@@ -17,7 +17,9 @@ setup(
         "Flask-PyMongo==0.3.1",
         "Flask-Markdown",
         "MyCapytain==2.0.0b8",
-        "PyYaml"
+        "PyYaml",
+        "setuptools==36.5.0",
+        "Flask-Env==1.0.1"
     ],
     setup_requires=[
     ],

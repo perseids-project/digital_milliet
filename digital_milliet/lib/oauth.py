@@ -49,7 +49,7 @@ class OAuthHelper(object):
         session['next'] = request.args.get('next', '')
         # overrides the oauth functionality for ease of development
         # this override should not be used in production
-        if self.auth_override is not None:
+        if self.auth_override:
             session['oauth_user_uri'] = self.auth_override['oauth_user_uri']
             session['oauth_user_name'] = self.auth_override['oauth_user_name']
             return redirect(session['next'])

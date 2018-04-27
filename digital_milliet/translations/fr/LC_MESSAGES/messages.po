@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-30 17:08+0000\n"
+"POT-Creation-Date: 2018-04-27 21:38+0000\n"
 "PO-Revision-Date: 2017-03-01 09:52-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -18,29 +18,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 
-#: digital_milliet/lib/views.py:104
+#: digital_milliet/lib/views.py:147
 #, python-format
 msgid "Record for %(millnum)s removed."
 msgstr ""
 
-#: digital_milliet/lib/views.py:106
+#: digital_milliet/lib/views.py:153
 #, python-format
 msgid "Error removing record for %(millnum)s."
 msgstr ""
 
-#: digital_milliet/lib/views.py:135
+#: digital_milliet/lib/views.py:188
 msgid "Edit successfully saved"
 msgstr ""
 
-#: digital_milliet/lib/views.py:137
+#: digital_milliet/lib/views.py:190
 msgid "Error!"
 msgstr ""
 
-#: digital_milliet/lib/views.py:159
+#: digital_milliet/lib/views.py:212
 msgid "Annotation successfully created!"
 msgstr ""
 
-#: digital_milliet/lib/views.py:162
+#: digital_milliet/lib/views.py:215
 msgid "Error saving!"
 msgstr ""
 
@@ -68,6 +68,22 @@ msgid ""
 "about ancient painting into account, such as archaeology, epigraphy, and "
 "philology."
 msgstr ""
+"Le \"Recueil des textes grecs et latins relatifs à la peinture ancienne\""
+" fut l'initiative du peintre académique <a target=\"_blank\" "
+"href=\"https://fr.wikipedia.org/wiki/Paul_Milliet_(peintre)\">Paul "
+"Milliet</a> qui était un passionné de la culture Grecque ancienne. P. "
+"Milliet souhaitait rendre accessibles les textes anciens sur la peinture "
+"aux non-spécialistes tels que lui. À cette époque, en effet, le seul "
+"recueil disponible à propos de la peinture ancienne était celui de J. "
+"Overbeck, Die Antiken Schriftquellen sur Geschichte des Bildenden Künste "
+"bei dem Greichen (\"Sources antiques écrites à propos de l'histoire des "
+"arts figuratifs en Grèce\"), publié en 1868. Les textes n'y étaient pas "
+"traduits et donc inaccessibles au grand public. C'est alors que Paul "
+"Milliet prit l'initiative de faire publier un ouvrage qui inclurait tous "
+"les textes anciens à propos de la peinture qui nous sont parvenus. Chaque"
+" texte serait accompagné d'une traduction et de commentaires qui "
+"prendraient en compte le savoir actuel concernant la peinture ancienne, "
+"tel que l'archéologie, l'épigraphie ou la philologie."
 
 #: digital_milliet/templates/about.html:11
 #, python-format
@@ -100,6 +116,32 @@ msgid ""
 "href=\"http://www.editionsmacula.com/livre/75.html\">enhanced version</a>"
 " with updated bibliography."
 msgstr ""
+"La composition du \"Recueil Milliet\" fut dans un premier temps confiée à"
+" l'archéologue <a target=\"_blank\" "
+"href=\"https://fr.wikipedia.org/wiki/Gustave_Mendel\">Gustave Mendel</a> "
+"en 1906. Puis en 1911, la tâche fut réattribuée à <a target=\"_blank\" "
+"href=\"https://fr.wikipedia.org/wiki/Adolphe_Reinach\">Adolphe "
+"Reinach</a>, un jeune archéologue et épigraphiste, fils de <a "
+"target=\"_blank\" "
+"href=\"https://fr.wikipedia.org/wiki/Joseph_Reinach\">Joseph Reinach</a>,"
+" journaliste et politicien célèbre pour son engagement dans l'affaire "
+"Dreyfus. Les frères de Joseph et oncles d'Adolphe étaient <a "
+"target=\"_blank\" "
+"href=\"https://fr.wikipedia.org/wiki/Salomon_Reinach\">Salomon "
+"Reinach</a> et <a target=\"_blank\" "
+"href=\"https://fr.wikipedia.org/wiki/Th%%C3%%A9odore_Reinach\">Theodore "
+"Reinach</a>, le premier un archéologue et le second un historien, tous "
+"deux célèbres. La composition du \"Recueil Milliet\" avança bien jusqu'à "
+"la mort tragique d'Adolphe Reinach en 1914 sur le front des Ardennes. Le "
+"Recueil Milliet resta inachevé mais fut quand même publié par Salomon "
+"Reinach en 1921, après la fin de la Première Guerre Mondiale. Le plan "
+"initial était de publier trois volumes qui auraient suivi l'organisation "
+"des Antiken Schriftquellen d'Overbeck : le premier volume serait consacré"
+" à la peinture, le second à l'architecture et le troisième à la "
+"sculpture. La plus récente version de ce recueil fut publiée en 1985 par "
+"Agnès Rouveret qui en proposa une <a target=\"_blank\" "
+"href=\"http://www.editionsmacula.com/livre/75.html\">édition "
+"augmentée</a> avec une bibliographie à jour."
 
 #: digital_milliet/templates/about.html:14
 msgid ""
@@ -127,16 +169,41 @@ msgid ""
 "classical painting to illustrate or accompany the descriptions found in "
 "ancient texts."
 msgstr ""
+"Notre travail sur les textes anciens relatifs à la peinture grecque et "
+"romaine relève d'une approche très similaire à celle du Recueil Milliet "
+"original. Nous offrons une collection interactive de textes anciens grecs"
+" et latins sur la peinture. Chaque texte est accompagné par une "
+"traduction bilingue (français et anglais) et d'un commentaire rédigé en "
+"prenant en compte le savoir actuel relatif à la peinture grecque et "
+"romaine. Chaque passage à un identifiant permanent et ceux-ci sont "
+"marqués numériquement, au niveau du passage et dans le texte, ce qui "
+"permet d'identifier les sujets majeurs développés dans les textes et les "
+"images. Ces \"étiquettes\" offrent la possibilité de créer un index "
+"bilingue dans la collection. Les textes et les améliorations sont "
+"sauvegardés selon le modèle de données <a target=\"_blank\" "
+"href=\"http://www.openannotation.org/spec/core/\">Open Annotation</a> une"
+" structure standardisée qui permet de créer des annotations sur les "
+"ressources présentes sur le web. Tirer parti de ces normes en constante "
+"évolution rend nos données facilement lisibles et réutilisables, et par "
+"conséquent interopérables avec d'autres projets.  Finalement, la "
+"collection inclut des commentaires textuels et iconographiques qui "
+"permettent d'expliquer certains termes techniques (qui diffèrent des nos "
+"propres définitions) à propos de la peinture ancienne tels que l'ombrage,"
+" la perspective, la symétrie ou le dessin de contour. Bien que les œuvres"
+" d'arts décrites dans les textes soient perdues, le matériel "
+"archéologique toujours renouvelé augmente notre savoir à propos de la "
+"peinture ancienne et offre des exemples concrets qui illustrent ou "
+"accompagnent les descriptions trouvées dans les textes."
 
-#: digital_milliet/templates/about.html:20
+#: digital_milliet/templates/about.html:19
 msgid "Who is the Digital Milliet?"
 msgstr "Qui est le Digital Milliet ?"
 
-#: digital_milliet/templates/about.html:25
+#: digital_milliet/templates/about.html:24
 msgid "Project Director"
 msgstr ""
 
-#: digital_milliet/templates/about.html:27
+#: digital_milliet/templates/about.html:26
 msgid ""
 "Marie-Claire Beaulieu's interests are concentrated in two main areas: "
 "Greek religion and Digital Humanities. In Greek religion, she has "
@@ -149,7 +216,7 @@ msgid ""
 "between mortals, immortals, and the dead."
 msgstr ""
 
-#: digital_milliet/templates/about.html:30
+#: digital_milliet/templates/about.html:29
 msgid ""
 "In Digital Humanities, Marie-Claire Beaulieu is working on making the "
 "creation and dissemination of knowledge about the ancient world more "
@@ -161,11 +228,11 @@ msgid ""
 "manuscript tradition such as the Homeric <i>Iliad</i>."
 msgstr ""
 
-#: digital_milliet/templates/about.html:35
+#: digital_milliet/templates/about.html:34
 msgid "Scientific Editor"
 msgstr ""
 
-#: digital_milliet/templates/about.html:37
+#: digital_milliet/templates/about.html:36
 msgid ""
 "Dr. Valérie Toillon received her PhD in May 2014. She is a specialist of "
 "Ancient Greek Painting. Her thesis covered the representation and "
@@ -179,11 +246,11 @@ msgid ""
 "Sciences Humaines</a>)."
 msgstr ""
 
-#: digital_milliet/templates/about.html:42
+#: digital_milliet/templates/about.html:41
 msgid "Software Developer"
 msgstr ""
 
-#: digital_milliet/templates/about.html:44
+#: digital_milliet/templates/about.html:43
 msgid ""
 "Anna Krohn splits her time between The Digital Milliet project, staffing "
 "the <a target=\"_blank\" href=\"https://sites.google.com/a/brandeis.edu"
@@ -193,11 +260,11 @@ msgid ""
 "science, data management, 3D modeling, and software development."
 msgstr ""
 
-#: digital_milliet/templates/about.html:51
+#: digital_milliet/templates/about.html:50
 msgid "Editor"
 msgstr ""
 
-#: digital_milliet/templates/about.html:53
+#: digital_milliet/templates/about.html:52
 msgid ""
 "Spyridon Loumakis holds an M.A. in Archaeology from the University of "
 "Athens, Greece, and an M.A. in History and Philosophy of Religion from "
@@ -219,11 +286,11 @@ msgid ""
 "necessary."
 msgstr ""
 
-#: digital_milliet/templates/about.html:57
+#: digital_milliet/templates/about.html:56
 msgid "Sr. Software Developer"
 msgstr ""
 
-#: digital_milliet/templates/about.html:59
+#: digital_milliet/templates/about.html:58
 msgid ""
 "Bridget Almas is the lead software developer for <a target=\"_blank\" "
 "href=\"http://perseids.org\">The Perseids Project</a> at Tufts "

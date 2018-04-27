@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-30 17:08+0000\n"
+"POT-Creation-Date: 2018-04-27 21:38+0000\n"
 "PO-Revision-Date: 2017-03-01 09:52-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,29 +18,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.5.3\n"
 
-#: digital_milliet/lib/views.py:104
+#: digital_milliet/lib/views.py:147
 #, python-format
 msgid "Record for %(millnum)s removed."
 msgstr ""
 
-#: digital_milliet/lib/views.py:106
+#: digital_milliet/lib/views.py:153
 #, python-format
 msgid "Error removing record for %(millnum)s."
 msgstr ""
 
-#: digital_milliet/lib/views.py:135
+#: digital_milliet/lib/views.py:188
 msgid "Edit successfully saved"
 msgstr ""
 
-#: digital_milliet/lib/views.py:137
+#: digital_milliet/lib/views.py:190
 msgid "Error!"
 msgstr ""
 
-#: digital_milliet/lib/views.py:159
+#: digital_milliet/lib/views.py:212
 msgid "Annotation successfully created!"
 msgstr ""
 
-#: digital_milliet/lib/views.py:162
+#: digital_milliet/lib/views.py:215
 msgid "Error saving!"
 msgstr ""
 
@@ -128,15 +128,15 @@ msgid ""
 "ancient texts."
 msgstr ""
 
-#: digital_milliet/templates/about.html:20
+#: digital_milliet/templates/about.html:19
 msgid "Who is the Digital Milliet?"
 msgstr ""
 
-#: digital_milliet/templates/about.html:25
+#: digital_milliet/templates/about.html:24
 msgid "Project Director"
 msgstr ""
 
-#: digital_milliet/templates/about.html:27
+#: digital_milliet/templates/about.html:26
 msgid ""
 "Marie-Claire Beaulieu's interests are concentrated in two main areas: "
 "Greek religion and Digital Humanities. In Greek religion, she has "
@@ -149,7 +149,7 @@ msgid ""
 "between mortals, immortals, and the dead."
 msgstr ""
 
-#: digital_milliet/templates/about.html:30
+#: digital_milliet/templates/about.html:29
 msgid ""
 "In Digital Humanities, Marie-Claire Beaulieu is working on making the "
 "creation and dissemination of knowledge about the ancient world more "
@@ -161,11 +161,11 @@ msgid ""
 "manuscript tradition such as the Homeric <i>Iliad</i>."
 msgstr ""
 
-#: digital_milliet/templates/about.html:35
+#: digital_milliet/templates/about.html:34
 msgid "Scientific Editor"
 msgstr ""
 
-#: digital_milliet/templates/about.html:37
+#: digital_milliet/templates/about.html:36
 msgid ""
 "Dr. Valérie Toillon received her PhD in May 2014. She is a specialist of "
 "Ancient Greek Painting. Her thesis covered the representation and "
@@ -179,11 +179,11 @@ msgid ""
 "Sciences Humaines</a>)."
 msgstr ""
 
-#: digital_milliet/templates/about.html:42
+#: digital_milliet/templates/about.html:41
 msgid "Software Developer"
 msgstr ""
 
-#: digital_milliet/templates/about.html:44
+#: digital_milliet/templates/about.html:43
 msgid ""
 "Anna Krohn splits her time between The Digital Milliet project, staffing "
 "the <a target=\"_blank\" href=\"https://sites.google.com/a/brandeis.edu"
@@ -193,11 +193,11 @@ msgid ""
 "science, data management, 3D modeling, and software development."
 msgstr ""
 
-#: digital_milliet/templates/about.html:51
+#: digital_milliet/templates/about.html:50
 msgid "Editor"
 msgstr ""
 
-#: digital_milliet/templates/about.html:53
+#: digital_milliet/templates/about.html:52
 msgid ""
 "Spyridon Loumakis holds an M.A. in Archaeology from the University of "
 "Athens, Greece, and an M.A. in History and Philosophy of Religion from "
@@ -219,11 +219,11 @@ msgid ""
 "necessary."
 msgstr ""
 
-#: digital_milliet/templates/about.html:57
+#: digital_milliet/templates/about.html:56
 msgid "Sr. Software Developer"
 msgstr ""
 
-#: digital_milliet/templates/about.html:59
+#: digital_milliet/templates/about.html:58
 msgid ""
 "Bridget Almas is the lead software developer for <a target=\"_blank\" "
 "href=\"http://perseids.org\">The Perseids Project</a> at Tufts "

@@ -6989,6 +6989,10 @@ article#milliet .provenance {
     max-height: 150px;
     margin: 0 auto;
     display: block; }
+  #about .contributors .missing-image {
+    height: 150px;
+    margin: 0 auto;
+    display: block; }
 
 #search {
   background-image: url("../img/background_search.jpg");

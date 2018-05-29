@@ -53,10 +53,19 @@
         </p>
     </div>
     <div class="col-md-4">
+        <div class="missing-image"></div>
         <h4><b>Bridget Almas</b>, {{ _('Sr. Software Developer') }}</h4>
         <p>
-            {{ _('Bridget Almas is the lead software developer for <a target="_blank" href="http://perseids.org">The Perseids Project</a> at Tufts University. She served as architect and code-reviewer on the Digital Milliet project.') }}
+            {{ _('Bridget Almas is the Software Architect at <a target="_blank" href="https://alpheios.net/">The Alpheios Project</a>. She previously worked as the lead software developer for <a target="_blank" href="http://perseids.org">The Perseids Project</a> at Tufts University and has served as architect and code-reviewer on the Digital Milliet project.') }}
         </p>
+    </div>
+    <div class="col-md-4">
+    <img src="{{ url_for('static', filename='img/ZF.jpg') }}"/>
+        <h4><b>Zachary Fletcher</b>, {{ _('Sr. Software Developer') }}</h4>
+        <p>
+            {{ _('Zachary Fletcher is the lead software developer for <a target="_blank" href="http://perseids.org">The Perseids Project</a> at Tufts University. He is currently serving as technical lead on the Digital Milliet project.') }}
+        </p>
+    </div>
 </section>
 </article>
 {% endblock %}

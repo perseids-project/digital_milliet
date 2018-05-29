@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-27 21:38+0000\n"
+"POT-Creation-Date: 2018-05-29 14:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -219,14 +219,25 @@ msgid ""
 msgstr ""
 
 #: digital_milliet/templates/about.html:56
+#: digital_milliet/templates/about.html:63
 msgid "Sr. Software Developer"
 msgstr ""
 
 #: digital_milliet/templates/about.html:58
 msgid ""
-"Bridget Almas is the lead software developer for <a target=\"_blank\" "
+"Bridget Almas is the Software Architect at <a target=\"_blank\" "
+"href=\"https://alpheios.net/\">The Alpheios Project</a>. She previously "
+"worked as the lead software developer for <a target=\"_blank\" "
+"href=\"http://perseids.org\">The Perseids Project</a> at Tufts University"
+" and has served as architect and code-reviewer on the Digital Milliet "
+"project."
+msgstr ""
+
+#: digital_milliet/templates/about.html:65
+msgid ""
+"Zachary Fletcher is the lead software developer for <a target=\"_blank\" "
 "href=\"http://perseids.org\">The Perseids Project</a> at Tufts "
-"University. She served as architect and code-reviewer on the Digital "
+"University. He is currently serving as technical lead on the Digital "
 "Milliet project."
 msgstr ""
 

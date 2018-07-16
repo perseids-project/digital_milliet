@@ -72,17 +72,20 @@
 			}
 
 			@media (max-width: $screen-xs-max) {
-				width:		100%;
+				width:		62%;
 			}
 		}
 
 		> button {
 			background-color:	$btn-milliet-bg-color;
 			color:				#fff;
+			@media (max-width: $screen-xs-max) {
+				margin-top:		5px;
+			}
 		}
 
 	    @media (max-width: $screen-xs-max) {
-			flex-direction:	column;
+			flex-wrap:	wrap;
 			> * {
 				height:			$btn-milliet-height * 0.75 ;
 			}
@@ -93,6 +96,11 @@
 	    @media (max-width: $screen-xs-max) {
 			height:				$btn-milliet-height * 0.75 ;
 			line-height:		$btn-milliet-height * 0.75 ;
+	    }
+	}
+	.btn-browse {
+	    @media (max-width: $screen-xs-max) {
+			width:				100%;
 	    }
 	}
 }
@@ -110,7 +118,8 @@
 	background-color:					$btn-milliet-bg-color;
 
 	select { 
-		padding-right:					$btn-milliet-height;
+		padding-right:					$btn-milliet-height * 0.66;
+		padding-left:					$btn-milliet-height * 0.34;
 		height:							$btn-milliet-height;
 		background-color:				transparent;
 		border:							none;
@@ -126,6 +135,9 @@
 		> option {
 			padding:					$btn-milliet-height / 6 0;
 		}
+		@media (max-width: $screen-xs-max) {
+			padding-left:		10px;
+		}
 	}
 
 	.carret {
@@ -136,7 +148,6 @@
 		z-index:						1;
 		position:						absolute;
 		right:							0;
-		background-color:				$btn-milliet-bg-color;
 		top:							0;
 		display:						block;
 		width:							$btn-milliet-height;

@@ -2,8 +2,8 @@
 
 : ${MONGO_HOST:=mongo}
 : ${MONGO_PORT:=27017}
-: ${MONGO_RETRIES:=5}
-: ${MONGO_WAIT:=1}
+: ${MONGO_RETRIES:=10}
+: ${MONGO_WAIT:=2}
 
 ii=1
 while [ $ii -le $MONGO_RETRIES ]

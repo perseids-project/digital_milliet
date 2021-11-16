@@ -3,7 +3,7 @@ cachelib==0.4.1
 certifi==2021.10.8
 chardet==3.0.4
 click==8.0.3
-Flask==0.12.4
+Flask==1.0
 Flask-Babel==0.9
 Flask-Bower==1.0.1
 Flask-Cache==0.13.1

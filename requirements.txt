@@ -18,7 +18,7 @@ idna==2.7
 isodate==0.6.0
 itsdangerous==2.0.1
 Jinja2==3.0.3
-lxml==4.6.4
+lxml==4.9.1
 Markdown==3.3.4
 MarkupSafe==2.0.1
 MyCapytain==2.0.0b8
